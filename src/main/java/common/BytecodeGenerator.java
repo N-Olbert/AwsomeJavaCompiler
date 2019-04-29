@@ -1,10 +1,10 @@
 package common;
 
-import tastgenerator.generalelements.Program;
+import tastgenerator.generalelements.TypedProgram;
 
 import java.io.OutputStream;
 
 public interface BytecodeGenerator
 {
-    OutputStream getByteCode(Program typedAst);
+    OutputStream getByteCode(TypedProgram typedAst);
 }
