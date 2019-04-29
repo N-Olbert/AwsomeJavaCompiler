@@ -1,8 +1,9 @@
 package common;
 
-import tastgenerator.generalelements.Program;
+import astgenerator.generalelements.UntypedProgram;
+import tastgenerator.generalelements.TypedProgram;
 
 public interface TypedASTGenerator
 {
-    Program getTypedProgram(Program ast);
+    TypedProgram getTypedProgram(UntypedProgram ast);
 }
