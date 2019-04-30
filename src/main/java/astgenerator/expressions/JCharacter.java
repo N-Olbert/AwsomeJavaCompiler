@@ -1,5 +1,8 @@
 package astgenerator.expressions;
 
+import tastgenerator.TypeChecker;
+import tastgenerator.expressions.TypedExpression;
+
 public class JCharacter extends Expression
 {
     private char jChar;
@@ -10,5 +13,10 @@ public class JCharacter extends Expression
 
     public char getJChar(){
         return jChar;
+    }
+
+    @Override
+    public TypedExpression toTyped(TypeChecker converter) {
+        return converter.typeCheck(this);
     }
 }

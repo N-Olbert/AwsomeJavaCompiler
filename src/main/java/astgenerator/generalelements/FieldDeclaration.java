@@ -3,6 +3,8 @@ package astgenerator.generalelements;
 import common.AccessModifier;
 import common.Modifier;
 import common.ObjectType;
+import tastgenerator.TypeChecker;
+import tastgenerator.generalelements.TypedGeneralThing;
 
 public class FieldDeclaration extends GeneralThing
 {
@@ -42,5 +44,10 @@ public class FieldDeclaration extends GeneralThing
     public Modifier getModifier()
     {
         return modifier;
+    }
+
+    @Override
+    public TypedGeneralThing toTyped(TypeChecker converter) {
+        return converter.typeCheck(this);
     }
 }

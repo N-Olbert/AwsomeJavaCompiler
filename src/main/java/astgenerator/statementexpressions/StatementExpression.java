@@ -6,8 +6,5 @@ import tastgenerator.statementexpressions.TypedStatementExpression;
 
 public abstract class StatementExpression
 {
-    public TypedStatementExpression toTyped(TypeChecker checker)
-    {
-        throw new IllegalStateException("hhf");
-    }
+    public abstract TypedStatementExpression toTyped(TypeChecker converter);
 }

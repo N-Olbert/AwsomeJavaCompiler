@@ -1,6 +1,8 @@
 package astgenerator.statements;
 
 import astgenerator.expressions.Expression;
+import tastgenerator.TypeChecker;
+import tastgenerator.statements.TypedStatement;
 
 public class IfElse extends Statement
 {
@@ -28,5 +30,10 @@ public class IfElse extends Statement
     public Block getOtherwise()
     {
         return otherwise;
+    }
+
+    @Override
+    public TypedStatement toTyped(TypeChecker converter) {
+        return converter.typeCheck(this);
     }
 }
