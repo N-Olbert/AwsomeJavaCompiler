@@ -69,7 +69,7 @@ public class PointClassTests
     {
         assertNotNull(typedProgram);
         assertEquals(typedProgram.getClasses().size(), 1);
-        var typedPointClass = typedProgram.getClasses().get(1);
+        var typedPointClass = typedProgram.getClasses().get(0);
         assertEquals(typedProgram.getObjectType(), ObjectType.getType("Point"));
         var typedFields = typedPointClass.getFields();
         assertEquals(typedFields.size(), 2);
