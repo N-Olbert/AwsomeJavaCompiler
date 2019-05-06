@@ -1,5 +1,6 @@
 package General;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
@@ -23,5 +24,10 @@ public class BytecodeLoader extends ClassLoader
     public Method getMethod(String className, String method, Class<?>... parameterTypes) throws NoSuchMethodException
     {
         return findClass(className).getMethod(method, parameterTypes);
+    }
+
+    public Field getField(String className, String field) throws NoSuchFieldException
+    {
+        return findClass(className).getField(field);
     }
 }
