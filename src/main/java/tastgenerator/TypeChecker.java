@@ -28,7 +28,6 @@ public interface TypeChecker
     TypedStatementExpressionExpression typeCheck(StatementExpressionExpression toCheck);
     TypedSuper typeCheck(Super toCheck);
     TypedThis typeCheck(This toCheck);
-    TypedThisWrapper typeCheck(ThisWrapper toCheck);
     TypedUnary typeCheck(Unary toCheck);
 
     TypedClass typeCheck(Class toCheck);

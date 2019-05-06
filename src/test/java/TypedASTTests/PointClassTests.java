@@ -1,9 +1,10 @@
 package TypedASTTests;
 
-import astgenerator.expressions.LocalOrFieldVar;
+import astgenerator.expressions.InstVar;
+import astgenerator.expressions.This;
 import astgenerator.generalelements.*;
 import astgenerator.generalelements.Class;
-import astgenerator.statements.Block;
+import astgenerator.statementexpressions.MethodCall;
 import astgenerator.statements.Return;
 import common.*;
 import org.junit.Test;
@@ -57,7 +58,7 @@ public class PointClassTests
     {
         var baseClass = getBasePointClass();
         var methods = baseClass.getClasses().get(1).getMethods();
-        //var returnStatement = new Return(new LocalOrFiel)
+        var returnStatement = new Return(new InstVar(new This(), "x"));
         //var block = new Block()
 
         MethodDeclaration getX;
