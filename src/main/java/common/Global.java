@@ -20,8 +20,7 @@ public class Global implements Factory
 
     public TypedASTGenerator getTypedAstGenerator()
     {
-        //TODO: Julian/David
-        return null;
+        return new TASTGenerator();
     }
 
     public BytecodeGenerator getBytecodeGenerator()

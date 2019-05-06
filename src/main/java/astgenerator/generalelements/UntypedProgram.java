@@ -3,6 +3,7 @@ package astgenerator.generalelements;
 import tastgenerator.TypeChecker;
 import tastgenerator.generalelements.TypedGeneralThing;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UntypedProgram extends GeneralThing
@@ -11,6 +12,11 @@ public class UntypedProgram extends GeneralThing
     public List<Class> getClasses()
     {
         return classes;
+    }
+
+    public UntypedProgram()
+    {
+        this.classes = new ArrayList<>();
     }
 
     public void setClasses(List<Class> classes)

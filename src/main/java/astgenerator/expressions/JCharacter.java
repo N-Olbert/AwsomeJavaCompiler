@@ -8,6 +8,11 @@ public class JCharacter extends Expression
     private char jChar;
 
     public JCharacter(String jChar){
+        if(jChar.length() > 1)
+        {
+            throw new IllegalArgumentException("Char can only have length of 1");
+        }
+
         this.jChar = jChar.charAt(0);
     }
 
