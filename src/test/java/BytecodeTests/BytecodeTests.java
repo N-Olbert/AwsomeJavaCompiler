@@ -1,54 +1,175 @@
 package BytecodeTests;
 
 import General.BytecodeLoader;
+import astgenerator.generalelements.FieldDeclaration;
 import common.*;
-import org.objectweb.asm.ClassWriter;
 import org.junit.Assert;
 import org.junit.Test;
-import tastgenerator.generalelements.TypedClass;
-import tastgenerator.generalelements.TypedFieldDeclaration;
-import tastgenerator.generalelements.TypedProgram;
+import static org.junit.Assert.*;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.lang.reflect.Field;
+import tastgenerator.expressions.TypedInt;
+import tastgenerator.generalelements.*;
+import tastgenerator.statements.TypedBlock;
+import tastgenerator.statements.TypedReturn;
+import tastgenerator.statements.TypedStatement;
+
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BytecodeTests
 {
     @Test
-    public void testASTGeneration()
+    public void testASTGenerationClassWithFields()
     {
+        var className = "Point";
         Factory factory = Global.getFactory();
-        Assert.assertNotNull(factory);
+        assertNotNull(factory);
         BytecodeGenerator byteCodeGen = factory.getBytecodeGenerator();
-        Assert.assertNotNull(byteCodeGen);
+        assertNotNull(byteCodeGen);
 
         //Wird noch deutlich verbessert (generische Generierung).
-        TypedProgram testProgram = new TypedProgram();
-        List<TypedClass> classes = new ArrayList<TypedClass>();
-        List<TypedFieldDeclaration> fields = new ArrayList<TypedFieldDeclaration>();
+        List<TypedFieldDeclaration> fields = new ArrayList<>();
         TypedFieldDeclaration field1 = new TypedFieldDeclaration(AccessModifier.PRIVATE, Modifier.NONE, ObjectType.IntType, "x");
         field1.setObjectType(ObjectType.IntType);
-        TypedFieldDeclaration field2 = new TypedFieldDeclaration(AccessModifier.PRIVATE, Modifier.NONE,ObjectType.IntType, "y");
+        TypedFieldDeclaration field2 = new TypedFieldDeclaration(AccessModifier.PRIVATE, Modifier.NONE, ObjectType.IntType, "y");
         field2.setObjectType(ObjectType.IntType);
         fields.add(field1);
         fields.add(field2);
-        TypedClass pointClass = new TypedClass(ObjectType.getType("Point"), fields, null);
+
+        var testProgram = getProgram(className, fields, new ArrayList <>());
+
+        OutputStream code = byteCodeGen.getByteCode(testProgram);
+        assertNotNull(code);
+
+        ByteArrayOutputStream out = (ByteArrayOutputStream) code;
+        BytecodeLoader loader = new BytecodeLoader(out.toByteArray());
+
+        try
+        {
+            var extractedField = loader.getField(className, "x");
+            assertEquals(extractedField.getType(), int.class);
+        }
+        catch (NoSuchFieldException e)
+        {
+            Assert.fail("Field \"x\" not found");
+        }
+
+        try
+        {
+            var extractedField = loader.getField(className, "y");
+            assertEquals(extractedField.getType(), int.class);
+        }
+        catch (NoSuchFieldException e)
+        {
+            Assert.fail("Field \"y\" not found");
+        }
+    }
+
+    @Test
+    public void testASTClassGenerationWithMethod()
+    {
+        var methodName = "TestGetInt";
+        var className = "TestReturn";
+
+        Factory factory = Global.getFactory();
+        assertNotNull(factory);
+        BytecodeGenerator byteCodeGen = factory.getBytecodeGenerator();
+        assertNotNull(byteCodeGen);
+
+        List<TypedFieldDeclaration> fields = new ArrayList<>();
+        var methods = new ArrayList<TypedMethodDeclaration>();
+        var methodparameters = new ArrayList<TypedMethodParameter>();
+        var statements = new ArrayList<TypedStatement>();
+        statements.add(new TypedReturn(new TypedInt("5")));
+        var typedBlock = new TypedBlock(statements);
+        var typedMethod = new TypedMethodDeclaration(AccessModifier.PUBLIC,Modifier.NONE,
+                ObjectType.IntType, methodName, methodparameters, typedBlock);
+        methods.add(typedMethod);
+
+        var testProgram = getProgram(className, fields, methods);
+
+        OutputStream code = byteCodeGen.getByteCode(testProgram);
+        assertNotNull(code);
+
+        ByteArrayOutputStream out = (ByteArrayOutputStream) code;
+        BytecodeLoader loader = new BytecodeLoader(out.toByteArray());
+
+        try
+        {
+            var Class = loader.findClass(className);
+            var method = loader.getMethod(className, methodName);
+            assertEquals(int.class, method.getReturnType());
+            assertEquals(5, method.invoke(Class));
+        }
+        catch (NoSuchMethodException e)
+        {
+            fail("Method: \"" + methodName + "\" not found");
+        }
+        catch (IllegalAccessException | InvocationTargetException e)
+        {
+            fail("Invoking Method: \""+methodName + " \"");
+        }
+    }
+
+    @Test
+    public void testASTClassGenerationWithGetMethodOfParameter()
+    {
+        var className = "TestSimpleStatement";
+        var methodName = "ReturnParameter";
+        Factory factory = Global.getFactory();
+        assertNotNull(factory);
+        BytecodeGenerator byteCodeGen = factory.getBytecodeGenerator();
+        assertNotNull(byteCodeGen);
+
+        List<TypedFieldDeclaration> fields = new ArrayList<>();
+        var methods = new ArrayList<TypedMethodDeclaration>();
+        var methodparameters = new ArrayList<TypedMethodParameter>();
+        methodparameters.add(new TypedMethodParameter(ObjectType.IntType, "x"));
+        var statements = new ArrayList<TypedStatement>();
+        statements.add(new TypedReturn(new TypedInt(methodparameters.get(0).getName())));
+        var typedBlock = new TypedBlock(statements);
+        var typedMethod = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE,
+                ObjectType.IntType, methodName, methodparameters, typedBlock);
+        methods.add(typedMethod);
+
+        var program = getProgram(className, fields, methods);
+
+        OutputStream code = byteCodeGen.getByteCode(program);
+        assertNotNull(code);
+
+        ByteArrayOutputStream out = (ByteArrayOutputStream) code;
+        BytecodeLoader loader = new BytecodeLoader(out.toByteArray());
+
+        try
+        {
+            var Class = loader.findClass(className);
+            var method = loader.getMethod(className, methodName);
+            assertEquals(int.class, method.getReturnType());
+            assertEquals(5, method.invoke(Class, 5));
+            assertEquals(0, Class.getFields().length);
+            assertEquals(1, Class.getMethods().length);
+        }
+        catch (NoSuchMethodException e)
+        {
+            fail("Method: \"" + methodName + "\" not found");
+        }
+        catch (IllegalAccessException | InvocationTargetException e)
+        {
+            fail("Invoking Method: \""+methodName + " \"");
+        }
+    }
+
+
+    private TypedProgram getProgram(String className, List<TypedFieldDeclaration> fields ,List<TypedMethodDeclaration> methods)
+    {
+        TypedProgram testProgram = new TypedProgram();
+        List<TypedClass> classes = new ArrayList<>();
+        TypedClass pointClass = new TypedClass(ObjectType.getType(className), fields, methods);
         classes.add(pointClass);
         testProgram.setClasses(classes);
-
-        List<ClassWriter> cws = byteCodeGen.generate(testProgram);
-        int i = 0;
-        cws.forEach(cw -> {
-            BytecodeLoader loader = new BytecodeLoader(cw.toByteArray());
-        });
-
-        Assert.assertNotNull(cws);
-
-        //TESTS folgen noch.
-        Assert.assertEquals(true, true);
+        return testProgram;
     }
 }
