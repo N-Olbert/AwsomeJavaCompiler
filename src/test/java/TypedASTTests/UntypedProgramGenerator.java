@@ -4,6 +4,7 @@ import astgenerator.generalelements.Class;
 import astgenerator.generalelements.FieldDeclaration;
 import astgenerator.generalelements.MethodDeclaration;
 import astgenerator.generalelements.UntypedProgram;
+import astgenerator.statements.Block;
 import astgenerator.statements.Statement;
 import common.AccessModifier;
 import common.Modifier;
@@ -52,7 +53,7 @@ public class UntypedProgramGenerator
         return fieldList;
     }
 
-    public static List<MethodDeclaration> getMethodsWithoutParams(List<String[]> params, List<Statement> stmts)
+    public static List<MethodDeclaration> getMethodsWithoutParams(List<String[]> params, List<Block> stmts)
     {
         var methodList = new ArrayList<MethodDeclaration>();
         for(String[] s : params)
