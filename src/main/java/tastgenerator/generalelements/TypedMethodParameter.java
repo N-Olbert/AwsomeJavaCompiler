@@ -11,4 +11,14 @@ public class TypedMethodParameter extends TypedGeneralThing
         this.type = type;
         this.name = name;
     }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public ObjectType getType()
+    {
+        return type;
+    }
 }
