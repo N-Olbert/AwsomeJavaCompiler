@@ -9,12 +9,16 @@ import static org.junit.Assert.*;
 
 import org.objectweb.asm.ClassWriter;
 import tastgenerator.expressions.TypedInt;
+import tastgenerator.expressions.TypedLocalOrFieldVar;
 import tastgenerator.generalelements.*;
 import tastgenerator.statements.TypedBlock;
 import tastgenerator.statements.TypedReturn;
 import tastgenerator.statements.TypedStatement;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -69,10 +73,10 @@ public class BytecodeTests
         }
     }
 
-    //@Test Not implemented yet
+    @Test
     public void testASTClassGenerationWithMethod()
     {
-        var methodName = "TestGetInt";
+        var methodName = "giveMeFive";
         var className = "TestReturn";
 
         Factory factory = Global.getFactory();
@@ -86,7 +90,7 @@ public class BytecodeTests
         var statements = new ArrayList<TypedStatement>();
         statements.add(new TypedReturn(new TypedInt("5")));
         var typedBlock = new TypedBlock(statements);
-        var typedMethod = new TypedMethodDeclaration(AccessModifier.PUBLIC,Modifier.NONE,
+        var typedMethod = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.STATIC,
                 ObjectType.IntType, methodName, methodparameters, typedBlock);
         methods.add(typedMethod);
 
@@ -97,6 +101,15 @@ public class BytecodeTests
         assertNotNull(cws);
         assertEquals(cws.size(), 1);
         byte[] bytes = cws.get(0).toByteArray();
+
+        try(FileOutputStream os = new FileOutputStream(new File("target/class1.class"))) {
+            os.write(bytes);
+            os.flush();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
         BytecodeLoader loader = new BytecodeLoader(bytes);
 
         try
@@ -104,7 +117,7 @@ public class BytecodeTests
             var Class = loader.findClass(className);
             var method = loader.getMethod(className, methodName);
             assertEquals(int.class, method.getReturnType());
-            assertEquals(5, method.invoke(Class));
+            assertEquals(5, method.invoke(null));
         }
         catch (NoSuchMethodException e)
         {
@@ -131,7 +144,7 @@ public class BytecodeTests
         var methodparameters = new ArrayList<TypedMethodParameter>();
         methodparameters.add(new TypedMethodParameter(ObjectType.IntType, "x"));
         var statements = new ArrayList<TypedStatement>();
-        statements.add(new TypedReturn(new TypedInt(methodparameters.get(0).getName())));
+        statements.add(new TypedReturn(new TypedLocalOrFieldVar(ObjectType.IntType, "x")));
         var typedBlock = new TypedBlock(statements);
         var typedMethod = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE,
                 ObjectType.IntType, methodName, methodparameters, typedBlock);

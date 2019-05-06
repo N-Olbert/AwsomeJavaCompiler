@@ -1,6 +1,8 @@
 package tastgenerator.statements;
 
+import bytecodegenerator.Generator;
 import common.ObjectType;
+import org.objectweb.asm.MethodVisitor;
 
 public class TypedLocalVarDeclaration extends TypedStatement
 {
@@ -21,5 +23,10 @@ public class TypedLocalVarDeclaration extends TypedStatement
     public String getName()
     {
         return name;
+    }
+
+    @Override
+    public void generateByteCode(MethodVisitor visitor) {
+        Generator.generate(this, visitor);
     }
 }

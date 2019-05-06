@@ -1,6 +1,8 @@
 package tastgenerator.expressions;
 
+import bytecodegenerator.Generator;
 import common.Operators;
+import org.objectweb.asm.MethodVisitor;
 
 public class TypedUnary extends TypedExpression
 {
@@ -20,5 +22,10 @@ public class TypedUnary extends TypedExpression
     public Operators getOperator()
     {
         return operator;
+    }
+
+    @Override
+    public void generateByteCode(MethodVisitor visitor) {
+        Generator.generate(this, visitor);
     }
 }

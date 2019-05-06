@@ -1,5 +1,7 @@
 package tastgenerator.statements;
 
+import bytecodegenerator.Generator;
+import org.objectweb.asm.MethodVisitor;
 import tastgenerator.expressions.TypedExpression;
 
 public class TypedIfElse extends TypedStatement
@@ -28,5 +30,10 @@ public class TypedIfElse extends TypedStatement
     public TypedBlock getOtherwise()
     {
         return otherwise;
+    }
+
+    @Override
+    public void generateByteCode(MethodVisitor visitor) {
+        Generator.generate(this, visitor);
     }
 }
