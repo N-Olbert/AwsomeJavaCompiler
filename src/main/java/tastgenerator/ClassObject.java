@@ -6,9 +6,9 @@ import java.util.HashMap;
 
 public class ClassObject {
     private HashMap<String, ObjectType> fields;
-    private HashMap<String, ObjectType> methods;
+    private HashMap<String, Method> methods;
 
-    public ClassObject(HashMap<String, ObjectType> fields, HashMap<String, ObjectType> methods) {
+    public ClassObject(HashMap<String, ObjectType> fields, HashMap<String, Method> methods) {
         this.fields = fields;
         this.methods = methods;
     }
@@ -17,7 +17,7 @@ public class ClassObject {
         return fields;
     }
 
-    public HashMap<String, ObjectType> getMethods() {
+    public HashMap<String, Method> getMethods() {
         return methods;
     }
 

@@ -8,6 +8,9 @@ import astgenerator.statementexpressions.MethodCall;
 import astgenerator.statementexpressions.New;
 import astgenerator.statements.*;
 import common.ObjectType;
+import common.Operators;
+import tastgenerator.exceptions.InvalidASTException;
+import tastgenerator.exceptions.TypeMismatchException;
 import tastgenerator.expressions.*;
 import tastgenerator.generalelements.*;
 import tastgenerator.statementexpressions.TypedAssign;
@@ -31,9 +34,13 @@ public class TypeCheckerInstance implements TypeChecker
             for (FieldDeclaration fieldDecl: currentClass.getFields()) {
                 fields.put(fieldDecl.getName(), fieldDecl.getVariableType());
             }
-            HashMap<String, ObjectType> methods = new HashMap<>();
+            HashMap<String, Method> methods = new HashMap<>();
             for (MethodDeclaration methodDecl: currentClass.getMethods()) {
-                methods.put(methodDecl.getName(), methodDecl.getReturnType());
+                List<ObjectType> params = new ArrayList<>();
+                for (MethodParameter parameter: methodDecl.getParams()) {
+                    params.add(parameter.getType());
+                }
+                methods.put(methodDecl.getName(), new Method(methodDecl.getReturnType(), params));
             }
             classes.put(currentClass.getClassType().getName(), new ClassObject(fields, methods));
         }
@@ -48,7 +55,7 @@ public class TypeCheckerInstance implements TypeChecker
     @Override
     public TypedReturn typeCheck(Return toCheck)
     {
-        return null;
+        return new TypedReturn(toCheck.getExp().toTyped(this));
     }
 
     @Override
@@ -59,7 +66,54 @@ public class TypeCheckerInstance implements TypeChecker
     @Override
     public TypedBinary typeCheck(Binary toCheck)
     {
-        return null;
+        TypedExpression expression1 = toCheck.getExpression().toTyped(this);
+        TypedExpression expression2 = toCheck.getExpression2().toTyped(this);
+        switch (toCheck.getOperator()){
+            case ADDITION:
+            case SUBTRACTION:
+            case MULTIPLICATION:
+            case DIVISION:
+            case MODULO:
+                if ((expression1.getObjectType() == ObjectType.IntType || expression1.getObjectType() == ObjectType.CharType) &&
+                    (expression2.getObjectType() == ObjectType.IntType || expression2.getObjectType() == ObjectType.CharType)) {
+                    return new TypedBinary(expression1, expression2, toCheck.getOperator(), ObjectType.IntType);
+                } else {
+                    throw new TypeMismatchException("Type Mismatch: Cannot apply " + toCheck.getOperator().name() + " to '" +
+                            expression1.getObjectType().getName() + "' and '" + expression2.getObjectType().getName() + "'");
+                }
+            case AND:
+            case OR:
+            case XOR:
+                if (expression1.getObjectType() == ObjectType.BoolType && expression2.getObjectType() == ObjectType.BoolType) {
+                    return new TypedBinary(expression1, expression2, toCheck.getOperator(), ObjectType.BoolType);
+                } else {
+                    throw new TypeMismatchException("Type Mismatch: Cannot apply " + toCheck.getOperator().name() + " to '" +
+                            expression1.getObjectType().getName() + "' and '" + expression2.getObjectType().getName() + "'");
+                }
+            case GREATERTHAN:
+            case GREATEROREQUAL:
+            case LESSTHAN:
+            case LESSOREQUAL:
+                if ((expression1.getObjectType() == ObjectType.IntType || expression1.getObjectType() == ObjectType.CharType) &&
+                    (expression2.getObjectType() == ObjectType.IntType || expression2.getObjectType() == ObjectType.CharType)) {
+                    return new TypedBinary(expression1, expression2, toCheck.getOperator(), ObjectType.BoolType);
+                } else {
+                    throw new TypeMismatchException("Type Mismatch: Cannot apply " + toCheck.getOperator().name() + " to '" +
+                            expression1.getObjectType().getName() + "' and '" + expression2.getObjectType().getName() + "'");
+                }
+            case EQUALS:
+            case NOTEQUALS:
+                if (((expression1.getObjectType() == ObjectType.IntType || expression1.getObjectType() == ObjectType.CharType) &&
+                     (expression2.getObjectType() == ObjectType.IntType || expression2.getObjectType() == ObjectType.CharType)) ||
+                     (expression1.getObjectType() == ObjectType.BoolType && expression2.getObjectType() == ObjectType.BoolType)) {
+                    return new TypedBinary(expression1, expression2, toCheck.getOperator(), ObjectType.BoolType);
+                } else {
+                    throw new TypeMismatchException("Type Mismatch: Cannot apply " + toCheck.getOperator().name() + " to '" +
+                            expression1.getObjectType().getName() + "' and '" + expression2.getObjectType().getName() + "'");
+                }
+            default:
+                throw new InvalidASTException("invalid operator");
+        }
     }
 
     @Override
@@ -114,7 +168,28 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedUnary typeCheck(Unary toCheck) {
-        return null;
+        TypedExpression expression = toCheck.getExpression().toTyped(this);
+        switch(toCheck.getOperator()) {
+            case NEGATION:
+                if (expression.getObjectType() == ObjectType.BoolType) {
+                    return new TypedUnary(expression, toCheck.getOperator(), ObjectType.BoolType);
+                } else {
+                    throw new TypeMismatchException("Type Mismatch: Cannot apply " + toCheck.getOperator().name() + " to '" +
+                            expression.getObjectType().getName() + "'");
+                }
+            case INCREMENTBEFORE:
+            case INCREMENTAFTER:
+            case DECREMENTBEFORE:
+            case DECREMENTAFTER:
+                if (expression.getObjectType() == ObjectType.IntType || expression.getObjectType() == ObjectType.CharType) {
+                    return new TypedUnary(expression, toCheck.getOperator(), ObjectType.IntType);
+                } else {
+                    throw new TypeMismatchException("Type Mismatch: Cannot apply " + toCheck.getOperator().name() + " to '" +
+                            expression.getObjectType().getName() + "'");
+                }
+            default:
+                throw new InvalidASTException("invalid operator");
+        }
     }
 
     @Override
