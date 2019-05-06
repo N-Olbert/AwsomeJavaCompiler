@@ -28,6 +28,17 @@ public class MethodDeclaration extends GeneralThing
         this.stmt = stmt;
     }
 
+    public MethodDeclaration(ObjectType returnType, String name,
+                             List<MethodParameter> params, Statement stmt) {
+        this.accessModifier = AccessModifier.PACKAGE_PRIVATE;
+        this.modifier = Modifier.NONE;
+        this.returnType = returnType;
+        this.name = name;
+        this.params = params;
+        this.stmt = stmt;
+    }
+
+
     public ObjectType getReturnType()
     {
         return returnType;

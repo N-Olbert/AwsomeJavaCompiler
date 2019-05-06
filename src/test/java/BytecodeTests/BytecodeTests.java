@@ -32,7 +32,7 @@ public class BytecodeTests
         field2.setObjectType(ObjectType.IntType);
         fields.add(field1);
         fields.add(field2);
-        TypedClass pointClass = new TypedClass(new ObjectType("Point"), fields, null);
+        TypedClass pointClass = new TypedClass(ObjectType.getType("Point"), fields, null);
         classes.add(pointClass);
         testProgram.setClasses(classes);
 
