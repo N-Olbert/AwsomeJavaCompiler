@@ -1,5 +1,9 @@
 package common;
 
+import bytecodegenerator.Generator;
+
+import java.util.List;
+
 public class Global implements Factory
 {
     private Global()
@@ -25,7 +29,6 @@ public class Global implements Factory
 
     public BytecodeGenerator getBytecodeGenerator()
     {
-        //TODO: Nico
-        return null;
+        return Generator::generate;
     }
 }
