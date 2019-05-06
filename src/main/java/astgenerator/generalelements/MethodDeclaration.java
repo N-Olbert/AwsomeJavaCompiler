@@ -48,6 +48,9 @@ public class MethodDeclaration extends GeneralThing
         return stmt;
     }
 
+    public AccessModifier getAccessModifier() { return accessModifier; }
+
+    public Modifier getModifier() { return modifier; }
 
     @Override
     public TypedGeneralThing toTyped(TypeChecker converter) {
