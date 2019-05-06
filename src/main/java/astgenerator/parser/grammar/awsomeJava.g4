@@ -30,7 +30,7 @@ objectType: 'int'|'char'|'boolean'|Identifier;
 jThis: 'this''.'expression;
 
 AccessModifier: 'public' | 'protected' | 'private';
-//Modifier: 'static' | 'final'; //abstract extra
+//Modifier: 'static'|'final'; //abstract extra
 JBoolean: 'true'|'false';
 JNull: 'null';
 Super: 'super()';
