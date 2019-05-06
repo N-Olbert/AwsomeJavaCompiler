@@ -1,14 +1,18 @@
 package BytecodeTests;
 
-import astgenerator.generalelements.FieldDeclaration;
+import General.BytecodeLoader;
 import common.*;
+import org.objectweb.asm.ClassWriter;
 import org.junit.Assert;
 import org.junit.Test;
 import tastgenerator.generalelements.TypedClass;
 import tastgenerator.generalelements.TypedFieldDeclaration;
 import tastgenerator.generalelements.TypedProgram;
 
-import java.io.OutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +40,13 @@ public class BytecodeTests
         classes.add(pointClass);
         testProgram.setClasses(classes);
 
-        OutputStream code = byteCodeGen.getByteCode(testProgram);
-        Assert.assertNotNull(code);
+        List<ClassWriter> cws = byteCodeGen.generate(testProgram);
+        int i = 0;
+        cws.forEach(cw -> {
+            BytecodeLoader loader = new BytecodeLoader(cw.toByteArray());
+        });
+
+        Assert.assertNotNull(cws);
 
         //TESTS folgen noch.
         Assert.assertEquals(true, true);

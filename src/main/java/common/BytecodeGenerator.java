@@ -1,10 +1,10 @@
 package common;
 
+import org.objectweb.asm.ClassWriter;
 import tastgenerator.generalelements.TypedProgram;
 
-import java.io.OutputStream;
+import java.util.List;
 
-public interface BytecodeGenerator
-{
-    OutputStream getByteCode(TypedProgram typedAst);
+public interface BytecodeGenerator {
+    List<ClassWriter> generate(TypedProgram program);
 }
