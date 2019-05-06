@@ -1,15 +1,16 @@
 package TypedASTTests;
 
+import astgenerator.expressions.JBoolean;
+import astgenerator.expressions.JCharacter;
+import astgenerator.expressions.JInteger;
 import astgenerator.generalelements.Class;
 import astgenerator.generalelements.FieldDeclaration;
 import astgenerator.generalelements.UntypedProgram;
-import common.Factory;
-import common.Global;
-import common.ObjectType;
-import common.TypedASTGenerator;
-import org.junit.Assert;
+import common.*;
+
+import static org.junit.Assert.*;
 import org.junit.Test;
-import tastgenerator.generalelements.TypedClass;
+import tastgenerator.TypeCheckerInstance;
 import tastgenerator.generalelements.TypedProgram;
 
 import java.util.ArrayList;
@@ -18,30 +19,54 @@ import java.util.List;
 public class TypedASTBaseTests
 {
     @Test
-    public void testASTGeneration()
+    public void testConvertBoolExpression()
     {
-        Factory factory = Global.getFactory();
-        Assert.assertNotNull(factory);
-        TypedASTGenerator astGen = factory.getTypedAstGenerator();
-        Assert.assertNotNull(astGen);
+        var converter = new TypeCheckerInstance(new UntypedProgram());
+        var bool = new JBoolean("false");
+        var typed = bool.toTyped(converter);
+        assertNotNull(typed);
+        assertEquals(typed.getObjectType(), ObjectType.BoolType);
+    }
 
-        //Wird noch deutlich verbessert (generische Generierung).
-        UntypedProgram testProgram = new UntypedProgram();
-        List<Class> classes = new ArrayList<Class>();
-        List<FieldDeclaration> fields = new ArrayList<FieldDeclaration>();
-        FieldDeclaration field1 = new FieldDeclaration(ObjectType.IntType, "x");
-        FieldDeclaration field2 = new FieldDeclaration(ObjectType.IntType, "y");
-        fields.add(field1);
-        fields.add(field2);
-        Class pointClass = new Class(new ObjectType("Point"), fields, null);
-        classes.add(pointClass);
-        testProgram.setClasses(classes);
+    @Test(expected = IllegalArgumentException.class)
+    public void testCharacterThrowsOnInvalidInput()
+    {
+        new JCharacter("test");
+    }
 
-        TypedProgram ast = astGen.getTypedProgram(testProgram);
-        Assert.assertNotNull(ast);
+    @Test
+    public void testConvertCharExpression()
+    {
+        var converter = new TypeCheckerInstance(new UntypedProgram());
+        var bool = new JCharacter("g");
+        var typed = bool.toTyped(converter);
+        assertNotNull(typed);
+        assertEquals(typed.getObjectType(), ObjectType.CharType);
+    }
 
-        //Korrekt wäre irgendwas in der Art, wird noch implementiert
-        // UntypedProgram([(CLASS("Test",[FD(INT, INT, x), FD(INT, INT, Y)],[])])
-        Assert.assertEquals(true, true);
+    @Test
+    public void testConvertIntExpression()
+    {
+        var converter = new TypeCheckerInstance(new UntypedProgram());
+        var bool = new JInteger("5");
+        var typed = bool.toTyped(converter);
+        assertNotNull(typed);
+        assertEquals(typed.getObjectType(), ObjectType.IntType);
+    }
+
+    public void testTypedInstVar()
+    {
+       /* var converter = new TypeCheckerInstance();
+        var bool = new JInteger("5");
+        var typed = bool.toTyped(converter);
+        assertNotNull(typed);
+        assertEquals(typed.getObjectType(), ObjectType.IntType);*/
+    }
+
+    private UntypedProgram getUntypedProgramWithBasicTypes()
+    {
+        var fieldsList = new ArrayList<String[]>();
+        fieldsList.add(new String[]{int.class.toString(), "i"});
+        return new UntypedProgram();
     }
 }

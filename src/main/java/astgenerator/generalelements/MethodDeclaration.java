@@ -1,9 +1,12 @@
 package astgenerator.generalelements;
 
+import astgenerator.statements.Block;
 import astgenerator.statements.Statement;
 import common.AccessModifier;
 import common.Modifier;
 import common.ObjectType;
+import tastgenerator.TypeChecker;
+import tastgenerator.generalelements.TypedGeneralThing;
 
 import java.util.List;
 
@@ -14,10 +17,10 @@ public class MethodDeclaration extends GeneralThing
     private ObjectType returnType;
     private String name;
     private List<MethodParameter> params;
-    private Statement stmt;
+    private Block stmt;
 
     public MethodDeclaration(AccessModifier accessModifier, Modifier modifier, ObjectType returnType,
-                             String name, List<MethodParameter> params, Statement stmt) {
+                             String name, List<MethodParameter> params, Block stmt) {
         this.accessModifier = accessModifier;
         this.modifier = modifier;
         this.returnType = returnType;
@@ -25,6 +28,17 @@ public class MethodDeclaration extends GeneralThing
         this.params = params;
         this.stmt = stmt;
     }
+
+    public MethodDeclaration(ObjectType returnType, String name,
+                             List<MethodParameter> params, Block stmt) {
+        this.accessModifier = AccessModifier.PACKAGE_PRIVATE;
+        this.modifier = Modifier.NONE;
+        this.returnType = returnType;
+        this.name = name;
+        this.params = params;
+        this.stmt = stmt;
+    }
+
 
     public ObjectType getReturnType()
     {
@@ -44,5 +58,14 @@ public class MethodDeclaration extends GeneralThing
     public Statement getStmt()
     {
         return stmt;
+    }
+
+    public AccessModifier getAccessModifier() { return accessModifier; }
+
+    public Modifier getModifier() { return modifier; }
+
+    @Override
+    public TypedGeneralThing toTyped(TypeChecker converter) {
+        return converter.typeCheck(this);
     }
 }

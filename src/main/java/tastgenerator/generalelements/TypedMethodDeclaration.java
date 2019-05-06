@@ -1,17 +1,24 @@
 package tastgenerator.generalelements;
+import common.AccessModifier;
+import common.Modifier;
 import common.ObjectType;
 import tastgenerator.statements.TypedBlock;
 
 import java.util.List;
 
-public class TypedMethodDeclaration
+public class TypedMethodDeclaration extends TypedGeneralThing
 {
+    private AccessModifier accessModifier;
+    private Modifier modifier;
     private ObjectType returnType;
     private String name;
     private List<TypedMethodParameter> params;
     private TypedBlock stmt;
 
-    public TypedMethodDeclaration(ObjectType returnType, String name, List<TypedMethodParameter> params, TypedBlock stmt) {
+    public TypedMethodDeclaration(AccessModifier accessModifier, Modifier modifier, ObjectType returnType,
+                                  String name, List<TypedMethodParameter> params, TypedBlock stmt) {
+        this.accessModifier = accessModifier;
+        this.modifier = modifier;
         this.returnType = returnType;
         this.name = name;
         this.params = params;
@@ -37,4 +44,8 @@ public class TypedMethodDeclaration
     {
         return stmt;
     }
+
+    public AccessModifier getAccessModifier() { return accessModifier; }
+
+    public Modifier getModifier() { return modifier; }
 }

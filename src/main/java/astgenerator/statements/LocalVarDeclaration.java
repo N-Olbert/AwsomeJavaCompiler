@@ -1,6 +1,8 @@
 package astgenerator.statements;
 
 import common.ObjectType;
+import tastgenerator.TypeChecker;
+import tastgenerator.statements.TypedStatement;
 
 public class LocalVarDeclaration extends Statement
 {
@@ -21,5 +23,10 @@ public class LocalVarDeclaration extends Statement
     public String getName()
     {
         return name;
+    }
+
+    @Override
+    public TypedStatement toTyped(TypeChecker converter) {
+        return converter.typeCheck(this);
     }
 }

@@ -1,6 +1,7 @@
 package astgenerator.statements;
 
 import astgenerator.expressions.Expression;
+import tastgenerator.TypeChecker;
 import tastgenerator.statements.TypedStatement;
 
 public class While extends Statement
@@ -22,5 +23,10 @@ public class While extends Statement
     public Block getStmt()
     {
         return stmt;
+    }
+
+    @Override
+    public TypedStatement toTyped(TypeChecker converter) {
+        return converter.typeCheck(this);
     }
 }

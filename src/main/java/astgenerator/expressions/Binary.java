@@ -1,6 +1,8 @@
 package astgenerator.expressions;
 
 import common.Operators;
+import tastgenerator.TypeChecker;
+import tastgenerator.expressions.TypedExpression;
 
 public class Binary extends Expression
 {
@@ -27,5 +29,10 @@ public class Binary extends Expression
     public Expression getExpression2()
     {
         return expression2;
+    }
+
+    @Override
+    public TypedExpression toTyped(TypeChecker converter) {
+        return converter.typeCheck(this);
     }
 }

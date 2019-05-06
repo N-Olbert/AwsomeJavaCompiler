@@ -1,5 +1,9 @@
 package common;
 
+import bytecodegenerator.Generator;
+
+import java.util.List;
+
 public class Global implements Factory
 {
     private Global()
@@ -20,13 +24,11 @@ public class Global implements Factory
 
     public TypedASTGenerator getTypedAstGenerator()
     {
-        //TODO: Julian/David
-        return null;
+        return new TASTGenerator();
     }
 
     public BytecodeGenerator getBytecodeGenerator()
     {
-        //TODO: Nico
-        return null;
+        return Generator::generate;
     }
 }

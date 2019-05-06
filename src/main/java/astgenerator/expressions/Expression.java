@@ -5,13 +5,13 @@ import tastgenerator.expressions.TypedExpression;
 
 public abstract class Expression
 {
-    public TypedExpression toTyped(TypeChecker converter)
-    {
+    public abstract TypedExpression toTyped(TypeChecker converter);
+    /*{
         if(this instanceof Binary)
         {
-            return converter.TypeCheckBinary((Binary) this);
+            return converter.typeCheck((Binary) this);
         }
 
         throw new IllegalStateException("NOPE");
-    }
+    }*/
 }

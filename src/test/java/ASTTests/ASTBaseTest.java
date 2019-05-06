@@ -24,8 +24,7 @@ public class ASTBaseTest
         UntypedProgram ast = astGen.getAST(file);
         Assert.assertNotNull(ast);
 
-        //Korrekt wäre irgendwas in der Art, wird noch implementiert
-        // UntypedProgram([(CLASS("Test",[],[])])
+
         Assert.assertEquals(true, true);
     }
 }

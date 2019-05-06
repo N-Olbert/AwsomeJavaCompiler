@@ -1,6 +1,8 @@
 package astgenerator.statementexpressions;
 
 import astgenerator.expressions.Expression;
+import tastgenerator.TypeChecker;
+import tastgenerator.statementexpressions.TypedStatementExpression;
 
 public class Assign extends StatementExpression
 {
@@ -18,5 +20,10 @@ public class Assign extends StatementExpression
 
     public Expression getExpression() {
         return this.expression;
+    }
+
+    @Override
+    public TypedStatementExpression toTyped(TypeChecker converter) {
+        return converter.typeCheck(this);
     }
 }

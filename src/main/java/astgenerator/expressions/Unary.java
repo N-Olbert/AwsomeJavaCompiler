@@ -1,5 +1,7 @@
 package astgenerator.expressions;
 import common.Operators;
+import tastgenerator.TypeChecker;
+import tastgenerator.expressions.TypedExpression;
 
 public class Unary extends Expression
 {
@@ -19,5 +21,10 @@ public class Unary extends Expression
     public Operators getOperator()
     {
         return operator;
+    }
+
+    @Override
+    public TypedExpression toTyped(TypeChecker converter) {
+        return converter.typeCheck(this);
     }
 }
