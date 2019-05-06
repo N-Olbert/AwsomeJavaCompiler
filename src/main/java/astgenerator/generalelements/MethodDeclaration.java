@@ -1,5 +1,6 @@
 package astgenerator.generalelements;
 
+import astgenerator.statements.Block;
 import astgenerator.statements.Statement;
 import common.AccessModifier;
 import common.Modifier;
@@ -16,10 +17,10 @@ public class MethodDeclaration extends GeneralThing
     private ObjectType returnType;
     private String name;
     private List<MethodParameter> params;
-    private Statement stmt;
+    private Block stmt;
 
     public MethodDeclaration(AccessModifier accessModifier, Modifier modifier, ObjectType returnType,
-                             String name, List<MethodParameter> params, Statement stmt) {
+                             String name, List<MethodParameter> params, Block stmt) {
         this.accessModifier = accessModifier;
         this.modifier = modifier;
         this.returnType = returnType;
@@ -29,7 +30,7 @@ public class MethodDeclaration extends GeneralThing
     }
 
     public MethodDeclaration(ObjectType returnType, String name,
-                             List<MethodParameter> params, Statement stmt) {
+                             List<MethodParameter> params, Block stmt) {
         this.accessModifier = AccessModifier.PACKAGE_PRIVATE;
         this.modifier = Modifier.NONE;
         this.returnType = returnType;

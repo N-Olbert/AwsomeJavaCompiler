@@ -113,6 +113,11 @@ public class TypeCheckerInstance implements TypeChecker
     }
 
     @Override
+    public TypedThisWrapper typeCheck(ThisWrapper toCheck) {
+        return null;
+    }
+
+    @Override
     public TypedUnary typeCheck(Unary toCheck) {
         return null;
     }
