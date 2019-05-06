@@ -7,6 +7,7 @@ import astgenerator.statementexpressions.Assign;
 import astgenerator.statementexpressions.MethodCall;
 import astgenerator.statementexpressions.New;
 import astgenerator.statements.*;
+import common.ObjectType;
 import tastgenerator.expressions.*;
 import tastgenerator.generalelements.*;
 import tastgenerator.statementexpressions.TypedAssign;
@@ -15,10 +16,28 @@ import tastgenerator.statementexpressions.TypedNew;
 import tastgenerator.statements.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class TypeCheckerInstance implements TypeChecker
 {
+
+    HashMap<String, ClassObject> classes;
+
+    public TypeCheckerInstance(UntypedProgram program) {
+        classes = new HashMap<>();
+        for (Class currentClass: program.getClasses()) {
+            HashMap<String, ObjectType> fields = new HashMap<>();
+            for (FieldDeclaration fieldDecl: currentClass.getFields()) {
+                fields.put(fieldDecl.getName(), fieldDecl.getVariableType());
+            }
+            HashMap<String, ObjectType> methods = new HashMap<>();
+            for (MethodDeclaration methodDecl: currentClass.getMethods()) {
+                methods.put(methodDecl.getName(), methodDecl.getReturnType());
+            }
+            classes.put(currentClass.getClassType().getName(), new ClassObject(fields, methods));
+        }
+    }
 
     @Override
     public TypedWhile typeCheck(While toCheck)
