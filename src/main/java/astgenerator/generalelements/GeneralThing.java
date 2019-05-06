@@ -5,8 +5,5 @@ import tastgenerator.generalelements.TypedGeneralThing;
 
 public abstract class GeneralThing
 {
-    public TypedGeneralThing toTyped(TypeChecker converter)
-    {
-        throw new IllegalStateException("NOPE");
-    }
+    public abstract TypedGeneralThing toTyped(TypeChecker converter);
 }

@@ -1,5 +1,8 @@
 package astgenerator.generalelements;
 
+import tastgenerator.TypeChecker;
+import tastgenerator.generalelements.TypedGeneralThing;
+
 import java.util.List;
 
 public class UntypedProgram extends GeneralThing
@@ -13,5 +16,10 @@ public class UntypedProgram extends GeneralThing
     public void setClasses(List<Class> classes)
     {
         this.classes = classes;
+    }
+
+    @Override
+    public TypedGeneralThing toTyped(TypeChecker converter) {
+        return converter.typeCheck(this);
     }
 }

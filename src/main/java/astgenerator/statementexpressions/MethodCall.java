@@ -1,6 +1,8 @@
 package astgenerator.statementexpressions;
 
 import astgenerator.expressions.Expression;
+import tastgenerator.TypeChecker;
+import tastgenerator.statementexpressions.TypedStatementExpression;
 
 import java.util.List;
 
@@ -30,5 +32,10 @@ public class MethodCall extends StatementExpression
     public List<Expression> getParameters()
     {
         return parameters;
+    }
+
+    @Override
+    public TypedStatementExpression toTyped(TypeChecker converter) {
+        return converter.typeCheck(this);
     }
 }

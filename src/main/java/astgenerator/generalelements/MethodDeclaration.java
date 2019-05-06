@@ -4,6 +4,8 @@ import astgenerator.statements.Statement;
 import common.AccessModifier;
 import common.Modifier;
 import common.ObjectType;
+import tastgenerator.TypeChecker;
+import tastgenerator.generalelements.TypedGeneralThing;
 
 import java.util.List;
 
@@ -44,5 +46,11 @@ public class MethodDeclaration extends GeneralThing
     public Statement getStmt()
     {
         return stmt;
+    }
+
+
+    @Override
+    public TypedGeneralThing toTyped(TypeChecker converter) {
+        return converter.typeCheck(this);
     }
 }

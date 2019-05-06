@@ -1,6 +1,8 @@
 package astgenerator.generalelements;
 
 import common.ObjectType;
+import tastgenerator.TypeChecker;
+import tastgenerator.generalelements.TypedGeneralThing;
 
 import java.util.List;
 
@@ -30,5 +32,10 @@ public class Class extends GeneralThing
     public List<MethodDeclaration> getMethods()
     {
         return methods;
+    }
+
+    @Override
+    public TypedGeneralThing toTyped(TypeChecker converter) {
+        return converter.typeCheck(this);
     }
 }

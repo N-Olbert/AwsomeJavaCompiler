@@ -1,6 +1,8 @@
 package astgenerator.statements;
 
 import astgenerator.expressions.Expression;
+import tastgenerator.TypeChecker;
+import tastgenerator.statements.TypedStatement;
 
 public class Return extends Statement
 {
@@ -13,5 +15,10 @@ public class Return extends Statement
     public Expression getExp()
     {
         return exp;
+    }
+
+    @Override
+    public TypedStatement toTyped(TypeChecker converter) {
+        return converter.typeCheck(this);
     }
 }

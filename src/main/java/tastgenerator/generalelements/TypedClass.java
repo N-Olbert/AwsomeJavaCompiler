@@ -1,10 +1,11 @@
 package tastgenerator.generalelements;
 
 import common.ObjectType;
+import tastgenerator.statements.TypedWhile;
 
 import java.util.List;
 
-public class TypedClass
+public class TypedClass extends TypedGeneralThing
 {
     private ObjectType classType;
     private List<TypedFieldDeclaration> fields;

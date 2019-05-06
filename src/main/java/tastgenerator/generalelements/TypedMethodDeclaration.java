@@ -4,7 +4,7 @@ import tastgenerator.statements.TypedBlock;
 
 import java.util.List;
 
-public class TypedMethodDeclaration
+public class TypedMethodDeclaration extends TypedGeneralThing
 {
     private ObjectType returnType;
     private String name;
