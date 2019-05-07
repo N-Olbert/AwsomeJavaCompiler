@@ -102,13 +102,6 @@ public class BytecodeTests
         assertEquals(cws.size(), 1);
         byte[] bytes = cws.get(0).toByteArray();
 
-        try(FileOutputStream os = new FileOutputStream(new File("target/class1.class"))) {
-            os.write(bytes);
-            os.flush();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
 
         BytecodeLoader loader = new BytecodeLoader(bytes);
 
@@ -129,7 +122,7 @@ public class BytecodeTests
         }
     }
 
-    //@Test Not implemented yet
+    @Test
     public void testASTClassGenerationWithGetMethodOfParameter()
     {
         var className = "TestSimpleStatement";
@@ -146,7 +139,7 @@ public class BytecodeTests
         var statements = new ArrayList<TypedStatement>();
         statements.add(new TypedReturn(new TypedLocalOrFieldVar(ObjectType.IntType, "x")));
         var typedBlock = new TypedBlock(statements);
-        var typedMethod = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE,
+        var typedMethod = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.STATIC,
                 ObjectType.IntType, methodName, methodparameters, typedBlock);
         methods.add(typedMethod);
 
@@ -155,16 +148,20 @@ public class BytecodeTests
         assertNotNull(cws);
         assertEquals(cws.size(), 1);
         byte[] code = cws.get(0).toByteArray();
+        saveClass(code, "target/class2.class");
         BytecodeLoader loader = new BytecodeLoader(code);
 
         try
         {
-            var Class = loader.findClass(className);
-            var method = loader.getMethod(className, methodName);
+            var clazz = loader.findClass(className);
+            assertNotNull(clazz);
+            var method = loader.getMethod(className, methodName, int.class);
             assertEquals(int.class, method.getReturnType());
-            assertEquals(5, method.invoke(Class, 5));
-            assertEquals(0, Class.getFields().length);
-            assertEquals(1, Class.getMethods().length);
+            assertEquals(5, method.invoke(null, 5));
+            assertEquals(Integer.MAX_VALUE, method.invoke(null, Integer.MAX_VALUE));
+            assertEquals(Integer.MIN_VALUE, method.invoke(null, Integer.MIN_VALUE));
+            assertEquals(-5, method.invoke(null, -5));
+            assertEquals(0, method.invoke(null, 0));
         }
         catch (NoSuchMethodException e)
         {
@@ -173,6 +170,16 @@ public class BytecodeTests
         catch (IllegalAccessException | InvocationTargetException e)
         {
             fail("Invoking Method: \""+methodName + " \"");
+        }
+    }
+
+    private void saveClass(byte[] bytes, String fileName) {
+        try(FileOutputStream os = new FileOutputStream(new File(fileName))) {
+            os.write(bytes);
+            os.flush();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

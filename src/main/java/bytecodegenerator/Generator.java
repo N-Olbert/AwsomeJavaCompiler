@@ -5,6 +5,7 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import tastgenerator.expressions.TypedExpression;
 import tastgenerator.expressions.TypedInt;
+import tastgenerator.expressions.TypedLocalOrFieldVar;
 import tastgenerator.generalelements.TypedClass;
 import tastgenerator.generalelements.TypedFieldDeclaration;
 import tastgenerator.generalelements.TypedMethodDeclaration;
@@ -14,7 +15,9 @@ import tastgenerator.statements.TypedBlock;
 import tastgenerator.statements.TypedReturn;
 import tastgenerator.statements.TypedStatement;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public abstract class Generator {
@@ -46,8 +49,15 @@ public abstract class Generator {
 
     public static void generate(TypedMethodDeclaration declaration, ClassWriter writer) {
         MethodVisitor visitor = writer.visitMethod(declaration.getAccessModifier().getCode() | declaration.getModifier().getCode(), declaration.getName(), generate(declaration.getParams()) + declaration.getReturnType().getName(), null, null);
+        Map<String, Integer> localVar = new HashMap<>();
+        if(declaration.getParams() != null) {
+            declaration.getParams().forEach(param -> {
+                localVar.put(param.getName(), localVar.size());
+                visitor.visitParameter(param.getName(), 0);
+            });
+        }
         visitor.visitCode();
-        generate(declaration.getStmt(), visitor);
+        generate(declaration.getStmt(), visitor, localVar);
         visitor.visitMaxs(0, 0);
         visitor.visitEnd();
     }
@@ -62,26 +72,55 @@ public abstract class Generator {
         return builder.toString();
     }
 
-    public static void generate(TypedBlock block, MethodVisitor visitor) {
+    public static void generate(TypedBlock block, MethodVisitor visitor, Map<String, Integer> localVar) {
         if(block.getBlockedStatements() != null) {
-            block.getBlockedStatements().forEach(statement -> statement.generateByteCode(visitor));
+            block.getBlockedStatements().forEach(statement -> statement.generateByteCode(visitor, new HashMap<>(localVar)));
         }
     }
 
-    public static void generate(TypedReturn statement, MethodVisitor visitor) {
-        statement.getExp().generateByteCode(visitor);
+    public static void generate(TypedReturn statement, MethodVisitor visitor, Map<String, Integer> localVar) {
+        statement.getExp().generateByteCode(visitor, new HashMap<>(localVar));
         visitor.visitInsn(Opcodes.IRETURN);
     }
 
-    public static void generate(TypedInt expression, MethodVisitor visitor) {
-        visitor.visitInsn(Opcodes.ICONST_5);
+    public static void generate(TypedLocalOrFieldVar expression, MethodVisitor visitor, Map<String, Integer> localVar) {
+        visitor.visitVarInsn(Opcodes.ILOAD, localVar.get(expression.getName()));
     }
 
-    public static void generate(TypedStatement statement, MethodVisitor visitor) {
+    public static void generate(TypedInt expression, MethodVisitor visitor, Map<String, Integer> localVar) {
+        switch (expression.getJint()) {
+            case -1:
+                visitor.visitInsn(Opcodes.ICONST_M1);
+                break;
+            case 0:
+                visitor.visitInsn(Opcodes.ICONST_0);
+                break;
+            case 1:
+                visitor.visitInsn(Opcodes.ICONST_1);
+                break;
+            case 2:
+                visitor.visitInsn(Opcodes.ICONST_2);
+                break;
+            case 3:
+                visitor.visitInsn(Opcodes.ICONST_3);
+                break;
+            case 4:
+                visitor.visitInsn(Opcodes.ICONST_4);
+                break;
+            case 5:
+                visitor.visitInsn(Opcodes.ICONST_5);
+                break;
+            default:
+                visitor.visitIntInsn(Opcodes.BIPUSH, expression.getJint());
+                break;
+        }
+    }
+
+    public static void generate(TypedStatement statement, MethodVisitor visitor, Map<String, Integer> localVar) {
         throw new RuntimeException("Not implemented yet!");
     }
 
-    public static void generate(TypedExpression expression, MethodVisitor visitor) {
+    public static void generate(TypedExpression expression, MethodVisitor visitor, Map<String, Integer> localVar) {
         throw new RuntimeException("Not implemented yet!");
     }
 

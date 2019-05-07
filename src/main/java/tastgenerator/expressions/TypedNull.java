@@ -4,6 +4,9 @@ import bytecodegenerator.Generator;
 import common.ObjectType;
 import org.objectweb.asm.MethodVisitor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class TypedNull extends TypedExpression
 {
     public TypedNull()
@@ -12,7 +15,7 @@ public class TypedNull extends TypedExpression
     }
 
     @Override
-    public void generateByteCode(MethodVisitor visitor) {
-        Generator.generate(this, visitor);
+    public void generateByteCode(MethodVisitor visitor, Map<String, Integer> localVar) {
+        Generator.generate(this, visitor, localVar);
     }
 }

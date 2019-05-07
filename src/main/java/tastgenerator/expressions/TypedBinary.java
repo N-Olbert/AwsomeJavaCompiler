@@ -4,6 +4,9 @@ import bytecodegenerator.Generator;
 import common.Operators;
 import org.objectweb.asm.MethodVisitor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class TypedBinary extends TypedExpression
 {
     private TypedExpression expression;
@@ -32,7 +35,7 @@ public class TypedBinary extends TypedExpression
     }
 
     @Override
-    public void generateByteCode(MethodVisitor visitor) {
-        Generator.generate(this, visitor);
+    public void generateByteCode(MethodVisitor visitor, Map<String, Integer> localVar) {
+        Generator.generate(this, visitor, localVar);
     }
 }

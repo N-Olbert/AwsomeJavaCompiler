@@ -4,6 +4,9 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import tastgenerator.generalelements.TypedClass;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public interface GenerateByteCodeStatement {
-    void generateByteCode(MethodVisitor visitor);
+    void generateByteCode(MethodVisitor visitor, Map<String, Integer> localVar);
 }

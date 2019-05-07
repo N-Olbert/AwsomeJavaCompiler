@@ -4,6 +4,9 @@ import bytecodegenerator.Generator;
 import org.objectweb.asm.MethodVisitor;
 import tastgenerator.expressions.TypedExpression;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class TypedWhile extends TypedStatement
 {
     private TypedExpression exp;
@@ -26,7 +29,7 @@ public class TypedWhile extends TypedStatement
     }
 
     @Override
-    public void generateByteCode(MethodVisitor visitor) {
-        Generator.generate(this, visitor);
+    public void generateByteCode(MethodVisitor visitor, Map<String, Integer> localVar) {
+        Generator.generate(this, visitor, localVar);
     }
 }
