@@ -3,15 +3,19 @@ package astgenerator.statements;
 import tastgenerator.TypeChecker;
 import tastgenerator.statements.TypedStatement;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Block extends Statement
 {
     private List<Statement> blockedStatements;
 
-    public Block(List<Statement> blockedStatements)
+    public Block(Statement... blockedStatements)
     {
-        this.blockedStatements = blockedStatements;
+        var newList = new ArrayList<Statement>();
+        Collections.addAll(newList, blockedStatements);
+        this.blockedStatements = newList;
     }
 
     public List<Statement> getBlockedStatements()

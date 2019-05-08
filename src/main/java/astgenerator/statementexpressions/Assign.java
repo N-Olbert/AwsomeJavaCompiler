@@ -6,20 +6,20 @@ import tastgenerator.statementexpressions.TypedStatementExpression;
 
 public class Assign extends StatementExpression
 {
-    private String name;
-    private Expression expression;
+    private Expression expression1;
+    private Expression expression2;
 
-    public Assign(String name, Expression expression) {
-        this.name = name;
-        this.expression = expression;
+    public Assign(Expression expression1, Expression expression2) {
+        this.expression1 = expression1;
+        this.expression2 = expression2;
     }
 
-    public String getName() {
-        return this.name;
+    public Expression getExpression1() {
+        return this.expression1;
     }
 
-    public Expression getExpression() {
-        return this.expression;
+    public Expression getExpression2() {
+        return this.expression2;
     }
 
     @Override
