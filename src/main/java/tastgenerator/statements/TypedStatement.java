@@ -1,8 +1,9 @@
 package tastgenerator.statements;
 
+import bytecodegenerator.GenerateByteCodeStatement;
 import common.ObjectType;
 
-public abstract class TypedStatement
+public abstract class TypedStatement implements GenerateByteCodeStatement
 {
     protected ObjectType objectType;
 

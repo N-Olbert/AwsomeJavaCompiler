@@ -1,8 +1,9 @@
 package tastgenerator.expressions;
 
+import bytecodegenerator.GenerateByteCodeExpression;
 import common.ObjectType;
 
-public abstract class TypedExpression
+public abstract class TypedExpression implements GenerateByteCodeExpression
 {
     protected ObjectType objectType;
 

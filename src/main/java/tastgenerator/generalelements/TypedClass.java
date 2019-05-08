@@ -1,7 +1,6 @@
 package tastgenerator.generalelements;
 
 import common.ObjectType;
-import tastgenerator.statements.TypedWhile;
 
 import java.util.List;
 

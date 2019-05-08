@@ -1,6 +1,11 @@
 package tastgenerator.expressions;
 
+import bytecodegenerator.Generator;
 import common.Operators;
+import org.objectweb.asm.MethodVisitor;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TypedBinary extends TypedExpression
 {
@@ -27,5 +32,10 @@ public class TypedBinary extends TypedExpression
     public TypedExpression getExpression2()
     {
         return expression2;
+    }
+
+    @Override
+    public void generateByteCode(MethodVisitor visitor, Map<String, Integer> localVar) {
+        Generator.generate(this, visitor, localVar);
     }
 }
