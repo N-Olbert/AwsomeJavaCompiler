@@ -1,4 +1,11 @@
 package tastgenerator.expressions;
+
+import bytecodegenerator.Generator;
+import org.objectweb.asm.MethodVisitor;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class TypedInstVar extends TypedExpression
 {
     private String name;
@@ -16,5 +23,10 @@ public class TypedInstVar extends TypedExpression
     public TypedExpression getExpression()
     {
         return expression;
+    }
+
+    @Override
+    public void generateByteCode(MethodVisitor visitor, Map<String, Integer> localVar) {
+        Generator.generate(this, visitor, localVar);
     }
 }

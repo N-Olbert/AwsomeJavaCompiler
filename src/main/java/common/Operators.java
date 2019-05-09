@@ -20,5 +20,9 @@ public enum Operators
     LESSTHAN,
     LESSOREQUAL,
     EQUALS,
+    PLUS,
+    PLUSPLUS,
+    MINUS,
+    MINUSMINUS,
     NOTEQUALS
 }

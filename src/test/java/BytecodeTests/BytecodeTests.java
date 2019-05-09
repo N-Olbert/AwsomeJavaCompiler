@@ -7,13 +7,18 @@ import org.junit.Assert;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import org.objectweb.asm.ClassWriter;
 import tastgenerator.expressions.TypedInt;
+import tastgenerator.expressions.TypedLocalOrFieldVar;
 import tastgenerator.generalelements.*;
 import tastgenerator.statements.TypedBlock;
 import tastgenerator.statements.TypedReturn;
 import tastgenerator.statements.TypedStatement;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -41,11 +46,11 @@ public class BytecodeTests
 
         var testProgram = getProgram(className, fields, new ArrayList <>());
 
-        OutputStream code = byteCodeGen.getByteCode(testProgram);
-        assertNotNull(code);
-
-        ByteArrayOutputStream out = (ByteArrayOutputStream) code;
-        BytecodeLoader loader = new BytecodeLoader(out.toByteArray());
+        List<ClassWriter> cws = byteCodeGen.generate(testProgram);
+        assertNotNull(cws);
+        assertEquals(cws.size(), 1);
+        byte[] bytes = cws.get(0).toByteArray();
+        BytecodeLoader loader = new BytecodeLoader(bytes);
 
         try
         {
@@ -71,7 +76,7 @@ public class BytecodeTests
     @Test
     public void testASTClassGenerationWithMethod()
     {
-        var methodName = "TestGetInt";
+        var methodName = "giveMeFive";
         var className = "TestReturn";
 
         Factory factory = Global.getFactory();
@@ -85,24 +90,27 @@ public class BytecodeTests
         var statements = new ArrayList<TypedStatement>();
         statements.add(new TypedReturn(new TypedInt("5")));
         var typedBlock = new TypedBlock(statements);
-        var typedMethod = new TypedMethodDeclaration(AccessModifier.PUBLIC,Modifier.NONE,
+        var typedMethod = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.STATIC,
                 ObjectType.IntType, methodName, methodparameters, typedBlock);
         methods.add(typedMethod);
 
         var testProgram = getProgram(className, fields, methods);
 
-        OutputStream code = byteCodeGen.getByteCode(testProgram);
-        assertNotNull(code);
 
-        ByteArrayOutputStream out = (ByteArrayOutputStream) code;
-        BytecodeLoader loader = new BytecodeLoader(out.toByteArray());
+        List<ClassWriter> cws = byteCodeGen.generate(testProgram);
+        assertNotNull(cws);
+        assertEquals(cws.size(), 1);
+        byte[] bytes = cws.get(0).toByteArray();
+
+
+        BytecodeLoader loader = new BytecodeLoader(bytes);
 
         try
         {
             var Class = loader.findClass(className);
             var method = loader.getMethod(className, methodName);
             assertEquals(int.class, method.getReturnType());
-            assertEquals(5, method.invoke(Class));
+            assertEquals(5, method.invoke(null));
         }
         catch (NoSuchMethodException e)
         {
@@ -129,28 +137,31 @@ public class BytecodeTests
         var methodparameters = new ArrayList<TypedMethodParameter>();
         methodparameters.add(new TypedMethodParameter(ObjectType.IntType, "x"));
         var statements = new ArrayList<TypedStatement>();
-        statements.add(new TypedReturn(new TypedInt(methodparameters.get(0).getName())));
+        statements.add(new TypedReturn(new TypedLocalOrFieldVar(ObjectType.IntType, "x")));
         var typedBlock = new TypedBlock(statements);
-        var typedMethod = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE,
+        var typedMethod = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.STATIC,
                 ObjectType.IntType, methodName, methodparameters, typedBlock);
         methods.add(typedMethod);
 
         var program = getProgram(className, fields, methods);
-
-        OutputStream code = byteCodeGen.getByteCode(program);
-        assertNotNull(code);
-
-        ByteArrayOutputStream out = (ByteArrayOutputStream) code;
-        BytecodeLoader loader = new BytecodeLoader(out.toByteArray());
+        List<ClassWriter> cws = byteCodeGen.generate(program);
+        assertNotNull(cws);
+        assertEquals(cws.size(), 1);
+        byte[] code = cws.get(0).toByteArray();
+        saveClass(code, "target/class2.class");
+        BytecodeLoader loader = new BytecodeLoader(code);
 
         try
         {
-            var Class = loader.findClass(className);
-            var method = loader.getMethod(className, methodName);
+            var clazz = loader.findClass(className);
+            assertNotNull(clazz);
+            var method = loader.getMethod(className, methodName, int.class);
             assertEquals(int.class, method.getReturnType());
-            assertEquals(5, method.invoke(Class, 5));
-            assertEquals(0, Class.getFields().length);
-            assertEquals(1, Class.getMethods().length);
+            assertEquals(5, method.invoke(null, 5));
+            assertEquals(Integer.MAX_VALUE, method.invoke(null, Integer.MAX_VALUE));
+            assertEquals(Integer.MIN_VALUE, method.invoke(null, Integer.MIN_VALUE));
+            assertEquals(-5, method.invoke(null, -5));
+            assertEquals(0, method.invoke(null, 0));
         }
         catch (NoSuchMethodException e)
         {
@@ -159,6 +170,16 @@ public class BytecodeTests
         catch (IllegalAccessException | InvocationTargetException e)
         {
             fail("Invoking Method: \""+methodName + " \"");
+        }
+    }
+
+    private void saveClass(byte[] bytes, String fileName) {
+        try(FileOutputStream os = new FileOutputStream(new File(fileName))) {
+            os.write(bytes);
+            os.flush();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
