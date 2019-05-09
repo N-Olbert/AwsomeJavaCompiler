@@ -8,7 +8,6 @@ import astgenerator.statementexpressions.MethodCall;
 import astgenerator.statementexpressions.New;
 import astgenerator.statements.*;
 import common.ObjectType;
-import common.Operators;
 import tastgenerator.exceptions.InvalidASTException;
 import tastgenerator.exceptions.TypeMismatchException;
 import tastgenerator.expressions.*;
@@ -69,8 +68,8 @@ public class TypeCheckerInstance implements TypeChecker
         TypedExpression expression1 = toCheck.getExpression().toTyped(this);
         TypedExpression expression2 = toCheck.getExpression2().toTyped(this);
         switch (toCheck.getOperator()){
-            case ADDITION:
-            case SUBTRACTION:
+            case PLUS:
+            case MINUS:
             case MULTIPLICATION:
             case DIVISION:
             case MODULO:
@@ -123,22 +122,22 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedBoolean typeCheck(JBoolean toCheck) {
-        return null;
+        return new TypedBoolean(Boolean.toString(toCheck.getJBool()));
     }
 
     @Override
     public TypedChar typeCheck(JCharacter toCheck) {
-        return null;
+        return new TypedChar(String.valueOf(toCheck.getJChar()));
     }
 
     @Override
     public TypedInt typeCheck(JInteger toCheck) {
-        return null;
+        return new TypedInt(Integer.toString(toCheck.getJint()));
     }
 
     @Override
     public TypedNull typeCheck(JNull toCheck) {
-        return null;
+        return new TypedNull();
     }
 
     @Override
@@ -181,6 +180,8 @@ public class TypeCheckerInstance implements TypeChecker
             case INCREMENTAFTER:
             case DECREMENTBEFORE:
             case DECREMENTAFTER:
+            case PLUS:
+            case MINUS:
                 if (expression.getObjectType() == ObjectType.IntType || expression.getObjectType() == ObjectType.CharType) {
                     return new TypedUnary(expression, toCheck.getOperator(), ObjectType.IntType);
                 } else {

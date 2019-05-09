@@ -7,8 +7,8 @@ public enum Operators
     INCREMENTAFTER,
     DECREMENTBEFORE,
     DECREMENTAFTER,
-    ADDITION,
-    SUBTRACTION,
+    PLUS,
+    MINUS,
     MULTIPLICATION,
     DIVISION,
     MODULO,
@@ -20,9 +20,5 @@ public enum Operators
     LESSTHAN,
     LESSOREQUAL,
     EQUALS,
-    PLUS,
-    PLUSPLUS,
-    MINUS,
-    MINUSMINUS,
     NOTEQUALS
 }

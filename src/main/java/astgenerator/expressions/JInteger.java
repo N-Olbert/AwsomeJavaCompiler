@@ -12,6 +12,10 @@ public class JInteger extends Expression
         this.jint = Integer.parseInt(jint);
     }
 
+    public int getJint() {
+        return jint;
+    }
+
     @Override
     public TypedExpression toTyped(TypeChecker converter) {
         return converter.typeCheck(this);
