@@ -7,6 +7,8 @@ public enum Operators
     LESSTHAN,
     EQUALS,
     PLUS,
+    PLUSPLUS,
     MINUS,
+    MINUSMINUS,
     NOTEQUALS
 }
