@@ -3,18 +3,12 @@ package tastgenerator;
 import astgenerator.expressions.*;
 import astgenerator.generalelements.*;
 import astgenerator.generalelements.Class;
-import astgenerator.statementexpressions.Assign;
-import astgenerator.statementexpressions.MethodCall;
-import astgenerator.statementexpressions.New;
 import astgenerator.statements.*;
 import common.ObjectType;
 import tastgenerator.exceptions.InvalidASTException;
 import tastgenerator.exceptions.TypeMismatchException;
 import tastgenerator.expressions.*;
 import tastgenerator.generalelements.*;
-import tastgenerator.statementexpressions.TypedAssign;
-import tastgenerator.statementexpressions.TypedMethodCall;
-import tastgenerator.statementexpressions.TypedNew;
 import tastgenerator.statements.*;
 
 import java.util.ArrayList;
@@ -24,7 +18,7 @@ import java.util.List;
 public class TypeCheckerInstance implements TypeChecker
 {
 
-    HashMap<String, ClassObject> classes;
+    private HashMap<String, ClassObject> classes;
 
     public TypeCheckerInstance(UntypedProgram program) {
         classes = new HashMap<>();
@@ -58,7 +52,7 @@ public class TypeCheckerInstance implements TypeChecker
     }
 
     @Override
-    public TypedStatemetExpressionStatement typeCheck(StatementExpressionStatement toCheck) {
+    public TypedAssignExpression typeCheck(AssignExpression toCheck) {
         return null;
     }
 
@@ -151,7 +145,12 @@ public class TypeCheckerInstance implements TypeChecker
     }
 
     @Override
-    public TypedStatementExpressionExpression typeCheck(StatementExpressionExpression toCheck) {
+    public TypedMethodCallExpression typeCheck(MethodCallExpression toCheck) {
+        return null;
+    }
+
+    @Override
+    public TypedNewExpression typeCheck(NewExpression toCheck) {
         return null;
     }
 
@@ -183,7 +182,7 @@ public class TypeCheckerInstance implements TypeChecker
             case PLUS:
             case MINUS:
                 if (expression.getObjectType() == ObjectType.IntType || expression.getObjectType() == ObjectType.CharType) {
-                    return new TypedUnary(expression, toCheck.getOperator(), ObjectType.IntType);
+                    return new TypedUnary(expression, toCheck.getOperator(), ObjectType.CharType);
                 } else {
                     throw new TypeMismatchException("Type Mismatch: Cannot apply " + toCheck.getOperator().name() + " to '" +
                             expression.getObjectType().getName() + "'");
@@ -229,17 +228,7 @@ public class TypeCheckerInstance implements TypeChecker
     }
 
     @Override
-    public TypedAssign typeCheck(Assign toCheck) {
-        return null;
-    }
-
-    @Override
-    public TypedMethodCall typeCheck(MethodCall toCheck) {
-        return null;
-    }
-
-    @Override
-    public TypedNew typeCheck(New toCheck) {
+    public TypedAssignStatement typeCheck(AssignStatement toCheck) {
         return null;
     }
 
@@ -255,6 +244,16 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedLocalVarDeclaration typeCheck(LocalVarDeclaration toCheck) {
+        return null;
+    }
+
+    @Override
+    public TypedMethodCallStatement typeCheck(MethodCallStatement toCheck) {
+        return null;
+    }
+
+    @Override
+    public TypedNewStatement typeCheck(NewStatement toCheck) {
         return null;
     }
 }

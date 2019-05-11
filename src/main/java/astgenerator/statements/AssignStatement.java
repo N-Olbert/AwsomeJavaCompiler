@@ -1,15 +1,15 @@
-package astgenerator.statementexpressions;
+package astgenerator.statements;
 
 import astgenerator.expressions.Expression;
 import tastgenerator.TypeChecker;
-import tastgenerator.statementexpressions.TypedStatementExpression;
+import tastgenerator.statements.TypedStatement;
 
-public class Assign extends StatementExpression
+public class AssignStatement extends Statement
 {
     private Expression expression1;
     private Expression expression2;
 
-    public Assign(Expression expression1, Expression expression2) {
+    public AssignStatement(Expression expression1, Expression expression2) {
         this.expression1 = expression1;
         this.expression2 = expression2;
     }
@@ -23,7 +23,7 @@ public class Assign extends StatementExpression
     }
 
     @Override
-    public TypedStatementExpression toTyped(TypeChecker converter) {
+    public TypedStatement toTyped(TypeChecker converter) {
         return converter.typeCheck(this);
     }
 }

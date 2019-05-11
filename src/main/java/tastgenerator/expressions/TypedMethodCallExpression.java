@@ -1,16 +1,17 @@
-package tastgenerator.statementexpressions;
+package tastgenerator.expressions;
 
-import tastgenerator.expressions.TypedExpression;
+import org.objectweb.asm.MethodVisitor;
 
 import java.util.List;
+import java.util.Map;
 
-public class TypedMethodCall extends TypedStatementExpression
+public class TypedMethodCallExpression extends TypedExpression
 {
     private TypedExpression object;
     private String name;
     private List<TypedExpression> parameters;
 
-    public TypedMethodCall(TypedExpression object, String name, List<TypedExpression> parameters)
+    public TypedMethodCallExpression(TypedExpression object, String name, List<TypedExpression> parameters)
     {
         this.object = object;
         this.name = name;
@@ -30,5 +31,10 @@ public class TypedMethodCall extends TypedStatementExpression
     public List<TypedExpression> getParameters()
     {
         return parameters;
+    }
+
+    @Override
+    public void generateByteCode(MethodVisitor visitor, Map<String, Integer> localVar) {
+
     }
 }

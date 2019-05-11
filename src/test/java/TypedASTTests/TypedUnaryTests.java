@@ -76,7 +76,7 @@ public class TypedUnaryTests
     public void testCharIncrementNoWideningConversation()
     {
         var converter = new TypeCheckerInstance(new UntypedProgram());
-        var unary = new Unary(new JInteger("4"), Operators.INCREMENTAFTER);
+        var unary = new Unary(new JCharacter("4"), Operators.INCREMENTAFTER);
         var typedUnary = (TypedUnary) unary.toTyped(converter);
         assertNotNull(typedUnary);
         assertEquals(typedUnary.getObjectType(), ObjectType.CharType);
@@ -86,7 +86,7 @@ public class TypedUnaryTests
     public void testCharDecrementNoWideningConversation()
     {
         var converter = new TypeCheckerInstance(new UntypedProgram());
-        var unary = new Unary(new JInteger("4"), Operators.DECREMENTAFTER);
+        var unary = new Unary(new JCharacter("4"), Operators.DECREMENTAFTER);
         var typedUnary = (TypedUnary) unary.toTyped(converter);
         assertNotNull(typedUnary);
         assertEquals(typedUnary.getObjectType(), ObjectType.CharType);

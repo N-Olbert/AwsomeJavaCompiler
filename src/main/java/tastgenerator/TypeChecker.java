@@ -17,6 +17,7 @@ import tastgenerator.statements.*;
 
 public interface TypeChecker
 {
+    TypedAssignExpression typeCheck(AssignExpression toCheck);
     TypedBinary typeCheck(Binary toCheck);
     TypedInstVar typeCheck(InstVar toCheck);
     TypedBoolean typeCheck(JBoolean toCheck);
@@ -25,7 +26,8 @@ public interface TypeChecker
     TypedNull typeCheck(JNull toCheck);
     TypedString typeCheck(JString toCheck);
     TypedLocalOrFieldVar typeCheck(LocalOrFieldVar toCheck);
-    TypedStatementExpressionExpression typeCheck(StatementExpressionExpression toCheck);
+    TypedMethodCallExpression typeCheck(MethodCallExpression toCheck);
+    TypedNewExpression typeCheck(NewExpression toCheck);
     TypedSuper typeCheck(Super toCheck);
     TypedThis typeCheck(This toCheck);
     TypedUnary typeCheck(Unary toCheck);
@@ -36,15 +38,13 @@ public interface TypeChecker
     TypedMethodParameter typeCheck(MethodParameter toCheck);
     TypedProgram typeCheck(UntypedProgram toCheck);
 
-    TypedAssign typeCheck(Assign toCheck);
-    TypedMethodCall typeCheck(MethodCall toCheck);
-    TypedNew typeCheck(New toCheck);
-
+    TypedAssignStatement typeCheck(AssignStatement toCheck);
     TypedBlock typeCheck(Block toCheck);
     TypedIfElse typeCheck(IfElse toCheck);
     TypedLocalVarDeclaration typeCheck(LocalVarDeclaration toCheck);
+    TypedMethodCallStatement typeCheck(MethodCallStatement toCheck);
+    TypedNewStatement typeCheck(NewStatement toCheck);
     TypedReturn typeCheck(Return toCheck);
-    TypedStatemetExpressionStatement typeCheck(StatementExpressionStatement toCheck);
     TypedWhile typeCheck(While toCheck);
 
 
