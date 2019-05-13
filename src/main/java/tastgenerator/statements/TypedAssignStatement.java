@@ -1,4 +1,5 @@
 package tastgenerator.statements;
+import common.ObjectType;
 import org.objectweb.asm.MethodVisitor;
 import tastgenerator.expressions.TypedExpression;
 
@@ -9,9 +10,10 @@ public class TypedAssignStatement extends TypedStatement
     private TypedExpression expression1;
     private TypedExpression expression2;
 
-    public TypedAssignStatement(TypedExpression expression1, TypedExpression expression2) {
+    public TypedAssignStatement(TypedExpression expression1, TypedExpression expression2, ObjectType type) {
         this.expression1 = expression1;
         this.expression2 = expression2;
+        this.objectType = type;
     }
 
     public TypedExpression getExpression1() {
