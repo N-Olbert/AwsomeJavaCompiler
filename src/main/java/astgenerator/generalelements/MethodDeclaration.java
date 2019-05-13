@@ -7,6 +7,7 @@ import common.Modifier;
 import common.ObjectType;
 import tastgenerator.TypeChecker;
 import tastgenerator.generalelements.TypedGeneralThing;
+import tastgenerator.generalelements.TypedMethodDeclaration;
 
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class MethodDeclaration extends GeneralThing
     public Modifier getModifier() { return modifier; }
 
     @Override
-    public TypedGeneralThing toTyped(TypeChecker converter) {
+    public TypedMethodDeclaration toTyped(TypeChecker converter) {
         return converter.typeCheck(this);
     }
 }

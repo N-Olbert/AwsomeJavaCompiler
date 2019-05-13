@@ -53,46 +53,6 @@ public class TypedUnaryTests
     }
 
     @Test
-    public void testIntIncrement()
-    {
-        var converter = new TypeCheckerInstance(new UntypedProgram());
-        var unary = new Unary(new JInteger("4"), Operators.INCREMENTAFTER);
-        var typedUnary = (TypedUnary) unary.toTyped(converter);
-        assertNotNull(typedUnary);
-        assertEquals(typedUnary.getObjectType(), ObjectType.IntType);
-    }
-
-    @Test
-    public void testIntDecrement()
-    {
-        var converter = new TypeCheckerInstance(new UntypedProgram());
-        var unary = new Unary(new JInteger("4"), Operators.DECREMENTAFTER);
-        var typedUnary = (TypedUnary) unary.toTyped(converter);
-        assertNotNull(typedUnary);
-        assertEquals(typedUnary.getObjectType(), ObjectType.IntType);
-    }
-
-    @Test
-    public void testCharIncrementNoWideningConversation()
-    {
-        var converter = new TypeCheckerInstance(new UntypedProgram());
-        var unary = new Unary(new JCharacter("4"), Operators.INCREMENTAFTER);
-        var typedUnary = (TypedUnary) unary.toTyped(converter);
-        assertNotNull(typedUnary);
-        assertEquals(typedUnary.getObjectType(), ObjectType.CharType);
-    }
-
-    @Test
-    public void testCharDecrementNoWideningConversation()
-    {
-        var converter = new TypeCheckerInstance(new UntypedProgram());
-        var unary = new Unary(new JCharacter("4"), Operators.DECREMENTAFTER);
-        var typedUnary = (TypedUnary) unary.toTyped(converter);
-        assertNotNull(typedUnary);
-        assertEquals(typedUnary.getObjectType(), ObjectType.CharType);
-    }
-
-    @Test
     public void testBasicNegation()
     {
         var converter = new TypeCheckerInstance(new UntypedProgram());
@@ -115,14 +75,6 @@ public class TypedUnaryTests
     {
         var converter = new TypeCheckerInstance(new UntypedProgram());
         var unary = new Unary(new JNull(), Operators.MINUS);
-        unary.toTyped(converter);
-    }
-
-    @Test(expected = Exception.class)
-    public void testBasicFail3()
-    {
-        var converter = new TypeCheckerInstance(new UntypedProgram());
-        var unary = new Unary(new JNull(), Operators.INCREMENTAFTER);
         unary.toTyped(converter);
     }
 }
