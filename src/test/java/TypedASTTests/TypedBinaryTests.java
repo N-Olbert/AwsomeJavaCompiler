@@ -98,7 +98,7 @@ public class TypedBinaryTests
         var block = new Block();
         var localVarDecl = new LocalVarDeclaration(ObjectType.CharType, "i");
         var assign = new AssignStatement(new LocalOrFieldVar("i"),
-                                new Binary(new JInteger("3"), new JInteger("3"), Operators.MINUS));
+                new Binary(new JInteger("3"), new JInteger("3"), Operators.MINUS));
         block.getBlockedStatements().add(localVarDecl);
         block.getBlockedStatements().add(assign);
         block.toTyped(converter);
@@ -111,7 +111,7 @@ public class TypedBinaryTests
         var block = new Block();
         var localVarDecl = new LocalVarDeclaration(ObjectType.CharType, "i");
         var assign = new AssignStatement(new LocalOrFieldVar("i"),
-                                new Binary(new JCharacter("a"), new JCharacter("b"), Operators.MINUS));
+                new Binary(new JCharacter("a"), new JCharacter("b"), Operators.MINUS));
         block.getBlockedStatements().add(localVarDecl);
         block.getBlockedStatements().add(assign);
         block.toTyped(converter);
@@ -124,7 +124,7 @@ public class TypedBinaryTests
         var block = new Block();
         var localVarDecl = new LocalVarDeclaration(ObjectType.CharType, "i");
         var assign = new AssignStatement(new LocalOrFieldVar("i"),
-                                new Binary(new JInteger("3"), new JCharacter("a"), Operators.MINUS));
+                new Binary(new JInteger("3"), new JCharacter("a"), Operators.MINUS));
         block.getBlockedStatements().add(localVarDecl);
         block.getBlockedStatements().add(assign);
         block.toTyped(converter);
@@ -137,7 +137,7 @@ public class TypedBinaryTests
         var block = new Block();
         var localVarDecl = new LocalVarDeclaration(ObjectType.CharType, "i");
         var assign = new AssignStatement(new LocalOrFieldVar("i"),
-                                new Binary(new JCharacter("a"), new JInteger("3"), Operators.MINUS));
+                new Binary(new JCharacter("a"), new JInteger("3"), Operators.MINUS));
         block.getBlockedStatements().add(localVarDecl);
         block.getBlockedStatements().add(assign);
         block.toTyped(converter);
