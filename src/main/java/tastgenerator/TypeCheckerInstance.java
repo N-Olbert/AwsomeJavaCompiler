@@ -120,7 +120,8 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedInstVar typeCheck(InstVar toCheck) {
-        return null;
+        TypedExpression expression = toCheck.getExpression().toTyped(this);
+        return new TypedInstVar(expression, toCheck.getName());
     }
 
     @Override
@@ -184,10 +185,6 @@ public class TypeCheckerInstance implements TypeChecker
                     throw new TypeMismatchException("Type Mismatch: Cannot apply " + toCheck.getOperator().name() + " to '" +
                             expression.getObjectType().getName() + "'");
                 }
-            case INCREMENTBEFORE:
-            case INCREMENTAFTER:
-            case DECREMENTBEFORE:
-            case DECREMENTAFTER:
             case PLUS:
             case MINUS:
                 if (expression.getObjectType() == ObjectType.IntType || expression.getObjectType() == ObjectType.CharType) {
@@ -212,38 +209,76 @@ public class TypeCheckerInstance implements TypeChecker
         for(MethodDeclaration method: toCheck.getMethods()){
             typedMethods.add((TypedMethodDeclaration) method.toTyped(this));
         }
-
         return new TypedClass(toCheck.getClassType(), typedFields, typedMethods);
     }
 
     @Override
     public TypedFieldDeclaration typeCheck(FieldDeclaration toCheck) {
-        return null;
+        return new TypedFieldDeclaration(toCheck.getAccessModifier(),
+                                         toCheck.getModifier(),
+                                         toCheck.getVariableType(),
+                                         toCheck.getName());
     }
 
     @Override
     public TypedMethodDeclaration typeCheck(MethodDeclaration toCheck) {
-        return null;
+        List<TypedMethodParameter> typedParams = new ArrayList<>();
+        for (MethodParameter parameter: toCheck.getParams()) {
+            typedParams.add((TypedMethodParameter) parameter.toTyped(this));
+        }
+        TypedBlock typedBlock = (TypedBlock) toCheck.getStmt().toTyped(this);
+        if (!compareTypes(toCheck.getReturnType(), typedBlock.getObjectType())) {
+            throw new TypeMismatchException("Returned type does not equal the specified return type of the method");
+        }
+        return new TypedMethodDeclaration(toCheck.getAccessModifier(), toCheck.getModifier(),
+                toCheck.getReturnType(), toCheck.getName(), typedParams, typedBlock);
     }
 
     @Override
     public TypedMethodParameter typeCheck(MethodParameter toCheck) {
-        return null;
+        return new TypedMethodParameter(toCheck.getType(), toCheck.getName());
     }
 
     @Override
     public TypedProgram typeCheck(UntypedProgram toCheck) {
-        return null;
+        List<TypedClass> typedClasses = new ArrayList<>();
+        for (Class currentClass: toCheck.getClasses()) {
+            typedClasses.add((TypedClass) currentClass.toTyped(this));
+        }
+        return new TypedProgram(typedClasses);
     }
 
     @Override
     public TypedAssignStatement typeCheck(AssignStatement toCheck) {
-        return null;
+        TypedExpression expression1 = toCheck.getExpression1().toTyped(this);
+        TypedExpression expression2 = toCheck.getExpression2().toTyped(this);
+        if (!(expression1 instanceof TypedLocalOrFieldVar || expression1 instanceof TypedInstVar)) {
+            throw new InvalidASTException("Left side of the assign is not assignable");
+        }
+        if (!compareTypes(expression1.getObjectType(), expression2.getObjectType())) {
+            throw new TypeMismatchException("Types of the left and right side of the assign do not match");
+        }
+        return new TypedAssignStatement(expression1, expression2);
     }
 
     @Override
     public TypedBlock typeCheck(Block toCheck) {
-        return null;
+        List<TypedStatement> statements = new ArrayList<>();
+        ObjectType type = ObjectType.VoidType;
+        for(Statement statement: toCheck.getBlockedStatements()) {
+            TypedStatement typedStatement = statement.toTyped(this);
+            if (!typedStatement.getObjectType().getName().equals(ObjectType.VoidType.getName()) &&
+                    !typedStatement.getObjectType().getName().equals(type.getName())) {
+                if (type.getName().equals(ObjectType.CharType.getName()) &&
+                        typedStatement.getObjectType().getName().equals(ObjectType.IntType.getName())) {
+                    type = ObjectType.IntType;
+                } else {
+                    type = ObjectType.getType("Object");
+                }
+            }
+            statements.add(typedStatement);
+        }
+        return new TypedBlock(statements);
     }
 
     @Override
@@ -264,5 +299,12 @@ public class TypeCheckerInstance implements TypeChecker
     @Override
     public TypedNewStatement typeCheck(NewStatement toCheck) {
         return null;
+    }
+
+    private boolean compareTypes(ObjectType type1, ObjectType type2) {
+        return (type1.getName().equals(type2.getName()) ||
+                type1.getName().equals("Object")) ||
+                (type1.getName().equals(ObjectType.IntType.getName()) &&
+                        type2.getName().equals(ObjectType.CharType.getName()));
     }
 }

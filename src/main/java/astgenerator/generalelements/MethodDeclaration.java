@@ -55,7 +55,7 @@ public class MethodDeclaration extends GeneralThing
         return params;
     }
 
-    public Statement getStmt()
+    public Block getStmt()
     {
         return stmt;
     }

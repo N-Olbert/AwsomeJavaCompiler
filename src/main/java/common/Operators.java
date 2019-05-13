@@ -3,10 +3,6 @@ package common;
 public enum Operators
 {
     NEGATION,
-    INCREMENTBEFORE,
-    INCREMENTAFTER,
-    DECREMENTBEFORE,
-    DECREMENTAFTER,
     PLUS,
     MINUS,
     MULTIPLICATION,
