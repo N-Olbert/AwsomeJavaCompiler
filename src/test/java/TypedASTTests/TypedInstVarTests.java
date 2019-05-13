@@ -94,7 +94,7 @@ public class TypedInstVarTests
         assertNotNull(block);
         var assign = (TypedAssignStatement)block.getBlockedStatements().get(0);
         assertEquals(assign.getObjectType(), ObjectType.VoidType);
-        var localVar = (TypedInstVar)assign.getExpression();
+        var localVar = (TypedInstVar)assign.getExpression1();
         assertEquals(localVar.getObjectType(), ObjectType.getType(instVarName));
     }
 
