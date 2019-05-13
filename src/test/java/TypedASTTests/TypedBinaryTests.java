@@ -2,10 +2,9 @@ package TypedASTTests;
 
 import astgenerator.expressions.*;
 import astgenerator.generalelements.UntypedProgram;
-import astgenerator.statementexpressions.Assign;
+import astgenerator.statements.AssignStatement;
 import astgenerator.statements.Block;
 import astgenerator.statements.LocalVarDeclaration;
-import astgenerator.statements.StatementExpressionStatement;
 import common.ObjectType;
 import common.Operators;
 import static org.junit.Assert.*;
@@ -98,10 +97,10 @@ public class TypedBinaryTests
         var converter = new TypeCheckerInstance(new UntypedProgram());
         var block = new Block();
         var localVarDecl = new LocalVarDeclaration(ObjectType.CharType, "i");
-        var assign = new Assign(new LocalOrFieldVar("i"),
+        var assign = new AssignStatement(new LocalOrFieldVar("i"),
                                 new Binary(new JInteger("3"), new JInteger("3"), Operators.MINUS));
         block.getBlockedStatements().add(localVarDecl);
-        block.getBlockedStatements().add(new StatementExpressionStatement(assign));
+        block.getBlockedStatements().add(assign);
         block.toTyped(converter);
     }
 
@@ -111,10 +110,10 @@ public class TypedBinaryTests
         var converter = new TypeCheckerInstance(new UntypedProgram());
         var block = new Block();
         var localVarDecl = new LocalVarDeclaration(ObjectType.CharType, "i");
-        var assign = new Assign(new LocalOrFieldVar("i"),
+        var assign = new AssignStatement(new LocalOrFieldVar("i"),
                                 new Binary(new JCharacter("a"), new JCharacter("b"), Operators.MINUS));
         block.getBlockedStatements().add(localVarDecl);
-        block.getBlockedStatements().add(new StatementExpressionStatement(assign));
+        block.getBlockedStatements().add(assign);
         block.toTyped(converter);
     }
 
@@ -124,10 +123,10 @@ public class TypedBinaryTests
         var converter = new TypeCheckerInstance(new UntypedProgram());
         var block = new Block();
         var localVarDecl = new LocalVarDeclaration(ObjectType.CharType, "i");
-        var assign = new Assign(new LocalOrFieldVar("i"),
+        var assign = new AssignStatement(new LocalOrFieldVar("i"),
                                 new Binary(new JInteger("3"), new JCharacter("a"), Operators.MINUS));
         block.getBlockedStatements().add(localVarDecl);
-        block.getBlockedStatements().add(new StatementExpressionStatement(assign));
+        block.getBlockedStatements().add(assign);
         block.toTyped(converter);
     }
 
@@ -137,10 +136,10 @@ public class TypedBinaryTests
         var converter = new TypeCheckerInstance(new UntypedProgram());
         var block = new Block();
         var localVarDecl = new LocalVarDeclaration(ObjectType.CharType, "i");
-        var assign = new Assign(new LocalOrFieldVar("i"),
+        var assign = new AssignStatement(new LocalOrFieldVar("i"),
                                 new Binary(new JCharacter("a"), new JInteger("3"), Operators.MINUS));
         block.getBlockedStatements().add(localVarDecl);
-        block.getBlockedStatements().add(new StatementExpressionStatement(assign));
+        block.getBlockedStatements().add(assign);
         block.toTyped(converter);
     }
 
