@@ -1,42 +1,39 @@
 grammar awsomeJava;
 
 programm: jClass+;
-jClass: AccessModifier? 'class' Identifier classBody; //Modifier
-constructor: AccessModifier? Identifier'('nMethodParameters')' block;
+jClass: AccessModifier? 'class' LocalOrFieldVar classBody; //Modifier
+constructor: AccessModifier? LocalOrFieldVar'('nMethodParameters')' block;
 classBody: '{'(methodDeclaration|fieldDeclaration)* constructor (methodDeclaration|fieldDeclaration)*'}';
-methodDeclaration: AccessModifier? objectType Identifier '('nMethodParameters')' block;
-fieldDeclaration: AccessModifier?  objectType Identifier;
-methodParameter: objectType Identifier;
+methodDeclaration: AccessModifier? objectType LocalOrFieldVar '('nMethodParameters')' block;
+fieldDeclaration: AccessModifier?  objectType LocalOrFieldVar';';
+methodParameter: objectType LocalOrFieldVar;
 nMethodParameters: (methodParameter)? | methodParameter (','methodParameter)+;
 nArguments: expression? | expression (',' expression)* | instVar;
-localOrFieldVar: objectType Identifier;
-instVar: (Identifier '.')+ Identifier | jThis;
-expression: (baseType | instVar | localOrFieldVar | binary | unary ); //comparison
+instVar:  This '.' LocalOrFieldVar|(LocalOrFieldVar '.')+ LocalOrFieldVar;
+expression: (baseType | instVar | LocalOrFieldVar | binary | unary ); //comparison
 statementExpressions: (assign | jNew | methodCall)';';
-assign: (objectType)? Identifier '=' (jNew|methodCall) | Identifier AssignOperator expression
-| Identifier AssignOperator instVar;
-jNew: 'new' Identifier '('nMethodParameters')';
-methodCall: Identifier'('nArguments');';
-statement: block | ifelse | localOrFieldVarDeclaration | jReturn | jWhile;
+localVarDeclaration: baseType LocalOrFieldVar;
+assign: (objectType|This'.')? LocalOrFieldVar AssignOperator (jNew|methodCall|expression|instVar);
+jNew: 'new' LocalOrFieldVar '('nMethodParameters')';
+methodCall: (This'.')? LocalOrFieldVar'('nArguments')';
+statement: ifelse | localVarDeclaration | jReturn | jWhile | block;
 block: '{' (statement|statementExpressions)* '}';
 ifelse: 'if (' expression ')' block ('else if('expression')'block)* ('else ('expression')'block)?;
 jWhile: 'while ('expression ')' block;
-jReturn: 'return' expression ';';
-localOrFieldVarDeclaration: localOrFieldVar '=' expression | Identifier '=' expression;
-unary: (OpBeforeIdentifier|OpBeforeOrAfterIdentifier) Identifier | Identifier OpBeforeOrAfterIdentifier;
-binary: Identifier OpInBetweenIdentifier Identifier;
-baseType: JBoolean | JNull | This | JString | JCharacter | JInteger | Super | This;
-objectType: 'int'|'char'|'boolean'|Identifier;
-jThis: 'this''.'expression;
+jReturn: 'return' expression;
+unary: (OpBeforeIdentifier|OpBeforeOrAfterIdentifier) LocalOrFieldVar | LocalOrFieldVar OpBeforeOrAfterIdentifier;
+binary: LocalOrFieldVar OpInBetweenIdentifier LocalOrFieldVar;
+baseType: JBoolean | JNull | This | JString | JCharacter | JInteger | Super;
+objectType: 'int'|'char'|'boolean'|LocalOrFieldVar;
 
 AccessModifier: 'public' | 'protected' | 'private';
 //Modifier: 'static'|'final'; //abstract extra
 JBoolean: 'true'|'false';
 JNull: 'null';
 Super: 'super()';
-Semicolon: ';';
+This: 'this';
 JString: '"'[A-Za-z]'"'+;
-Identifier: [A-Za-z]+;
+LocalOrFieldVar: [A-Za-z]+;
 JCharacter: [A-Za-z];
 JInteger: [0-9]+;
 AssignOperator: '='|'+='|'-=';
@@ -46,6 +43,6 @@ OpBeforeOrAfterIdentifier: '++'|'--';
 OpInBetweenIdentifier: '+'|'-'|'&&'|'||';
 
 WS: [ \t(\r?\n)] -> skip;
-Comment: ('\\'[A-Za-z]* | '/*'[A-Za-z]*'*/') -> skip;
+Comment: ('//'[A-Za-z]* | '/*'[A-Za-z]*'*/') -> skip;
 
 
