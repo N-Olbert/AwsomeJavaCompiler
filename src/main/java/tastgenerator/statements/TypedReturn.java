@@ -1,6 +1,7 @@
 package tastgenerator.statements;
 
 import bytecodegenerator.Generator;
+import common.ObjectType;
 import org.objectweb.asm.MethodVisitor;
 import tastgenerator.expressions.TypedExpression;
 
@@ -13,6 +14,12 @@ public class TypedReturn extends TypedStatement
     public TypedReturn(TypedExpression exp)
     {
         this.exp = exp;
+    }
+
+    public TypedReturn(TypedExpression exp, ObjectType objectType)
+    {
+        this.exp = exp;
+        setObjectType(objectType);
     }
 
     public TypedExpression getExp()

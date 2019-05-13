@@ -17,6 +17,13 @@ public class TypedNewExpression extends TypedExpression
         this.parameters = expressions;
     }
 
+    public TypedNewExpression(ObjectType newType, List<TypedExpression> expressions, ObjectType objectType)
+    {
+        this.newType = newType;
+        this.parameters = expressions;
+        setObjectType(objectType);
+    }
+
     public ObjectType getNewType()
     {
         return newType;

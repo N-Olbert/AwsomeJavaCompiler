@@ -17,6 +17,12 @@ public class TypedLocalVarDeclaration extends TypedStatement
         this.variableType = variableType;
         this.name = name;
     }
+    public TypedLocalVarDeclaration(ObjectType variableType, String name, ObjectType objectType)
+    {
+        this.variableType = variableType;
+        this.name = name;
+        setObjectType(objectType);
+    }
 
     public ObjectType getVariableType()
     {

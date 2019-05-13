@@ -25,6 +25,17 @@ public class TypedMethodDeclaration extends TypedGeneralThing
         this.stmt = stmt;
     }
 
+    public TypedMethodDeclaration(AccessModifier accessModifier, Modifier modifier, ObjectType returnType,
+                                  String name, List<TypedMethodParameter> params, TypedBlock stmt, ObjectType objectType) {
+        this.accessModifier = accessModifier;
+        this.modifier = modifier;
+        this.returnType = returnType;
+        this.name = name;
+        this.params = params;
+        this.stmt = stmt;
+        setObjectType(objectType);
+    }
+
     public ObjectType getReturnType()
     {
         return returnType;

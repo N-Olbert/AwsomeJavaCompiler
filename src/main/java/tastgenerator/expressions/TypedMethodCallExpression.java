@@ -1,5 +1,6 @@
 package tastgenerator.expressions;
 
+import common.ObjectType;
 import org.objectweb.asm.MethodVisitor;
 
 import java.util.List;
@@ -16,6 +17,14 @@ public class TypedMethodCallExpression extends TypedExpression
         this.object = object;
         this.name = name;
         this.parameters = parameters;
+    }
+
+    public TypedMethodCallExpression(TypedExpression object, String name, List<TypedExpression> parameters, ObjectType objectType)
+    {
+        this.object = object;
+        this.name = name;
+        this.parameters = parameters;
+        setObjectType(objectType);
     }
 
     public TypedExpression getObject()

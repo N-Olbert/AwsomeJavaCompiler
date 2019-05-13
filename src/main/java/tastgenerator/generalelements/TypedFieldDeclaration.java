@@ -20,6 +20,14 @@ public class TypedFieldDeclaration extends TypedGeneralThing
         this.variableType = variableType;
         this.name = name;
     }
+    public TypedFieldDeclaration(AccessModifier accessModifier, Modifier modifier, ObjectType variableType, String name, ObjectType objectType)
+    {
+        this.accessModifier = accessModifier;
+        this.modifier = modifier;
+        this.variableType = variableType;
+        this.name = name;
+        setObjectType(objectType);
+    }
 
     public String getName()
     {

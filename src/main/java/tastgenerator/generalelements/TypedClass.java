@@ -17,6 +17,14 @@ public class TypedClass extends TypedGeneralThing
         this.methods = methods;
     }
 
+    public TypedClass(ObjectType classType, List<TypedFieldDeclaration> fields, List<TypedMethodDeclaration> methods, ObjectType objectType)
+    {
+        this.classType = classType;
+        this.fields = fields;
+        this.methods = methods;
+        setObjectType(objectType);
+    }
+
     public ObjectType getClassType()
     {
         return classType;

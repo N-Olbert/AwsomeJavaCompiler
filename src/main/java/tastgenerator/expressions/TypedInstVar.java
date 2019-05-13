@@ -1,6 +1,7 @@
 package tastgenerator.expressions;
 
 import bytecodegenerator.Generator;
+import common.ObjectType;
 import org.objectweb.asm.MethodVisitor;
 
 import java.util.HashMap;
@@ -13,6 +14,12 @@ public class TypedInstVar extends TypedExpression
     public TypedInstVar(TypedExpression expression, String name){
         this.expression = expression;
         this.name = name;
+    }
+
+    public TypedInstVar(TypedExpression expression, String name, ObjectType objectType){
+        this.expression = expression;
+        this.name = name;
+        setObjectType(expression.objectType);
     }
 
     public String getName()

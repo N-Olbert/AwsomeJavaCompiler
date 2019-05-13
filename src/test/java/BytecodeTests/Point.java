@@ -45,21 +45,21 @@ class Point
         methodParams.add(new String[] { ObjectType.VoidType.getName(), constructorName });
         var blocks = new ArrayList<TypedBlock>();
         var typedStatements = new ArrayList<TypedStatement>();
-        typedStatements.add(new TypedAssignStatement(new TypedInstVar(new TypedThis(), "x"), new TypedLocalOrFieldVar(ObjectType.IntType, "x")));
-        blocks.add(new TypedBlock(typedStatements));
+        typedStatements.add(new TypedAssignStatement(new TypedInstVar(new TypedThis(ObjectType.getType(className)), "x", ObjectType.IntType), new TypedLocalOrFieldVar(ObjectType.IntType, "x")));
+        blocks.add(new TypedBlock(typedStatements, ObjectType.VoidType));
         var typedStatements1 = new ArrayList<TypedStatement>();
-        typedStatements.add(new TypedReturn(new TypedInstVar(new TypedThis(), "x")));
-        blocks.add(new TypedBlock(typedStatements1));
+        typedStatements.add(new TypedReturn(new TypedInstVar(new TypedThis(ObjectType.getType(className)), "x")));
+        blocks.add(new TypedBlock(typedStatements1, ObjectType.IntType));
         var typedStatements2 = new ArrayList<TypedStatement>();
-        typedStatements2.add(new TypedAssignStatement(new TypedInstVar(new TypedThis(), "y"), new TypedLocalOrFieldVar(ObjectType.IntType, "y")));
-        blocks.add(new TypedBlock(typedStatements2));
+        typedStatements2.add(new TypedAssignStatement(new TypedInstVar(new TypedThis(ObjectType.getType(className)), "y", ObjectType.IntType), new TypedLocalOrFieldVar(ObjectType.IntType, "y")));
+        blocks.add(new TypedBlock(typedStatements2, ObjectType.VoidType));
         var typedStatements3 = new ArrayList<TypedStatement>();
-        typedStatements.add(new TypedReturn(new TypedInstVar(new TypedThis(), "y")));
-        blocks.add(new TypedBlock(typedStatements3));
+        typedStatements.add(new TypedReturn(new TypedInstVar(new TypedThis(ObjectType.getType(className)), "y", ObjectType.IntType), ObjectType.IntType));
+        blocks.add(new TypedBlock(typedStatements3, ObjectType.IntType));
         var typedStatements4 = new ArrayList<TypedStatement>();
-        typedStatements4.add(new TypedAssignStatement(new TypedInstVar(new TypedThis(), "x"), new TypedLocalOrFieldVar(ObjectType.IntType, "x")));
-        typedStatements4.add(new TypedAssignStatement(new TypedInstVar(new TypedThis(), "y"), new TypedLocalOrFieldVar(ObjectType.IntType, "y")));
-        blocks.add(new TypedBlock(typedStatements4));
+        typedStatements4.add(new TypedAssignStatement(new TypedInstVar(new TypedThis(ObjectType.getType(className)), "x", ObjectType.IntType), new TypedLocalOrFieldVar(ObjectType.IntType, "x")));
+        typedStatements4.add(new TypedAssignStatement(new TypedInstVar(new TypedThis(ObjectType.getType(className)), "y", ObjectType.IntType), new TypedLocalOrFieldVar(ObjectType.IntType, "y")));
+        blocks.add(new TypedBlock(typedStatements4, ObjectType.VoidType));
 
         var methodParameters = new ArrayList<ArrayList<TypedMethodParameter>>();
         methodParameters.add(new ArrayList <>(){{

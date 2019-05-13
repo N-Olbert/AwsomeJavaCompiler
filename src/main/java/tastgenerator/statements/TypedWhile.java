@@ -1,6 +1,7 @@
 package tastgenerator.statements;
 
 import bytecodegenerator.Generator;
+import common.ObjectType;
 import org.objectweb.asm.MethodVisitor;
 import tastgenerator.expressions.TypedExpression;
 
@@ -16,6 +17,13 @@ public class TypedWhile extends TypedStatement
     {
         this.exp = exp;
         this.stmt = stmt;
+    }
+
+    public TypedWhile(TypedExpression exp, TypedStatement stmt, ObjectType objectType)
+    {
+        this.exp = exp;
+        this.stmt = stmt;
+        setObjectType(objectType);
     }
 
     public TypedExpression getExp()

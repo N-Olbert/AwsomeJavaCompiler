@@ -1,6 +1,7 @@
 package tastgenerator.statements;
 
 import bytecodegenerator.Generator;
+import common.ObjectType;
 import org.objectweb.asm.MethodVisitor;
 
 import java.util.HashMap;
@@ -19,6 +20,12 @@ public class TypedBlock extends TypedStatement
     public List<TypedStatement> getBlockedStatements()
     {
         return blockedStatements;
+    }
+
+    public TypedBlock(List<TypedStatement> blockedStatements, ObjectType objectType)
+    {
+        this.blockedStatements = blockedStatements;
+        setObjectType(objectType);
     }
 
     @Override
