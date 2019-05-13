@@ -184,10 +184,6 @@ public class TypeCheckerInstance implements TypeChecker
                     throw new TypeMismatchException("Type Mismatch: Cannot apply " + toCheck.getOperator().name() + " to '" +
                             expression.getObjectType().getName() + "'");
                 }
-            case INCREMENTBEFORE:
-            case INCREMENTAFTER:
-            case DECREMENTBEFORE:
-            case DECREMENTAFTER:
             case PLUS:
             case MINUS:
                 if (expression.getObjectType() == ObjectType.IntType || expression.getObjectType() == ObjectType.CharType) {
