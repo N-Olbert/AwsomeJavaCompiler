@@ -16,10 +16,10 @@ public class awsomeJavaParser extends Parser {
 	public static final int
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
 		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
-		AccessModifier=18, JBoolean=19, JNull=20, Super=21, This=22, JString=23, 
-		LocalOrFieldVar=24, JCharacter=25, JInteger=26, AssignOperator=27, Comperator=28, 
-		OpBeforeIdentifier=29, OpBeforeOrAfterIdentifier=30, OpInBetweenIdentifier=31, 
-		WS=32, Comment=33;
+		AccessModifier=18, JBoolean=19, JNull=20, Void=21, Super=22, This=23, 
+		JString=24, Identifier=25, JCharacter=26, JInteger=27, AssignOperator=28, 
+		Comperator=29, OpBeforeIdentifier=30, OpBeforeOrAfterIdentifier=31, OpInBetweenIdentifier=32, 
+		WS=33, Comment=34;
 	public static final int
 		RULE_programm = 0, RULE_jClass = 1, RULE_constructor = 2, RULE_classBody = 3, 
 		RULE_methodDeclaration = 4, RULE_fieldDeclaration = 5, RULE_methodParameter = 6, 
@@ -43,8 +43,8 @@ public class awsomeJavaParser extends Parser {
 		return new String[] {
 			null, "'class'", "'('", "')'", "'{'", "'}'", "';'", "','", "'.'", "'new'", 
 			"'if ('", "'else if('", "'else ('", "'while ('", "'return'", "'int'", 
-			"'char'", "'boolean'", null, null, "'null'", "'super()'", "'this'", null, 
-			null, null, null, null, null, "'!'"
+			"'char'", "'boolean'", null, null, "'null'", "'void'", "'super()'", "'this'", 
+			null, null, null, null, null, null, "'!'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -52,7 +52,7 @@ public class awsomeJavaParser extends Parser {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, "AccessModifier", "JBoolean", "JNull", 
-			"Super", "This", "JString", "LocalOrFieldVar", "JCharacter", "JInteger", 
+			"Void", "Super", "This", "JString", "Identifier", "JCharacter", "JInteger", 
 			"AssignOperator", "Comperator", "OpBeforeIdentifier", "OpBeforeOrAfterIdentifier", 
 			"OpInBetweenIdentifier", "WS", "Comment"
 		};
@@ -164,7 +164,7 @@ public class awsomeJavaParser extends Parser {
 	}
 
 	public static class JClassContext extends ParserRuleContext {
-		public TerminalNode LocalOrFieldVar() { return getToken(awsomeJavaParser.LocalOrFieldVar, 0); }
+		public TerminalNode Identifier() { return getToken(awsomeJavaParser.Identifier, 0); }
 		public ClassBodyContext classBody() {
 			return getRuleContext(ClassBodyContext.class,0);
 		}
@@ -203,7 +203,7 @@ public class awsomeJavaParser extends Parser {
 			setState(58);
 			match(T__0);
 			setState(59);
-			match(LocalOrFieldVar);
+			match(Identifier);
 			setState(60);
 			classBody();
 			}
@@ -220,7 +220,7 @@ public class awsomeJavaParser extends Parser {
 	}
 
 	public static class ConstructorContext extends ParserRuleContext {
-		public TerminalNode LocalOrFieldVar() { return getToken(awsomeJavaParser.LocalOrFieldVar, 0); }
+		public TerminalNode Identifier() { return getToken(awsomeJavaParser.Identifier, 0); }
 		public NMethodParametersContext nMethodParameters() {
 			return getRuleContext(NMethodParametersContext.class,0);
 		}
@@ -260,7 +260,7 @@ public class awsomeJavaParser extends Parser {
 			}
 
 			setState(65);
-			match(LocalOrFieldVar);
+			match(Identifier);
 			setState(66);
 			match(T__1);
 			setState(67);
@@ -355,7 +355,7 @@ public class awsomeJavaParser extends Parser {
 			setState(84);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << AccessModifier) | (1L << LocalOrFieldVar))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << AccessModifier) | (1L << Identifier))) != 0)) {
 				{
 				setState(82);
 				_errHandler.sync(this);
@@ -397,7 +397,7 @@ public class awsomeJavaParser extends Parser {
 		public ObjectTypeContext objectType() {
 			return getRuleContext(ObjectTypeContext.class,0);
 		}
-		public TerminalNode LocalOrFieldVar() { return getToken(awsomeJavaParser.LocalOrFieldVar, 0); }
+		public TerminalNode Identifier() { return getToken(awsomeJavaParser.Identifier, 0); }
 		public NMethodParametersContext nMethodParameters() {
 			return getRuleContext(NMethodParametersContext.class,0);
 		}
@@ -439,7 +439,7 @@ public class awsomeJavaParser extends Parser {
 			setState(92);
 			objectType();
 			setState(93);
-			match(LocalOrFieldVar);
+			match(Identifier);
 			setState(94);
 			match(T__1);
 			setState(95);
@@ -465,7 +465,7 @@ public class awsomeJavaParser extends Parser {
 		public ObjectTypeContext objectType() {
 			return getRuleContext(ObjectTypeContext.class,0);
 		}
-		public TerminalNode LocalOrFieldVar() { return getToken(awsomeJavaParser.LocalOrFieldVar, 0); }
+		public TerminalNode Identifier() { return getToken(awsomeJavaParser.Identifier, 0); }
 		public TerminalNode AccessModifier() { return getToken(awsomeJavaParser.AccessModifier, 0); }
 		public FieldDeclarationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -501,7 +501,7 @@ public class awsomeJavaParser extends Parser {
 			setState(102);
 			objectType();
 			setState(103);
-			match(LocalOrFieldVar);
+			match(Identifier);
 			setState(104);
 			match(T__5);
 			}
@@ -521,7 +521,7 @@ public class awsomeJavaParser extends Parser {
 		public ObjectTypeContext objectType() {
 			return getRuleContext(ObjectTypeContext.class,0);
 		}
-		public TerminalNode LocalOrFieldVar() { return getToken(awsomeJavaParser.LocalOrFieldVar, 0); }
+		public TerminalNode Identifier() { return getToken(awsomeJavaParser.Identifier, 0); }
 		public MethodParameterContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -545,7 +545,7 @@ public class awsomeJavaParser extends Parser {
 			setState(106);
 			objectType();
 			setState(107);
-			match(LocalOrFieldVar);
+			match(Identifier);
 			}
 		}
 		catch (RecognitionException re) {
@@ -594,7 +594,7 @@ public class awsomeJavaParser extends Parser {
 				setState(110);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << LocalOrFieldVar))) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << Identifier))) != 0)) {
 					{
 					setState(109);
 					methodParameter();
@@ -677,7 +677,7 @@ public class awsomeJavaParser extends Parser {
 				setState(122);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << JBoolean) | (1L << JNull) | (1L << Super) | (1L << This) | (1L << JString) | (1L << LocalOrFieldVar) | (1L << JCharacter) | (1L << JInteger) | (1L << OpBeforeIdentifier) | (1L << OpBeforeOrAfterIdentifier))) != 0)) {
+				if ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << JBoolean) | (1L << JNull) | (1L << Void) | (1L << Super) | (1L << This) | (1L << JString) | (1L << Identifier) | (1L << JCharacter) | (1L << JInteger) | (1L << OpBeforeIdentifier) | (1L << OpBeforeOrAfterIdentifier))) != 0)) {
 					{
 					setState(121);
 					expression();
@@ -731,9 +731,9 @@ public class awsomeJavaParser extends Parser {
 
 	public static class InstVarContext extends ParserRuleContext {
 		public TerminalNode This() { return getToken(awsomeJavaParser.This, 0); }
-		public List<TerminalNode> LocalOrFieldVar() { return getTokens(awsomeJavaParser.LocalOrFieldVar); }
-		public TerminalNode LocalOrFieldVar(int i) {
-			return getToken(awsomeJavaParser.LocalOrFieldVar, i);
+		public List<TerminalNode> Identifier() { return getTokens(awsomeJavaParser.Identifier); }
+		public TerminalNode Identifier(int i) {
+			return getToken(awsomeJavaParser.Identifier, i);
 		}
 		public InstVarContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -765,10 +765,10 @@ public class awsomeJavaParser extends Parser {
 				setState(136);
 				match(T__7);
 				setState(137);
-				match(LocalOrFieldVar);
+				match(Identifier);
 				}
 				break;
-			case LocalOrFieldVar:
+			case Identifier:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(140); 
@@ -780,7 +780,7 @@ public class awsomeJavaParser extends Parser {
 						{
 						{
 						setState(138);
-						match(LocalOrFieldVar);
+						match(Identifier);
 						setState(139);
 						match(T__7);
 						}
@@ -794,7 +794,7 @@ public class awsomeJavaParser extends Parser {
 					_alt = getInterpreter().adaptivePredict(_input,15,_ctx);
 				} while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER );
 				setState(144);
-				match(LocalOrFieldVar);
+				match(Identifier);
 				}
 				break;
 			default:
@@ -819,7 +819,7 @@ public class awsomeJavaParser extends Parser {
 		public InstVarContext instVar() {
 			return getRuleContext(InstVarContext.class,0);
 		}
-		public TerminalNode LocalOrFieldVar() { return getToken(awsomeJavaParser.LocalOrFieldVar, 0); }
+		public TerminalNode Identifier() { return getToken(awsomeJavaParser.Identifier, 0); }
 		public BinaryContext binary() {
 			return getRuleContext(BinaryContext.class,0);
 		}
@@ -864,7 +864,7 @@ public class awsomeJavaParser extends Parser {
 			case 3:
 				{
 				setState(149);
-				match(LocalOrFieldVar);
+				match(Identifier);
 				}
 				break;
 			case 4:
@@ -964,7 +964,7 @@ public class awsomeJavaParser extends Parser {
 		public BaseTypeContext baseType() {
 			return getRuleContext(BaseTypeContext.class,0);
 		}
-		public TerminalNode LocalOrFieldVar() { return getToken(awsomeJavaParser.LocalOrFieldVar, 0); }
+		public TerminalNode Identifier() { return getToken(awsomeJavaParser.Identifier, 0); }
 		public LocalVarDeclarationContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -988,7 +988,7 @@ public class awsomeJavaParser extends Parser {
 			setState(161);
 			baseType();
 			setState(162);
-			match(LocalOrFieldVar);
+			match(Identifier);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1003,7 +1003,7 @@ public class awsomeJavaParser extends Parser {
 	}
 
 	public static class AssignContext extends ParserRuleContext {
-		public TerminalNode LocalOrFieldVar() { return getToken(awsomeJavaParser.LocalOrFieldVar, 0); }
+		public TerminalNode Identifier() { return getToken(awsomeJavaParser.Identifier, 0); }
 		public TerminalNode AssignOperator() { return getToken(awsomeJavaParser.AssignOperator, 0); }
 		public JNewContext jNew() {
 			return getRuleContext(JNewContext.class,0);
@@ -1060,7 +1060,7 @@ public class awsomeJavaParser extends Parser {
 				break;
 			}
 			setState(169);
-			match(LocalOrFieldVar);
+			match(Identifier);
 			setState(170);
 			match(AssignOperator);
 			setState(175);
@@ -1105,7 +1105,7 @@ public class awsomeJavaParser extends Parser {
 	}
 
 	public static class JNewContext extends ParserRuleContext {
-		public TerminalNode LocalOrFieldVar() { return getToken(awsomeJavaParser.LocalOrFieldVar, 0); }
+		public TerminalNode Identifier() { return getToken(awsomeJavaParser.Identifier, 0); }
 		public NMethodParametersContext nMethodParameters() {
 			return getRuleContext(NMethodParametersContext.class,0);
 		}
@@ -1132,7 +1132,7 @@ public class awsomeJavaParser extends Parser {
 			setState(177);
 			match(T__8);
 			setState(178);
-			match(LocalOrFieldVar);
+			match(Identifier);
 			setState(179);
 			match(T__1);
 			setState(180);
@@ -1153,7 +1153,7 @@ public class awsomeJavaParser extends Parser {
 	}
 
 	public static class MethodCallContext extends ParserRuleContext {
-		public TerminalNode LocalOrFieldVar() { return getToken(awsomeJavaParser.LocalOrFieldVar, 0); }
+		public TerminalNode Identifier() { return getToken(awsomeJavaParser.Identifier, 0); }
 		public NArgumentsContext nArguments() {
 			return getRuleContext(NArgumentsContext.class,0);
 		}
@@ -1192,7 +1192,7 @@ public class awsomeJavaParser extends Parser {
 			}
 
 			setState(187);
-			match(LocalOrFieldVar);
+			match(Identifier);
 			setState(188);
 			match(T__1);
 			setState(189);
@@ -1258,6 +1258,7 @@ public class awsomeJavaParser extends Parser {
 				break;
 			case JBoolean:
 			case JNull:
+			case Void:
 			case Super:
 			case This:
 			case JString:
@@ -1344,7 +1345,7 @@ public class awsomeJavaParser extends Parser {
 			setState(204);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__3) | (1L << T__8) | (1L << T__9) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << JBoolean) | (1L << JNull) | (1L << Super) | (1L << This) | (1L << JString) | (1L << LocalOrFieldVar) | (1L << JCharacter) | (1L << JInteger))) != 0)) {
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__3) | (1L << T__8) | (1L << T__9) | (1L << T__12) | (1L << T__13) | (1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << JBoolean) | (1L << JNull) | (1L << Void) | (1L << Super) | (1L << This) | (1L << JString) | (1L << Identifier) | (1L << JCharacter) | (1L << JInteger))) != 0)) {
 				{
 				setState(202);
 				_errHandler.sync(this);
@@ -1563,9 +1564,8 @@ public class awsomeJavaParser extends Parser {
 	}
 
 	public static class UnaryContext extends ParserRuleContext {
-		public TerminalNode LocalOrFieldVar() { return getToken(awsomeJavaParser.LocalOrFieldVar, 0); }
 		public TerminalNode OpBeforeIdentifier() { return getToken(awsomeJavaParser.OpBeforeIdentifier, 0); }
-		public TerminalNode OpBeforeOrAfterIdentifier() { return getToken(awsomeJavaParser.OpBeforeOrAfterIdentifier, 0); }
+		public TerminalNode Identifier() { return getToken(awsomeJavaParser.Identifier, 0); }
 		public UnaryContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1583,40 +1583,13 @@ public class awsomeJavaParser extends Parser {
 	public final UnaryContext unary() throws RecognitionException {
 		UnaryContext _localctx = new UnaryContext(_ctx, getState());
 		enterRule(_localctx, 42, RULE_unary);
-		int _la;
 		try {
-			setState(242);
-			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case OpBeforeIdentifier:
-			case OpBeforeOrAfterIdentifier:
-				enterOuterAlt(_localctx, 1);
-				{
-				setState(238);
-				_la = _input.LA(1);
-				if ( !(_la==OpBeforeIdentifier || _la==OpBeforeOrAfterIdentifier) ) {
-				_errHandler.recoverInline(this);
-				}
-				else {
-					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-					_errHandler.reportMatch(this);
-					consume();
-				}
-				setState(239);
-				match(LocalOrFieldVar);
-				}
-				break;
-			case LocalOrFieldVar:
-				enterOuterAlt(_localctx, 2);
-				{
-				setState(240);
-				match(LocalOrFieldVar);
-				setState(241);
-				match(OpBeforeOrAfterIdentifier);
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(238);
+			match(OpBeforeIdentifier);
+			setState(239);
+			match(Identifier);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1631,11 +1604,12 @@ public class awsomeJavaParser extends Parser {
 	}
 
 	public static class BinaryContext extends ParserRuleContext {
-		public List<TerminalNode> LocalOrFieldVar() { return getTokens(awsomeJavaParser.LocalOrFieldVar); }
-		public TerminalNode LocalOrFieldVar(int i) {
-			return getToken(awsomeJavaParser.LocalOrFieldVar, i);
+		public List<TerminalNode> Identifier() { return getTokens(awsomeJavaParser.Identifier); }
+		public TerminalNode Identifier(int i) {
+			return getToken(awsomeJavaParser.Identifier, i);
 		}
 		public TerminalNode OpInBetweenIdentifier() { return getToken(awsomeJavaParser.OpInBetweenIdentifier, 0); }
+		public TerminalNode OpBeforeOrAfterIdentifier() { return getToken(awsomeJavaParser.OpBeforeOrAfterIdentifier, 0); }
 		public BinaryContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1654,14 +1628,38 @@ public class awsomeJavaParser extends Parser {
 		BinaryContext _localctx = new BinaryContext(_ctx, getState());
 		enterRule(_localctx, 44, RULE_binary);
 		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(244);
-			match(LocalOrFieldVar);
-			setState(245);
-			match(OpInBetweenIdentifier);
-			setState(246);
-			match(LocalOrFieldVar);
+			setState(248);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,27,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(241);
+				match(Identifier);
+				setState(242);
+				match(OpInBetweenIdentifier);
+				setState(243);
+				match(Identifier);
+				}
+				break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(244);
+				match(Identifier);
+				setState(245);
+				match(OpBeforeOrAfterIdentifier);
+				}
+				break;
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(246);
+				match(OpBeforeOrAfterIdentifier);
+				setState(247);
+				match(Identifier);
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -1683,6 +1681,7 @@ public class awsomeJavaParser extends Parser {
 		public TerminalNode JCharacter() { return getToken(awsomeJavaParser.JCharacter, 0); }
 		public TerminalNode JInteger() { return getToken(awsomeJavaParser.JInteger, 0); }
 		public TerminalNode Super() { return getToken(awsomeJavaParser.Super, 0); }
+		public TerminalNode Void() { return getToken(awsomeJavaParser.Void, 0); }
 		public BaseTypeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1704,9 +1703,9 @@ public class awsomeJavaParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(248);
+			setState(250);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << JBoolean) | (1L << JNull) | (1L << Super) | (1L << This) | (1L << JString) | (1L << JCharacter) | (1L << JInteger))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << JBoolean) | (1L << JNull) | (1L << Void) | (1L << Super) | (1L << This) | (1L << JString) | (1L << JCharacter) | (1L << JInteger))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -1728,7 +1727,7 @@ public class awsomeJavaParser extends Parser {
 	}
 
 	public static class ObjectTypeContext extends ParserRuleContext {
-		public TerminalNode LocalOrFieldVar() { return getToken(awsomeJavaParser.LocalOrFieldVar, 0); }
+		public TerminalNode Identifier() { return getToken(awsomeJavaParser.Identifier, 0); }
 		public ObjectTypeContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1750,9 +1749,9 @@ public class awsomeJavaParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(250);
+			setState(252);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << LocalOrFieldVar))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__14) | (1L << T__15) | (1L << T__16) | (1L << Identifier))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -1774,7 +1773,7 @@ public class awsomeJavaParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3#\u00ff\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3$\u0101\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
@@ -1792,51 +1791,51 @@ public class awsomeJavaParser extends Parser {
 		"\7\23\u00cd\n\23\f\23\16\23\u00d0\13\23\3\23\3\23\3\24\3\24\3\24\3\24"+
 		"\3\24\3\24\3\24\3\24\3\24\7\24\u00dd\n\24\f\24\16\24\u00e0\13\24\3\24"+
 		"\3\24\3\24\3\24\3\24\5\24\u00e7\n\24\3\25\3\25\3\25\3\25\3\25\3\26\3\26"+
-		"\3\26\3\27\3\27\3\27\3\27\5\27\u00f5\n\27\3\30\3\30\3\30\3\30\3\31\3\31"+
-		"\3\32\3\32\3\32\2\2\33\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*,"+
-		".\60\62\2\5\3\2\37 \4\2\25\31\33\34\4\2\21\23\32\32\2\u010c\2\65\3\2\2"+
+		"\3\26\3\27\3\27\3\27\3\30\3\30\3\30\3\30\3\30\3\30\3\30\5\30\u00fb\n\30"+
+		"\3\31\3\31\3\32\3\32\3\32\2\2\33\2\4\6\b\n\f\16\20\22\24\26\30\32\34\36"+
+		" \"$&(*,.\60\62\2\4\4\2\25\32\34\35\4\2\21\23\33\33\2\u010f\2\65\3\2\2"+
 		"\2\4:\3\2\2\2\6A\3\2\2\2\bI\3\2\2\2\n\\\3\2\2\2\ff\3\2\2\2\16l\3\2\2\2"+
 		"\20y\3\2\2\2\22\u0087\3\2\2\2\24\u0093\3\2\2\2\26\u009a\3\2\2\2\30\u009f"+
 		"\3\2\2\2\32\u00a3\3\2\2\2\34\u00a9\3\2\2\2\36\u00b3\3\2\2\2 \u00bb\3\2"+
 		"\2\2\"\u00c7\3\2\2\2$\u00c9\3\2\2\2&\u00d3\3\2\2\2(\u00e8\3\2\2\2*\u00ed"+
-		"\3\2\2\2,\u00f4\3\2\2\2.\u00f6\3\2\2\2\60\u00fa\3\2\2\2\62\u00fc\3\2\2"+
+		"\3\2\2\2,\u00f0\3\2\2\2.\u00fa\3\2\2\2\60\u00fc\3\2\2\2\62\u00fe\3\2\2"+
 		"\2\64\66\5\4\3\2\65\64\3\2\2\2\66\67\3\2\2\2\67\65\3\2\2\2\678\3\2\2\2"+
-		"8\3\3\2\2\29;\7\24\2\2:9\3\2\2\2:;\3\2\2\2;<\3\2\2\2<=\7\3\2\2=>\7\32"+
+		"8\3\3\2\2\29;\7\24\2\2:9\3\2\2\2:;\3\2\2\2;<\3\2\2\2<=\7\3\2\2=>\7\33"+
 		"\2\2>?\5\b\5\2?\5\3\2\2\2@B\7\24\2\2A@\3\2\2\2AB\3\2\2\2BC\3\2\2\2CD\7"+
-		"\32\2\2DE\7\4\2\2EF\5\20\t\2FG\7\5\2\2GH\5$\23\2H\7\3\2\2\2IN\7\6\2\2"+
+		"\33\2\2DE\7\4\2\2EF\5\20\t\2FG\7\5\2\2GH\5$\23\2H\7\3\2\2\2IN\7\6\2\2"+
 		"JM\5\n\6\2KM\5\f\7\2LJ\3\2\2\2LK\3\2\2\2MP\3\2\2\2NL\3\2\2\2NO\3\2\2\2"+
 		"OQ\3\2\2\2PN\3\2\2\2QV\5\6\4\2RU\5\n\6\2SU\5\f\7\2TR\3\2\2\2TS\3\2\2\2"+
 		"UX\3\2\2\2VT\3\2\2\2VW\3\2\2\2WY\3\2\2\2XV\3\2\2\2YZ\7\7\2\2Z\t\3\2\2"+
-		"\2[]\7\24\2\2\\[\3\2\2\2\\]\3\2\2\2]^\3\2\2\2^_\5\62\32\2_`\7\32\2\2`"+
+		"\2[]\7\24\2\2\\[\3\2\2\2\\]\3\2\2\2]^\3\2\2\2^_\5\62\32\2_`\7\33\2\2`"+
 		"a\7\4\2\2ab\5\20\t\2bc\7\5\2\2cd\5$\23\2d\13\3\2\2\2eg\7\24\2\2fe\3\2"+
-		"\2\2fg\3\2\2\2gh\3\2\2\2hi\5\62\32\2ij\7\32\2\2jk\7\b\2\2k\r\3\2\2\2l"+
-		"m\5\62\32\2mn\7\32\2\2n\17\3\2\2\2oq\5\16\b\2po\3\2\2\2pq\3\2\2\2qz\3"+
+		"\2\2fg\3\2\2\2gh\3\2\2\2hi\5\62\32\2ij\7\33\2\2jk\7\b\2\2k\r\3\2\2\2l"+
+		"m\5\62\32\2mn\7\33\2\2n\17\3\2\2\2oq\5\16\b\2po\3\2\2\2pq\3\2\2\2qz\3"+
 		"\2\2\2ru\5\16\b\2st\7\t\2\2tv\5\16\b\2us\3\2\2\2vw\3\2\2\2wu\3\2\2\2w"+
 		"x\3\2\2\2xz\3\2\2\2yp\3\2\2\2yr\3\2\2\2z\21\3\2\2\2{}\5\26\f\2|{\3\2\2"+
 		"\2|}\3\2\2\2}\u0088\3\2\2\2~\u0083\5\26\f\2\177\u0080\7\t\2\2\u0080\u0082"+
 		"\5\26\f\2\u0081\177\3\2\2\2\u0082\u0085\3\2\2\2\u0083\u0081\3\2\2\2\u0083"+
 		"\u0084\3\2\2\2\u0084\u0088\3\2\2\2\u0085\u0083\3\2\2\2\u0086\u0088\5\24"+
 		"\13\2\u0087|\3\2\2\2\u0087~\3\2\2\2\u0087\u0086\3\2\2\2\u0088\23\3\2\2"+
-		"\2\u0089\u008a\7\30\2\2\u008a\u008b\7\n\2\2\u008b\u0094\7\32\2\2\u008c"+
-		"\u008d\7\32\2\2\u008d\u008f\7\n\2\2\u008e\u008c\3\2\2\2\u008f\u0090\3"+
+		"\2\u0089\u008a\7\31\2\2\u008a\u008b\7\n\2\2\u008b\u0094\7\33\2\2\u008c"+
+		"\u008d\7\33\2\2\u008d\u008f\7\n\2\2\u008e\u008c\3\2\2\2\u008f\u0090\3"+
 		"\2\2\2\u0090\u008e\3\2\2\2\u0090\u0091\3\2\2\2\u0091\u0092\3\2\2\2\u0092"+
-		"\u0094\7\32\2\2\u0093\u0089\3\2\2\2\u0093\u008e\3\2\2\2\u0094\25\3\2\2"+
-		"\2\u0095\u009b\5\60\31\2\u0096\u009b\5\24\13\2\u0097\u009b\7\32\2\2\u0098"+
+		"\u0094\7\33\2\2\u0093\u0089\3\2\2\2\u0093\u008e\3\2\2\2\u0094\25\3\2\2"+
+		"\2\u0095\u009b\5\60\31\2\u0096\u009b\5\24\13\2\u0097\u009b\7\33\2\2\u0098"+
 		"\u009b\5.\30\2\u0099\u009b\5,\27\2\u009a\u0095\3\2\2\2\u009a\u0096\3\2"+
 		"\2\2\u009a\u0097\3\2\2\2\u009a\u0098\3\2\2\2\u009a\u0099\3\2\2\2\u009b"+
 		"\27\3\2\2\2\u009c\u00a0\5\34\17\2\u009d\u00a0\5\36\20\2\u009e\u00a0\5"+
 		" \21\2\u009f\u009c\3\2\2\2\u009f\u009d\3\2\2\2\u009f\u009e\3\2\2\2\u00a0"+
 		"\u00a1\3\2\2\2\u00a1\u00a2\7\b\2\2\u00a2\31\3\2\2\2\u00a3\u00a4\5\60\31"+
-		"\2\u00a4\u00a5\7\32\2\2\u00a5\33\3\2\2\2\u00a6\u00aa\5\62\32\2\u00a7\u00a8"+
-		"\7\30\2\2\u00a8\u00aa\7\n\2\2\u00a9\u00a6\3\2\2\2\u00a9\u00a7\3\2\2\2"+
-		"\u00a9\u00aa\3\2\2\2\u00aa\u00ab\3\2\2\2\u00ab\u00ac\7\32\2\2\u00ac\u00b1"+
-		"\7\35\2\2\u00ad\u00b2\5\36\20\2\u00ae\u00b2\5 \21\2\u00af\u00b2\5\26\f"+
+		"\2\u00a4\u00a5\7\33\2\2\u00a5\33\3\2\2\2\u00a6\u00aa\5\62\32\2\u00a7\u00a8"+
+		"\7\31\2\2\u00a8\u00aa\7\n\2\2\u00a9\u00a6\3\2\2\2\u00a9\u00a7\3\2\2\2"+
+		"\u00a9\u00aa\3\2\2\2\u00aa\u00ab\3\2\2\2\u00ab\u00ac\7\33\2\2\u00ac\u00b1"+
+		"\7\36\2\2\u00ad\u00b2\5\36\20\2\u00ae\u00b2\5 \21\2\u00af\u00b2\5\26\f"+
 		"\2\u00b0\u00b2\5\24\13\2\u00b1\u00ad\3\2\2\2\u00b1\u00ae\3\2\2\2\u00b1"+
 		"\u00af\3\2\2\2\u00b1\u00b0\3\2\2\2\u00b2\35\3\2\2\2\u00b3\u00b4\7\13\2"+
-		"\2\u00b4\u00b5\7\32\2\2\u00b5\u00b6\7\4\2\2\u00b6\u00b7\5\20\t\2\u00b7"+
-		"\u00b8\7\5\2\2\u00b8\37\3\2\2\2\u00b9\u00ba\7\30\2\2\u00ba\u00bc\7\n\2"+
+		"\2\u00b4\u00b5\7\33\2\2\u00b5\u00b6\7\4\2\2\u00b6\u00b7\5\20\t\2\u00b7"+
+		"\u00b8\7\5\2\2\u00b8\37\3\2\2\2\u00b9\u00ba\7\31\2\2\u00ba\u00bc\7\n\2"+
 		"\2\u00bb\u00b9\3\2\2\2\u00bb\u00bc\3\2\2\2\u00bc\u00bd\3\2\2\2\u00bd\u00be"+
-		"\7\32\2\2\u00be\u00bf\7\4\2\2\u00bf\u00c0\5\22\n\2\u00c0\u00c1\7\5\2\2"+
+		"\7\33\2\2\u00be\u00bf\7\4\2\2\u00bf\u00c0\5\22\n\2\u00c0\u00c1\7\5\2\2"+
 		"\u00c1!\3\2\2\2\u00c2\u00c8\5&\24\2\u00c3\u00c8\5\32\16\2\u00c4\u00c8"+
 		"\5*\26\2\u00c5\u00c8\5(\25\2\u00c6\u00c8\5$\23\2\u00c7\u00c2\3\2\2\2\u00c7"+
 		"\u00c3\3\2\2\2\u00c7\u00c4\3\2\2\2\u00c7\u00c5\3\2\2\2\u00c7\u00c6\3\2"+
@@ -1852,12 +1851,13 @@ public class awsomeJavaParser extends Parser {
 		"$\23\2\u00e5\u00e7\3\2\2\2\u00e6\u00e1\3\2\2\2\u00e6\u00e7\3\2\2\2\u00e7"+
 		"\'\3\2\2\2\u00e8\u00e9\7\17\2\2\u00e9\u00ea\5\26\f\2\u00ea\u00eb\7\5\2"+
 		"\2\u00eb\u00ec\5$\23\2\u00ec)\3\2\2\2\u00ed\u00ee\7\20\2\2\u00ee\u00ef"+
-		"\5\26\f\2\u00ef+\3\2\2\2\u00f0\u00f1\t\2\2\2\u00f1\u00f5\7\32\2\2\u00f2"+
-		"\u00f3\7\32\2\2\u00f3\u00f5\7 \2\2\u00f4\u00f0\3\2\2\2\u00f4\u00f2\3\2"+
-		"\2\2\u00f5-\3\2\2\2\u00f6\u00f7\7\32\2\2\u00f7\u00f8\7!\2\2\u00f8\u00f9"+
-		"\7\32\2\2\u00f9/\3\2\2\2\u00fa\u00fb\t\3\2\2\u00fb\61\3\2\2\2\u00fc\u00fd"+
-		"\t\4\2\2\u00fd\63\3\2\2\2\36\67:ALNTV\\fpwy|\u0083\u0087\u0090\u0093\u009a"+
-		"\u009f\u00a9\u00b1\u00bb\u00c7\u00cc\u00ce\u00de\u00e6\u00f4";
+		"\5\26\f\2\u00ef+\3\2\2\2\u00f0\u00f1\7 \2\2\u00f1\u00f2\7\33\2\2\u00f2"+
+		"-\3\2\2\2\u00f3\u00f4\7\33\2\2\u00f4\u00f5\7\"\2\2\u00f5\u00fb\7\33\2"+
+		"\2\u00f6\u00f7\7\33\2\2\u00f7\u00fb\7!\2\2\u00f8\u00f9\7!\2\2\u00f9\u00fb"+
+		"\7\33\2\2\u00fa\u00f3\3\2\2\2\u00fa\u00f6\3\2\2\2\u00fa\u00f8\3\2\2\2"+
+		"\u00fb/\3\2\2\2\u00fc\u00fd\t\2\2\2\u00fd\61\3\2\2\2\u00fe\u00ff\t\3\2"+
+		"\2\u00ff\63\3\2\2\2\36\67:ALNTV\\fpwy|\u0083\u0087\u0090\u0093\u009a\u009f"+
+		"\u00a9\u00b1\u00bb\u00c7\u00cc\u00ce\u00de\u00e6\u00fa";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
