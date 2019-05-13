@@ -5,7 +5,7 @@ import org.objectweb.asm.Opcodes;
 public enum Modifier
 {
     NONE(0),
-    STATIC(Opcodes.ACC_FINAL),
+    STATIC(Opcodes.ACC_STATIC),
     ABSTRACT(Opcodes.ACC_ABSTRACT),
     FINAL(Opcodes.ACC_FINAL);
 

@@ -1,5 +1,6 @@
 package General;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -9,6 +10,7 @@ import java.lang.reflect.Method;
 public class BytecodeLoader extends ClassLoader
 {
     private byte[] byteCode;
+    private Class<?> clazz;
 
     public BytecodeLoader(byte[] byteCode)
     {
@@ -18,7 +20,12 @@ public class BytecodeLoader extends ClassLoader
     @Override
     public Class findClass(String name)
     {
-        return defineClass(name, byteCode, 0, byteCode.length);
+        if(clazz != null) {
+            return clazz;
+        }
+        else {
+            return clazz = defineClass(name, byteCode, 0, byteCode.length);
+        }
     }
 
     public Method getMethod(String className, String method, Class<?>... parameterTypes) throws NoSuchMethodException
@@ -28,6 +35,11 @@ public class BytecodeLoader extends ClassLoader
 
     public Field getField(String className, String field) throws NoSuchFieldException
     {
-        return findClass(className).getField(field);
+        return findClass(className).getDeclaredField(field);
+    }
+
+    public Constructor getConstructor(String classname, Class<?>... parameterTyped) throws NoSuchMethodException
+    {
+        return findClass(classname).getConstructor(parameterTyped);
     }
 }

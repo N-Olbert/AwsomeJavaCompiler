@@ -1,18 +1,18 @@
-package astgenerator.statementexpressions;
+package astgenerator.statements;
 
 import astgenerator.expressions.Expression;
 import common.ObjectType;
 import tastgenerator.TypeChecker;
-import tastgenerator.statementexpressions.TypedStatementExpression;
+import tastgenerator.statements.TypedStatement;
 
 import java.util.List;
 
-public class New extends StatementExpression
+public class NewStatement extends Statement
 {
-    ObjectType newType;
-    List<Expression> parameters;
+    private ObjectType newType;
+    private List<Expression> parameters;
 
-    public New(ObjectType newType, List<Expression> expressions)
+    public NewStatement(ObjectType newType, List<Expression> expressions)
     {
         this.newType = newType;
         this.parameters = expressions;
@@ -29,7 +29,7 @@ public class New extends StatementExpression
     }
 
     @Override
-    public TypedStatementExpression toTyped(TypeChecker converter) {
+    public TypedStatement toTyped(TypeChecker converter) {
         return converter.typeCheck(this);
     }
 }

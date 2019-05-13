@@ -1,6 +1,11 @@
 package tastgenerator.expressions;
 
+import bytecodegenerator.Generator;
 import common.ObjectType;
+import org.objectweb.asm.MethodVisitor;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TypedLocalOrFieldVar extends TypedExpression
 {
@@ -13,6 +18,11 @@ public class TypedLocalOrFieldVar extends TypedExpression
     public String getName()
     {
         return name;
+    }
+
+    @Override
+    public void generateByteCode(MethodVisitor visitor, Map<String, Integer> localVar) {
+        Generator.generate(this, visitor, localVar);
     }
 
 }

@@ -1,6 +1,11 @@
 package tastgenerator.statements;
 
+import bytecodegenerator.Generator;
+import org.objectweb.asm.MethodVisitor;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TypedBlock extends TypedStatement
 {
@@ -14,5 +19,10 @@ public class TypedBlock extends TypedStatement
     public List<TypedStatement> getBlockedStatements()
     {
         return blockedStatements;
+    }
+
+    @Override
+    public void generateByteCode(MethodVisitor visitor, Map<String, Integer> localVar) {
+        Generator.generate(this, visitor, localVar);
     }
 }
