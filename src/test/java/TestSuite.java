@@ -9,7 +9,7 @@ import org.junit.runners.Suite;
 // Comment in the TestClasses you want to have!
 @Suite.SuiteClasses({
         //ASTBaseTest.class,
-        //BytecodeTests.class,
+        BytecodeTests.class,
         //GeneralTests.class,
         //TypedASTBaseTests.class
 })

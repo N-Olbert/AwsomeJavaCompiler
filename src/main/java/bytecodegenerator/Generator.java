@@ -1,5 +1,6 @@
 package bytecodegenerator;
 
+import common.Modifier;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -15,6 +16,7 @@ import tastgenerator.statements.TypedBlock;
 import tastgenerator.statements.TypedReturn;
 import tastgenerator.statements.TypedStatement;
 
+import javax.tools.OptionChecker;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,34 +32,39 @@ public abstract class Generator {
         cw.visit(Opcodes.V1_4, Opcodes.ACC_PUBLIC,
                 clazz.getClassType().getName(),
                 null, "java/lang/Object", null);
-
+        Context context = new Context(clazz.getClassType().getName());
         if(clazz.getFields() != null) {
-            clazz.getFields().forEach(declaration -> generate(declaration, cw));
+            clazz.getFields().forEach(declaration -> generate(declaration, cw, context));
         }
         if(clazz.getMethods() != null) {
-            clazz.getMethods().forEach(declaration -> generate(declaration, cw));
+            clazz.getMethods().forEach(declaration -> generate(declaration, cw, context.clone()));
         }
         cw.visitEnd();
         return cw;
     }
 
 
-    public static void generate(TypedFieldDeclaration declaration, ClassWriter writer) {
+    public static void generate(TypedFieldDeclaration declaration, ClassWriter writer, Context context) {
+        if(Modifier.STATIC.equals(declaration.getModifier())) {
+            context.getStaticFields().add(declaration.getName());
+        }
+        else {
+            context.getLocalFields().add(declaration.getName());
+        }
         writer.visitField(declaration.getAccessModifier().getCode() | declaration.getModifier().getCode(), declaration.getName(), declaration.getVariableType().getName(), null, null);
     }
 
 
-    public static void generate(TypedMethodDeclaration declaration, ClassWriter writer) {
+    public static void generate(TypedMethodDeclaration declaration, ClassWriter writer, Context context) {
         MethodVisitor visitor = writer.visitMethod(declaration.getAccessModifier().getCode() | declaration.getModifier().getCode(), declaration.getName(), generate(declaration.getParams()) + declaration.getReturnType().getName(), null, null);
-        Map<String, Integer> localVar = new HashMap<>();
         if(declaration.getParams() != null) {
             declaration.getParams().forEach(param -> {
-                localVar.put(param.getName(), localVar.size());
+                context.getLocalVar().put(param.getName(), context.getLocalVar().size());
                 visitor.visitParameter(param.getName(), 0);
             });
         }
         visitor.visitCode();
-        generate(declaration.getStmt(), visitor, localVar);
+        generate(declaration.getStmt(), visitor, context.clone());
         visitor.visitMaxs(0, 0);
         visitor.visitEnd();
     }
@@ -72,22 +79,31 @@ public abstract class Generator {
         return builder.toString();
     }
 
-    public static void generate(TypedBlock block, MethodVisitor visitor, Map<String, Integer> localVar) {
+    public static void generate(TypedBlock block, MethodVisitor visitor, Context context) {
         if(block.getBlockedStatements() != null) {
-            block.getBlockedStatements().forEach(statement -> statement.generateByteCode(visitor, new HashMap<>(localVar)));
+            block.getBlockedStatements().forEach(statement -> statement.generateByteCode(visitor, context.clone()));
         }
     }
 
-    public static void generate(TypedReturn statement, MethodVisitor visitor, Map<String, Integer> localVar) {
-        statement.getExp().generateByteCode(visitor, new HashMap<>(localVar));
+    public static void generate(TypedReturn statement, MethodVisitor visitor, Context context) {
+        statement.getExp().generateByteCode(visitor, context.clone());
         visitor.visitInsn(Opcodes.IRETURN);
     }
 
-    public static void generate(TypedLocalOrFieldVar expression, MethodVisitor visitor, Map<String, Integer> localVar) {
-        visitor.visitVarInsn(Opcodes.ILOAD, localVar.get(expression.getName()));
+    public static void generate(TypedLocalOrFieldVar expression, MethodVisitor visitor, Context context) {
+        if(context.getLocalVar().containsKey(expression.getName())) {
+            visitor.visitVarInsn(Opcodes.ILOAD, context.getLocalVar().get(expression.getName()));
+        }
+        else if(context.getLocalFields().contains(expression.getName())) {
+            visitor.visitVarInsn(Opcodes.ALOAD, 0);
+            visitor.visitFieldInsn(Opcodes.GETFIELD, context.getClassName(), expression.getName(), expression.getObjectType().getName());
+        }
+        else if(context.getStaticFields().contains(expression.getName())) {
+            visitor.visitFieldInsn(Opcodes.GETSTATIC, context.getClassName(), expression.getName(), expression.getObjectType().getName());
+        }
     }
 
-    public static void generate(TypedInt expression, MethodVisitor visitor, Map<String, Integer> localVar) {
+    public static void generate(TypedInt expression, MethodVisitor visitor, Context context) {
         switch (expression.getJint()) {
             case -1:
                 visitor.visitInsn(Opcodes.ICONST_M1);
@@ -116,15 +132,11 @@ public abstract class Generator {
         }
     }
 
-    public static void generate(TypedStatement statement, MethodVisitor visitor, Map<String, Integer> localVar) {
+    public static void generate(TypedStatement statement, MethodVisitor visitor, Context context) {
         throw new RuntimeException("Not implemented yet!");
     }
 
-    public static void generate(TypedExpression expression, MethodVisitor visitor, Map<String, Integer> localVar) {
+    public static void generate(TypedExpression expression, MethodVisitor visitor, Context context) {
         throw new RuntimeException("Not implemented yet!");
     }
-
-
-
-
 }

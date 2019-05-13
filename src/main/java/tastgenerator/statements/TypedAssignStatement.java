@@ -1,4 +1,5 @@
 package tastgenerator.statements;
+import bytecodegenerator.Context;
 import org.objectweb.asm.MethodVisitor;
 import tastgenerator.expressions.TypedExpression;
 
@@ -23,7 +24,7 @@ public class TypedAssignStatement extends TypedStatement
     }
 
     @Override
-    public void generateByteCode(MethodVisitor visitor, Map<String, Integer> localVar) {
+    public void generateByteCode(MethodVisitor visitor, Context context) {
 
     }
 }

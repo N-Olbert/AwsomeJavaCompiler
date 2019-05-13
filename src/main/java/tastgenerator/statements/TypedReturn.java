@@ -1,5 +1,6 @@
 package tastgenerator.statements;
 
+import bytecodegenerator.Context;
 import bytecodegenerator.Generator;
 import org.objectweb.asm.MethodVisitor;
 import tastgenerator.expressions.TypedExpression;
@@ -22,7 +23,7 @@ public class TypedReturn extends TypedStatement
 
 
     @Override
-    public void generateByteCode(MethodVisitor visitor, Map<String, Integer> localVar) {
-        Generator.generate(this, visitor, localVar);
+    public void generateByteCode(MethodVisitor visitor, Context context) {
+        Generator.generate(this, visitor, context);
     }
 }
