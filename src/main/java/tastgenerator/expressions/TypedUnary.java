@@ -1,5 +1,6 @@
 package tastgenerator.expressions;
 
+import common.ObjectType;
 import bytecodegenerator.Generator;
 import common.Operators;
 import org.objectweb.asm.MethodVisitor;
@@ -11,10 +12,11 @@ public class TypedUnary extends TypedExpression
 {
     private TypedExpression expression;
     private Operators operator;
-    public TypedUnary(TypedExpression expression, Operators operator)
+    public TypedUnary(TypedExpression expression, Operators operator, ObjectType objectType)
     {
         this.expression = expression;
         this.operator = operator;
+        this.objectType = objectType;
     }
 
     public TypedExpression getExpression()

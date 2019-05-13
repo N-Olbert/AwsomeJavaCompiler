@@ -3,12 +3,22 @@ package common;
 public enum Operators
 {
     NEGATION,
-    GREATERTHAN,
-    LESSTHAN,
-    EQUALS,
+    INCREMENTBEFORE,
+    INCREMENTAFTER,
+    DECREMENTBEFORE,
+    DECREMENTAFTER,
     PLUS,
-    PLUSPLUS,
     MINUS,
-    MINUSMINUS,
+    MULTIPLICATION,
+    DIVISION,
+    MODULO,
+    AND,
+    OR,
+    XOR,
+    GREATERTHAN,
+    GREATEROREQUAL,
+    LESSTHAN,
+    LESSOREQUAL,
+    EQUALS,
     NOTEQUALS
 }

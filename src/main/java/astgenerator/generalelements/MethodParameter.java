@@ -14,6 +14,14 @@ public class MethodParameter extends GeneralThing
         this.name = name;
     }
 
+    public ObjectType getType() {
+        return type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     @Override
     public TypedGeneralThing toTyped(TypeChecker converter) {
         return converter.typeCheck(this);
