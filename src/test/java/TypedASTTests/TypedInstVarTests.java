@@ -10,6 +10,7 @@ import common.Operators;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import tastgenerator.TypeCheckerInstance;
+import tastgenerator.expressions.TypedInstVar;
 import tastgenerator.generalelements.TypedProgram;
 import tastgenerator.statements.TypedAssignStatement;
 
@@ -32,15 +33,58 @@ public class TypedInstVarTests
         assertBasicProgram(typedProgram);
     }
 
-    public void testBasicInstVar()
+    @Test
+    public void testBoolInstVar()
+    {
+        testBasicInstVar(BOOLVAR_NAME, ObjectType.BoolType.getName());
+    }
+
+    @Test
+    public void testIntInstVar()
+    {
+        testBasicInstVar(INTVAR_NAME, ObjectType.IntType.getName());
+    }
+
+    @Test
+    public void testCharInstVar()
+    {
+        testBasicInstVar(CHARVAR_NAME, ObjectType.CharType.getName());
+    }
+
+    @Test
+    public void testOwnTypeInstVar()
+    {
+        testBasicInstVar(OWNTYPEVAR_NAME, OWNTYPE_NAME);
+    }
+
+    @Test(expected = Exception.class)
+    public void testInstVarBasicFail1()
+    {
+        testBasicInstVar("nope", ObjectType.IntType.getName());
+    }
+
+    @Test(expected = Exception.class)
+    public void testInstVarBasicFail2()
+    {
+        testBasicInstVar(BOOLVAR_NAME, ObjectType.IntType.getName());
+    }
+
+    @Test(expected = Exception.class)
+    public void testInstVarBasicFail3()
+    {
+        testBasicInstVar(OWNTYPEVAR_NAME, ObjectType.JObjectType.getName());
+    }
+
+    private static void testBasicInstVar(String instVarName, String instVarType)
     {
         var program = getBasicProgram();
         var method =
                 new MethodDeclaration(ObjectType.VoidType, "a", new ArrayList<>(),
                                       new Block(
                                               new AssignStatement(
-                                                      new InstVar(new This(), OWNTYPEVAR_NAME),
-                                                      new NewExpression(ObjectType.getType(OWNTYPE_NAME), new ArrayList<>()))));
+                                                      new InstVar(new This(), instVarName),
+                                                      new NewExpression(ObjectType.getType(instVarType),
+                                                                        new ArrayList<>()))));
 
         program.getClasses().get(0).getMethods().add(method);
         var converter = new TypeCheckerInstance(program);
@@ -50,6 +94,8 @@ public class TypedInstVarTests
         assertNotNull(block);
         var assign = (TypedAssignStatement)block.getBlockedStatements().get(0);
         assertEquals(assign.getObjectType(), ObjectType.VoidType);
+        var localVar = (TypedInstVar)assign.getExpression();
+        assertEquals(localVar.getObjectType(), ObjectType.getType(instVarName));
     }
 
     private static UntypedProgram getBasicProgram()
