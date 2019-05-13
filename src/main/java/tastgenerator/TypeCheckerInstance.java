@@ -27,13 +27,22 @@ public class TypeCheckerInstance implements TypeChecker
             for (FieldDeclaration fieldDecl: currentClass.getFields()) {
                 fields.put(fieldDecl.getName(), fieldDecl.getVariableType());
             }
-            HashMap<String, Method> methods = new HashMap<>();
+            HashMap<String, List<Method>> methods = new HashMap<>();
             for (MethodDeclaration methodDecl: currentClass.getMethods()) {
                 List<ObjectType> params = new ArrayList<>();
                 for (MethodParameter parameter: methodDecl.getParams()) {
                     params.add(parameter.getType());
                 }
-                methods.put(methodDecl.getName(), new Method(methodDecl.getReturnType(), params));
+                Method newMethod = new Method(methodDecl.getReturnType(), params);
+                if (methods.containsKey(methodDecl.getName())) {
+                    List<Method> methodList = methods.get(methodDecl.getName());
+                    methodList.add(newMethod);
+                    methods.put(methodDecl.getName(), methodList);
+                } else {
+                    List<Method> methodList = new ArrayList<Method>();
+                    methodList.add(new Method(methodDecl.getReturnType(), params));
+                    methods.put(methodDecl.getName(), methodList);
+                }
             }
             classes.put(currentClass.getClassType().getName(), new ClassObject(fields, methods));
         }
@@ -175,10 +184,6 @@ public class TypeCheckerInstance implements TypeChecker
                     throw new TypeMismatchException("Type Mismatch: Cannot apply " + toCheck.getOperator().name() + " to '" +
                             expression.getObjectType().getName() + "'");
                 }
-            case INCREMENTBEFORE:
-            case INCREMENTAFTER:
-            case DECREMENTBEFORE:
-            case DECREMENTAFTER:
             case PLUS:
             case MINUS:
                 if (expression.getObjectType() == ObjectType.IntType || expression.getObjectType() == ObjectType.CharType) {
