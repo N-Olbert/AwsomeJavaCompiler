@@ -52,7 +52,7 @@ public class ParseTreeGenerator {
                fieldDecls.add(declaration);
            });
 
-           Class clazz = new Class(ObjectType.getType(classContext.Identifier().getText()),fieldDecls,null);
+           Class clazz = new Class(ObjectType.getType(classContext.Identifier().getText()),fieldDecls,new ArrayList<>());
            classes.add(clazz);
         });
 

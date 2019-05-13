@@ -6,6 +6,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException
     {
+        args = args.length == 0 ? new String[] {"C:\\GitHub\\AwsomeJavaCompiler\\src\\test\\resources\\BasicClass.java"} : args;
         for(var inputFileName : args)
         {
             try (var file = new FileInputStream(inputFileName))
