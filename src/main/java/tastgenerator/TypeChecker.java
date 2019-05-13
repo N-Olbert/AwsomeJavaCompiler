@@ -3,16 +3,9 @@ package tastgenerator;
 import astgenerator.expressions.*;
 import astgenerator.generalelements.*;
 import astgenerator.generalelements.Class;
-import astgenerator.statementexpressions.Assign;
-import astgenerator.statementexpressions.MethodCall;
-import astgenerator.statementexpressions.New;
-import astgenerator.statementexpressions.StatementExpression;
 import astgenerator.statements.*;
 import tastgenerator.expressions.*;
 import tastgenerator.generalelements.*;
-import tastgenerator.statementexpressions.TypedAssign;
-import tastgenerator.statementexpressions.TypedMethodCall;
-import tastgenerator.statementexpressions.TypedNew;
 import tastgenerator.statements.*;
 
 public interface TypeChecker
