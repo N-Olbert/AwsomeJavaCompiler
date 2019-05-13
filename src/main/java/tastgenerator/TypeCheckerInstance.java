@@ -4,7 +4,9 @@ import astgenerator.expressions.*;
 import astgenerator.generalelements.*;
 import astgenerator.generalelements.Class;
 import astgenerator.statements.*;
+import com.sun.jdi.VoidType;
 import common.ObjectType;
+import tastgenerator.exceptions.AlreadyDefinedException;
 import tastgenerator.exceptions.InvalidASTException;
 import tastgenerator.exceptions.TypeMismatchException;
 import tastgenerator.expressions.*;
@@ -14,11 +16,18 @@ import tastgenerator.statements.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Stack;
 
 public class TypeCheckerInstance implements TypeChecker
 {
 
     private HashMap<String, ClassObject> classes;
+
+    private ObjectType currentClass;
+
+    private List<Tuple<String, ObjectType>> currentLocalVars = new ArrayList<>();
+
+    private Stack<Integer> localVarCount= new Stack<>();
 
     public TypeCheckerInstance(UntypedProgram program) {
         classes = new HashMap<>();
@@ -62,7 +71,15 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedAssignExpression typeCheck(AssignExpression toCheck) {
-        return null;
+        TypedExpression expression1 = toCheck.getExpression1().toTyped(this);
+        TypedExpression expression2 = toCheck.getExpression2().toTyped(this);
+        if (!(expression1 instanceof TypedLocalOrFieldVar || expression1 instanceof TypedInstVar)) {
+            throw new InvalidASTException("Left side of the assign is not assignable");
+        }
+        if (!compareTypes(expression1.getObjectType(), expression2.getObjectType())) {
+            throw new TypeMismatchException("Types of the left and right side of the assign do not match");
+        }
+        return new TypedAssignExpression(expression1, expression2, expression1.getObjectType());
     }
 
     @Override
@@ -161,17 +178,24 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedNewExpression typeCheck(NewExpression toCheck) {
-        return null;
+        if (!classes.containsKey(toCheck.getNewType().getName())) {
+            throw new TypeMismatchException("This class does not exist");
+        }
+        List<TypedExpression> typedParameters = new ArrayList<>();
+        for (Expression parameter: toCheck.getParameters()) {
+            typedParameters.add(parameter.toTyped(this));
+        }
+        return new TypedNewExpression(toCheck.getNewType(), typedParameters, toCheck.getNewType());
     }
 
     @Override
     public TypedSuper typeCheck(Super toCheck) {
-        return null;
+        return new TypedSuper(ObjectType.JObjectType);
     }
 
     @Override
     public TypedThis typeCheck(This toCheck) {
-        return null;
+        return new TypedThis(currentClass);
     }
 
     @Override
@@ -242,8 +266,9 @@ public class TypeCheckerInstance implements TypeChecker
     @Override
     public TypedProgram typeCheck(UntypedProgram toCheck) {
         List<TypedClass> typedClasses = new ArrayList<>();
-        for (Class currentClass: toCheck.getClasses()) {
-            typedClasses.add((TypedClass) currentClass.toTyped(this));
+        for (Class classObj: toCheck.getClasses()) {
+            currentClass = classObj.getClassType();
+            typedClasses.add((TypedClass) classObj.toTyped(this));
         }
         return new TypedProgram(typedClasses);
     }
@@ -258,11 +283,12 @@ public class TypeCheckerInstance implements TypeChecker
         if (!compareTypes(expression1.getObjectType(), expression2.getObjectType())) {
             throw new TypeMismatchException("Types of the left and right side of the assign do not match");
         }
-        return new TypedAssignStatement(expression1, expression2);
+        return new TypedAssignStatement(expression1, expression2, ObjectType.VoidType);
     }
 
     @Override
     public TypedBlock typeCheck(Block toCheck) {
+        localVarCount.push(0);
         List<TypedStatement> statements = new ArrayList<>();
         ObjectType type = ObjectType.VoidType;
         for(Statement statement: toCheck.getBlockedStatements()) {
@@ -273,10 +299,13 @@ public class TypeCheckerInstance implements TypeChecker
                         typedStatement.getObjectType().getName().equals(ObjectType.IntType.getName())) {
                     type = ObjectType.IntType;
                 } else {
-                    type = ObjectType.getType("Object");
+                    type = ObjectType.JObjectType;
                 }
             }
             statements.add(typedStatement);
+        }
+        for (int i = 0; i < localVarCount.pop(); i++) {
+            currentLocalVars.remove(currentLocalVars.size() - 1);
         }
         return new TypedBlock(statements);
     }
@@ -288,7 +317,14 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedLocalVarDeclaration typeCheck(LocalVarDeclaration toCheck) {
-        return null;
+        for (Tuple<String, ObjectType> currentLocalVar: currentLocalVars) {
+            if (currentLocalVar.getFirst().equals(toCheck.getName())) {
+                throw new AlreadyDefinedException("Variable " + toCheck.getName() + " is already defined in the local scope");
+            }
+        }
+        currentLocalVars.add(new Tuple<String, ObjectType>(toCheck.getName(), toCheck.getVariableType()));
+        localVarCount.push(localVarCount.pop() + 1);
+        return new TypedLocalVarDeclaration(toCheck.getVariableType(), toCheck.getName());
     }
 
     @Override
