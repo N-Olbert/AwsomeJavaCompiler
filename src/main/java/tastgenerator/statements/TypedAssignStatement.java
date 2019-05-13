@@ -6,20 +6,20 @@ import java.util.Map;
 
 public class TypedAssignStatement extends TypedStatement
 {
-    private String name;
-    private TypedExpression expression;
+    private TypedExpression expression1;
+    private TypedExpression expression2;
 
-    public TypedAssignStatement(String name, TypedExpression expression) {
-        this.name = name;
-        this.expression = expression;
+    public TypedAssignStatement(TypedExpression expression1, TypedExpression expression2) {
+        this.expression1 = expression1;
+        this.expression2 = expression2;
     }
 
-    public String getName() {
-        return this.name;
+    public TypedExpression getExpression1() {
+        return this.expression1;
     }
 
-    public TypedExpression getExpression() {
-        return this.expression;
+    public TypedExpression getExpression2() {
+        return this.expression2;
     }
 
     @Override
