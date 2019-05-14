@@ -4,8 +4,8 @@ import astgenerator.generalelements.*;
 import astgenerator.generalelements.Class;
 import astgenerator.parser.generated.awsomeJavaParser;
 import common.ObjectType;
+import tastgenerator.Method;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,42 +24,41 @@ public class ParseTreeGenerator {
         {
             awsomeJavaParser.ClassBodyContext bodyContext = classContext.classBody();
             List<FieldDeclaration> fieldDecls = new ArrayList<>();
-            List<MethodDeclaration> methodDeclarations = new ArrayList<>();
+            List<MethodDeclaration> methodDeclaration = new ArrayList<>();
 
-            bodyContext.fieldDeclaration().forEach(fieldDecl -> {
-                ObjectType type = null;
+               bodyContext.fieldDeclaration().forEach(fieldDecl -> {
 
-                if (fieldDecl.objectType().Identifier() != null) {
-                    type = ObjectType.getType(fieldDecl.objectType().Identifier().getText());
-                } else {
-                    String objectType = fieldDecl.objectType().Identifier().getText();
+               ObjectType type = null;
 
-                    switch (objectType) {
-                        case "int":
-                            type = ObjectType.IntType;
-                            break;
-                        case "char":
-                            type = ObjectType.CharType;
-                            break;
-                        case "boolean":
-                            type = ObjectType.BoolType;
-                            break;
-                    }
-                }
+               if (fieldDecl.objectType().Identifier() != null){
+                   type = ObjectType.getType(fieldDecl.objectType().Identifier().getText());
+               } else {
+                   String objectType = fieldDecl.objectType().Identifier().getText();
 
-                FieldDeclaration declaration = new FieldDeclaration(type, fieldDecl.Identifier().getText());
+                   switch (objectType){
+                       case "int":
+                           type = ObjectType.IntType;
+                           break;
+                       case "char":
+                           type = ObjectType.CharType;
+                           break;
+                       case "boolean":
+                           type = ObjectType.BoolType;
+                           break;
+                   }
+               }
 
-                fieldDecls.add(declaration);
-            });
+               awsomeJavaParser.ConstructorContext constructorContext = bodyContext.constructor();
+               new MethodDeclaration(ObjectType.VoidType, constructorContext.Identifier().getText(),
+                       methodParameters(constructorContext),null);
 
-            awsomeJavaParser.ConstructorContext constructorContext = bodyContext.constructor();
-            MethodDeclaration declaration = new MethodDeclaration(ObjectType.VoidType,
-                    constructorContext.Identifier().getText(), methodParameters(constructorContext), null);
-            methodDeclarations.add(declaration);
+               FieldDeclaration declaration = new FieldDeclaration(type, fieldDecl.Identifier().getText());
 
-            Class clazz = new Class(ObjectType.getType(classContext.Identifier().getText()), fieldDecls,
-                    methodDeclarations);
-            classes.add(clazz);
+               fieldDecls.add(declaration);
+           });
+
+           Class clazz = new Class(ObjectType.getType(classContext.Identifier().getText()),fieldDecls,new ArrayList<>());
+           classes.add(clazz);
         });
 
         program.setClasses(classes);
