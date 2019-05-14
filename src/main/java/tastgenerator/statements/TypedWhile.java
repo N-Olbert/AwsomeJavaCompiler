@@ -26,7 +26,7 @@ public class TypedWhile extends TypedStatement
         return exp;
     }
 
-    public TypedStatement getStmt()
+    public TypedBlock getStmt()
     {
         return stmt;
     }

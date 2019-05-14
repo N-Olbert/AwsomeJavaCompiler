@@ -145,7 +145,15 @@ public class TypeCheckerInstance implements TypeChecker
     @Override
     public TypedInstVar typeCheck(InstVar toCheck) {
         TypedExpression expression = toCheck.getExpression().toTyped(this);
-        return new TypedInstVar(expression, toCheck.getName());
+        if (!classes.containsKey(expression.getObjectType().getName())) {
+            throw new CannotResolveSymbolException("Class " + expression.getObjectType().getName() + " does not exist");
+        }
+        ClassObject classObject = classes.get(expression.getObjectType().getName());
+        if (!classObject.getFields().containsKey(toCheck.getName())) {
+            throw new CannotResolveSymbolException("Class " + expression.getObjectType().getName() +
+                    " has no field with the name " + toCheck.getName());
+        }
+        return new TypedInstVar(expression, toCheck.getName(), classObject.getFields().get(toCheck.getName()));
     }
 
     @Override
@@ -297,7 +305,8 @@ public class TypeCheckerInstance implements TypeChecker
             throw new InvalidASTException("Left side of the assign is not assignable");
         }
         if (!compareTypes(expression1.getObjectType(), expression2.getObjectType())) {
-            throw new TypeMismatchException("Types of the left and right side of the assign do not match");
+            throw new TypeMismatchException("Type " + expression2.getObjectType().getName() + " cannot be assigned to " +
+                    expression1.getObjectType().getName());
         }
         return new TypedAssignStatement(expression1, expression2, ObjectType.VoidType);
     }
