@@ -1,4 +1,4 @@
-// Generated from C:/Users/Daniel/IdeaProjects/AwsomeJavaCompiler/src/main/java/astgenerator/parser\awsomeJava.g4 by ANTLR 4.7.2
+// Generated from C:/Users/Daniel/IdeaProjects/AwsomeJavaCompiler/src/main/java/astgenerator/parser/grammar\awsomeJava.g4 by ANTLR 4.7.2
 package astgenerator.parser.generated;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -124,18 +124,6 @@ public class awsomeJavaBaseListener implements awsomeJavaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLocalOrFieldVar(awsomeJavaParser.LocalOrFieldVarContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLocalOrFieldVar(awsomeJavaParser.LocalOrFieldVarContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterInstVar(awsomeJavaParser.InstVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -167,6 +155,18 @@ public class awsomeJavaBaseListener implements awsomeJavaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitStatementExpressions(awsomeJavaParser.StatementExpressionsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLocalVarDeclaration(awsomeJavaParser.LocalVarDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLocalVarDeclaration(awsomeJavaParser.LocalVarDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -268,18 +268,6 @@ public class awsomeJavaBaseListener implements awsomeJavaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLocalOrFieldVarDeclaration(awsomeJavaParser.LocalOrFieldVarDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLocalOrFieldVarDeclaration(awsomeJavaParser.LocalOrFieldVarDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterUnary(awsomeJavaParser.UnaryContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -323,18 +311,6 @@ public class awsomeJavaBaseListener implements awsomeJavaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitObjectType(awsomeJavaParser.ObjectTypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterJThis(awsomeJavaParser.JThisContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitJThis(awsomeJavaParser.JThisContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

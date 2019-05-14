@@ -18,8 +18,7 @@ public class Global implements Factory
 
     public ASTGenerator getASTGenerator()
     {
-        //TODO: Daniel
-        return null;
+        return new ASTGen();
     }
 
     public TypedASTGenerator getTypedAstGenerator()

@@ -13,10 +13,11 @@ public class TypedNewStatement extends TypedStatement
     private ObjectType newType;
     private List<TypedExpression> parameters;
 
-    public TypedNewStatement(ObjectType newType, List<TypedExpression> expressions)
+    public TypedNewStatement(ObjectType newType, List<TypedExpression> expressions, ObjectType objectType)
     {
         this.newType = newType;
         this.parameters = expressions;
+        this.objectType = objectType;
     }
 
     public ObjectType getNewType()

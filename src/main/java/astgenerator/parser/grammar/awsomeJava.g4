@@ -5,36 +5,35 @@ jClass: AccessModifier? 'class' Identifier classBody; //Modifier
 constructor: AccessModifier? Identifier'('nMethodParameters')' block;
 classBody: '{'(methodDeclaration|fieldDeclaration)* constructor (methodDeclaration|fieldDeclaration)*'}';
 methodDeclaration: AccessModifier? objectType Identifier '('nMethodParameters')' block;
-fieldDeclaration: AccessModifier?  objectType Identifier;
+fieldDeclaration: AccessModifier?  objectType Identifier';';
 methodParameter: objectType Identifier;
 nMethodParameters: (methodParameter)? | methodParameter (','methodParameter)+;
 nArguments: expression? | expression (',' expression)* | instVar;
-localOrFieldVar: objectType Identifier;
-instVar: (Identifier '.')+ Identifier | jThis;
-expression: (baseType | instVar | localOrFieldVar | binary | unary ); //comparison
+instVar:  This '.' Identifier|(Identifier '.')+ Identifier;
+expression: (baseType | instVar | Identifier | binary | unary ); //comparison
 statementExpressions: (assign | jNew | methodCall)';';
-assign: (objectType)? Identifier '=' (jNew|methodCall) | Identifier AssignOperator expression
-| Identifier AssignOperator instVar;
+localVarDeclaration: baseType Identifier;
+assign: (objectType|This'.')? Identifier AssignOperator (jNew|methodCall|expression|instVar);
 jNew: 'new' Identifier '('nMethodParameters')';
-methodCall: Identifier'('nArguments');';
-statement: block | ifelse | localOrFieldVarDeclaration | jReturn | jWhile;
+methodCall: (This'.')? Identifier'('nArguments')';
+statement: ifelse | localVarDeclaration | jReturn | jWhile | block;
 block: '{' (statement|statementExpressions)* '}';
 ifelse: 'if (' expression ')' block ('else if('expression')'block)* ('else ('expression')'block)?;
 jWhile: 'while ('expression ')' block;
-jReturn: 'return' expression ';';
-localOrFieldVarDeclaration: localOrFieldVar '=' expression | Identifier '=' expression;
-unary: (OpBeforeIdentifier|OpBeforeOrAfterIdentifier) Identifier | Identifier OpBeforeOrAfterIdentifier;
-binary: Identifier OpInBetweenIdentifier Identifier;
-baseType: JBoolean | JNull | This | JString | JCharacter | JInteger | Super | This;
+jReturn: 'return' expression;
+unary: OpBeforeIdentifier Identifier;
+binary: Identifier OpInBetweenIdentifier Identifier | Identifier OpBeforeOrAfterIdentifier |
+OpBeforeOrAfterIdentifier Identifier;
+baseType: JBoolean | JNull | This | JString | JCharacter | JInteger | Super | Void;
 objectType: 'int'|'char'|'boolean'|Identifier;
-jThis: 'this''.'expression;
 
 AccessModifier: 'public' | 'protected' | 'private';
 //Modifier: 'static'|'final'; //abstract extra
 JBoolean: 'true'|'false';
 JNull: 'null';
+Void: 'void';
 Super: 'super()';
-Semicolon: ';';
+This: 'this';
 JString: '"'[A-Za-z]'"'+;
 Identifier: [A-Za-z]+;
 JCharacter: [A-Za-z];
@@ -46,6 +45,6 @@ OpBeforeOrAfterIdentifier: '++'|'--';
 OpInBetweenIdentifier: '+'|'-'|'&&'|'||';
 
 WS: [ \t(\r?\n)] -> skip;
-Comment: ('\\'[A-Za-z]* | '/*'[A-Za-z]*'*/') -> skip;
+Comment: ('//'[A-Za-z]* | '/*'[A-Za-z]*'*/') -> skip;
 
 

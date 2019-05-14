@@ -1,4 +1,4 @@
-// Generated from C:/Users/Daniel/IdeaProjects/AwsomeJavaCompiler/src/main/java/astgenerator/parser\awsomeJava.g4 by ANTLR 4.7.2
+// Generated from C:/Users/Daniel/IdeaProjects/AwsomeJavaCompiler/src/main/java/astgenerator/parser/grammar\awsomeJava.g4 by ANTLR 4.7.2
 package astgenerator.parser.generated;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -98,16 +98,6 @@ public interface awsomeJavaListener extends ParseTreeListener {
 	 */
 	void exitNArguments(awsomeJavaParser.NArgumentsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link awsomeJavaParser#localOrFieldVar}.
-	 * @param ctx the parse tree
-	 */
-	void enterLocalOrFieldVar(awsomeJavaParser.LocalOrFieldVarContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link awsomeJavaParser#localOrFieldVar}.
-	 * @param ctx the parse tree
-	 */
-	void exitLocalOrFieldVar(awsomeJavaParser.LocalOrFieldVarContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link awsomeJavaParser#instVar}.
 	 * @param ctx the parse tree
 	 */
@@ -137,6 +127,16 @@ public interface awsomeJavaListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStatementExpressions(awsomeJavaParser.StatementExpressionsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link awsomeJavaParser#localVarDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterLocalVarDeclaration(awsomeJavaParser.LocalVarDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link awsomeJavaParser#localVarDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitLocalVarDeclaration(awsomeJavaParser.LocalVarDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link awsomeJavaParser#assign}.
 	 * @param ctx the parse tree
@@ -218,16 +218,6 @@ public interface awsomeJavaListener extends ParseTreeListener {
 	 */
 	void exitJReturn(awsomeJavaParser.JReturnContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link awsomeJavaParser#localOrFieldVarDeclaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterLocalOrFieldVarDeclaration(awsomeJavaParser.LocalOrFieldVarDeclarationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link awsomeJavaParser#localOrFieldVarDeclaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitLocalOrFieldVarDeclaration(awsomeJavaParser.LocalOrFieldVarDeclarationContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link awsomeJavaParser#unary}.
 	 * @param ctx the parse tree
 	 */
@@ -267,14 +257,4 @@ public interface awsomeJavaListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitObjectType(awsomeJavaParser.ObjectTypeContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link awsomeJavaParser#jThis}.
-	 * @param ctx the parse tree
-	 */
-	void enterJThis(awsomeJavaParser.JThisContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link awsomeJavaParser#jThis}.
-	 * @param ctx the parse tree
-	 */
-	void exitJThis(awsomeJavaParser.JThisContext ctx);
 }

@@ -88,8 +88,8 @@ public class BytecodeTests
         var methods = new ArrayList<TypedMethodDeclaration>();
         var methodparameters = new ArrayList<TypedMethodParameter>();
         var statements = new ArrayList<TypedStatement>();
-        statements.add(new TypedReturn(new TypedInt("5")));
-        var typedBlock = new TypedBlock(statements);
+        statements.add(new TypedReturn(new TypedInt("5"), ObjectType.IntType));
+        var typedBlock = new TypedBlock(statements, ObjectType.IntType);
         var typedMethod = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.STATIC,
                 ObjectType.IntType, methodName, methodparameters, typedBlock);
         methods.add(typedMethod);
@@ -137,8 +137,8 @@ public class BytecodeTests
         var methodparameters = new ArrayList<TypedMethodParameter>();
         methodparameters.add(new TypedMethodParameter(ObjectType.IntType, "x"));
         var statements = new ArrayList<TypedStatement>();
-        statements.add(new TypedReturn(new TypedLocalOrFieldVar(ObjectType.IntType, "x")));
-        var typedBlock = new TypedBlock(statements);
+        statements.add(new TypedReturn(new TypedLocalOrFieldVar(ObjectType.IntType, "x"), ObjectType.IntType));
+        var typedBlock = new TypedBlock(statements, ObjectType.IntType);
         var typedMethod = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.STATIC,
                 ObjectType.IntType, methodName, methodparameters, typedBlock);
         methods.add(typedMethod);
