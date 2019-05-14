@@ -45,8 +45,8 @@ class Point
         methodParams.add(new String[] { ObjectType.VoidType.getName(), constructorName });
         var blocks = new ArrayList<TypedBlock>();
         var typedStatements = new ArrayList<TypedStatement>();
-        typedStatements.add(new TypedAssignStatement(new TypedInstVar(new TypedThis(), "x"), new TypedLocalOrFieldVar(ObjectType.IntType, "x")));
         /* ToDo: Fix
+        typedStatements.add(new TypedAssignStatement(new TypedInstVar(new TypedThis(), "x"), new TypedLocalOrFieldVar(ObjectType.IntType, "x")));
         blocks.add(new TypedBlock(typedStatements));
 
         var typedStatements1 = new ArrayList<TypedStatement>();
