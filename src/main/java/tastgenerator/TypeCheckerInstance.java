@@ -61,7 +61,12 @@ public class TypeCheckerInstance implements TypeChecker
     @Override
     public TypedWhile typeCheck(While toCheck)
     {
-        return null;
+        TypedExpression typedCondition = toCheck.getExp().toTyped(this);
+        if (!typedCondition.getObjectType().getName().equals(ObjectType.BoolType.getName())) {
+            throw new TypeMismatchException("Condition of while must be boolean");
+        }
+        TypedBlock typedBlock = (TypedBlock) toCheck.getStmt().toTyped(this);
+        return new TypedWhile(typedCondition, typedBlock, typedBlock.getObjectType());
     }
 
     @Override
@@ -165,7 +170,7 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedString typeCheck(JString toCheck) {
-        return null;
+        return new TypedString(toCheck.getJString());
     }
 
     @Override
@@ -175,7 +180,10 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedMethodCallExpression typeCheck(MethodCallExpression toCheck) {
-        return null;
+        TypedExpression typedExpression = toCheck.getObject().toTyped(this);
+        Tuple<List<TypedExpression>, ObjectType> result = methodCallTypeParamsAndGetReturnType(typedExpression,
+                toCheck.getName(),toCheck.getParameters());
+        return new TypedMethodCallExpression(typedExpression, toCheck.getName(), result.getFirst(), ObjectType.VoidType);
     }
 
     @Override
@@ -212,9 +220,15 @@ public class TypeCheckerInstance implements TypeChecker
                             expression.getObjectType().getName() + "'");
                 }
             case PLUS:
+                if (expression.getObjectType() == ObjectType.CharType || expression.getObjectType() == ObjectType.IntType) {
+                    return new TypedUnary(expression, toCheck.getOperator(), expression.getObjectType());
+                } else {
+                    throw new TypeMismatchException("Type Mismatch: Cannot apply " + toCheck.getOperator().name() + " to '" +
+                            expression.getObjectType().getName() + "'");
+                }
             case MINUS:
                 if (expression.getObjectType() == ObjectType.IntType || expression.getObjectType() == ObjectType.CharType) {
-                    return new TypedUnary(expression, toCheck.getOperator(), ObjectType.CharType);
+                    return new TypedUnary(expression, toCheck.getOperator(), ObjectType.IntType);
                 } else {
                     throw new TypeMismatchException("Type Mismatch: Cannot apply " + toCheck.getOperator().name() + " to '" +
                             expression.getObjectType().getName() + "'");
