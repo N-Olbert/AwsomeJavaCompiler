@@ -186,10 +186,11 @@ public class BytecodeTests
 
     private TypedProgram getProgram(String className, List<TypedFieldDeclaration> fields ,List<TypedMethodDeclaration> methods)
     {
+        TypedProgram testProgram = new TypedProgram();
         List<TypedClass> classes = new ArrayList<>();
         TypedClass pointClass = new TypedClass(ObjectType.getType(className), fields, methods);
         classes.add(pointClass);
-        TypedProgram testProgram = new TypedProgram(classes);
+        testProgram.setClasses(classes);
         return testProgram;
     }
 }

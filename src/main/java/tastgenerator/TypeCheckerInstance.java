@@ -4,7 +4,6 @@ import astgenerator.expressions.*;
 import astgenerator.generalelements.*;
 import astgenerator.generalelements.Class;
 import astgenerator.statements.*;
-import com.sun.jdi.VoidType;
 import common.ObjectType;
 import tastgenerator.exceptions.AlreadyDefinedException;
 import tastgenerator.exceptions.CannotResolveSymbolException;
@@ -17,18 +16,11 @@ import tastgenerator.statements.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Stack;
 
 public class TypeCheckerInstance implements TypeChecker
 {
 
     private HashMap<String, ClassObject> classes;
-
-    private ObjectType currentClass;
-
-    private List<Tuple<String, ObjectType>> currentLocalVars = new ArrayList<>();
-
-    private Stack<Integer> localVarCount= new Stack<>();
 
     public TypeCheckerInstance(UntypedProgram program) {
         classes = new HashMap<>();
@@ -73,15 +65,7 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedAssignExpression typeCheck(AssignExpression toCheck) {
-        TypedExpression expression1 = toCheck.getExpression1().toTyped(this);
-        TypedExpression expression2 = toCheck.getExpression2().toTyped(this);
-        if (!(expression1 instanceof TypedLocalOrFieldVar || expression1 instanceof TypedInstVar)) {
-            throw new InvalidASTException("Left side of the assign is not assignable");
-        }
-        if (!compareTypes(expression1.getObjectType(), expression2.getObjectType())) {
-            throw new TypeMismatchException("Types of the left and right side of the assign do not match");
-        }
-        return new TypedAssignExpression(expression1, expression2, expression1.getObjectType());
+        return null;
     }
 
     @Override
@@ -139,8 +123,7 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedInstVar typeCheck(InstVar toCheck) {
-        TypedExpression expression = toCheck.getExpression().toTyped(this);
-        return new TypedInstVar(expression, toCheck.getName());
+        return null;
     }
 
     @Override
@@ -180,24 +163,17 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedNewExpression typeCheck(NewExpression toCheck) {
-        if (!classes.containsKey(toCheck.getNewType().getName())) {
-            throw new TypeMismatchException("This class does not exist");
-        }
-        List<TypedExpression> typedParameters = new ArrayList<>();
-        for (Expression parameter: toCheck.getParameters()) {
-            typedParameters.add(parameter.toTyped(this));
-        }
-        return new TypedNewExpression(toCheck.getNewType(), typedParameters, toCheck.getNewType());
+        return null;
     }
 
     @Override
     public TypedSuper typeCheck(Super toCheck) {
-        return new TypedSuper(ObjectType.JObjectType);
+        return null;
     }
 
     @Override
     public TypedThis typeCheck(This toCheck) {
-        return new TypedThis(currentClass);
+        return null;
     }
 
     @Override
@@ -235,57 +211,33 @@ public class TypeCheckerInstance implements TypeChecker
         for(MethodDeclaration method: toCheck.getMethods()){
             typedMethods.add((TypedMethodDeclaration) method.toTyped(this));
         }
+
         return new TypedClass(toCheck.getClassType(), typedFields, typedMethods);
     }
 
     @Override
     public TypedFieldDeclaration typeCheck(FieldDeclaration toCheck) {
-        return new TypedFieldDeclaration(toCheck.getAccessModifier(),
-                                         toCheck.getModifier(),
-                                         toCheck.getVariableType(),
-                                         toCheck.getName());
+        return null;
     }
 
     @Override
     public TypedMethodDeclaration typeCheck(MethodDeclaration toCheck) {
-        List<TypedMethodParameter> typedParams = new ArrayList<>();
-        for (MethodParameter parameter: toCheck.getParams()) {
-            typedParams.add((TypedMethodParameter) parameter.toTyped(this));
-        }
-        TypedBlock typedBlock = (TypedBlock) toCheck.getStmt().toTyped(this);
-        if (!compareTypes(toCheck.getReturnType(), typedBlock.getObjectType())) {
-            throw new TypeMismatchException("Returned type does not equal the specified return type of the method");
-        }
-        return new TypedMethodDeclaration(toCheck.getAccessModifier(), toCheck.getModifier(),
-                toCheck.getReturnType(), toCheck.getName(), typedParams, typedBlock);
+        return null;
     }
 
     @Override
     public TypedMethodParameter typeCheck(MethodParameter toCheck) {
-        return new TypedMethodParameter(toCheck.getType(), toCheck.getName());
+        return null;
     }
 
     @Override
     public TypedProgram typeCheck(UntypedProgram toCheck) {
-        List<TypedClass> typedClasses = new ArrayList<>();
-        for (Class classObj: toCheck.getClasses()) {
-            currentClass = classObj.getClassType();
-            typedClasses.add((TypedClass) classObj.toTyped(this));
-        }
-        return new TypedProgram(typedClasses);
+        return null;
     }
 
     @Override
     public TypedAssignStatement typeCheck(AssignStatement toCheck) {
-        TypedExpression expression1 = toCheck.getExpression1().toTyped(this);
-        TypedExpression expression2 = toCheck.getExpression2().toTyped(this);
-        if (!(expression1 instanceof TypedLocalOrFieldVar || expression1 instanceof TypedInstVar)) {
-            throw new InvalidASTException("Left side of the assign is not assignable");
-        }
-        if (!compareTypes(expression1.getObjectType(), expression2.getObjectType())) {
-            throw new TypeMismatchException("Types of the left and right side of the assign do not match");
-        }
-        return new TypedAssignStatement(expression1, expression2, ObjectType.VoidType);
+        return null;
     }
 
     @Override
@@ -320,14 +272,7 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedLocalVarDeclaration typeCheck(LocalVarDeclaration toCheck) {
-        for (Tuple<String, ObjectType> currentLocalVar: currentLocalVars) {
-            if (currentLocalVar.getFirst().equals(toCheck.getName())) {
-                throw new AlreadyDefinedException("Variable " + toCheck.getName() + " is already defined in the local scope");
-            }
-        }
-        currentLocalVars.add(new Tuple<String, ObjectType>(toCheck.getName(), toCheck.getVariableType()));
-        localVarCount.push(localVarCount.pop() + 1);
-        return new TypedLocalVarDeclaration(toCheck.getVariableType(), toCheck.getName());
+        return null;
     }
 
     @Override
@@ -377,12 +322,5 @@ public class TypeCheckerInstance implements TypeChecker
             typedParameters.add(parameter.toTyped(this));
         }
         return new TypedNewStatement(toCheck.getNewType(), typedParameters, toCheck.getNewType());
-    }
-
-    private boolean compareTypes(ObjectType type1, ObjectType type2) {
-        return (type1.getName().equals(type2.getName()) ||
-                type1.getName().equals("Object")) ||
-                (type1.getName().equals(ObjectType.IntType.getName()) &&
-                        type2.getName().equals(ObjectType.CharType.getName()));
     }
 }

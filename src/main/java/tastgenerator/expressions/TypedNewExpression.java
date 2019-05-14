@@ -11,11 +11,10 @@ public class TypedNewExpression extends TypedExpression
     private ObjectType newType;
     private List<TypedExpression> parameters;
 
-    public TypedNewExpression(ObjectType newType, List<TypedExpression> expressions, ObjectType objectType)
+    public TypedNewExpression(ObjectType newType, List<TypedExpression> expressions)
     {
         this.newType = newType;
         this.parameters = expressions;
-        this.objectType = objectType;
     }
 
     public ObjectType getNewType()
