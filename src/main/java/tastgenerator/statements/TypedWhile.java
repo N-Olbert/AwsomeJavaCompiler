@@ -2,6 +2,7 @@ package tastgenerator.statements;
 
 import bytecodegenerator.Context;
 import bytecodegenerator.Generator;
+import common.ObjectType;
 import org.objectweb.asm.MethodVisitor;
 import tastgenerator.expressions.TypedExpression;
 
@@ -11,12 +12,13 @@ import java.util.Map;
 public class TypedWhile extends TypedStatement
 {
     private TypedExpression exp;
-    private TypedStatement stmt;
+    private TypedBlock stmt;
 
-    public TypedWhile(TypedExpression exp, TypedStatement stmt)
+    public TypedWhile(TypedExpression exp, TypedBlock stmt, ObjectType objectType)
     {
         this.exp = exp;
         this.stmt = stmt;
+        this.objectType = objectType;
     }
 
     public TypedExpression getExp()
