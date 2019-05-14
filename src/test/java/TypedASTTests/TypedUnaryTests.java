@@ -43,13 +43,13 @@ public class TypedUnaryTests
     }
 
     @Test
-    public void testPositiveCharIntTypeInferring()
+    public void testPositiveCharNoIntTypeInferring()
     {
         var converter = new TypeCheckerInstance(new UntypedProgram());
         var unary = new Unary(new JCharacter("a"), Operators.PLUS);
         var typedUnary = (TypedUnary) unary.toTyped(converter);
         assertNotNull(typedUnary);
-        assertEquals(typedUnary.getObjectType(), ObjectType.IntType);
+        assertEquals(typedUnary.getObjectType(), ObjectType.CharType);
     }
 
     @Test
