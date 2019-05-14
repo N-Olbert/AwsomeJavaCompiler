@@ -17,48 +17,45 @@ public class ParseTreeGenerator {
         //@ToDo Access Modifiers
 
         List<Class> classes = new ArrayList<>();
+        List<FieldDeclaration> fieldDecls = new ArrayList<>();
+        List<MethodDeclaration> methodDecls = new ArrayList<>();
 
         UntypedProgram program = new UntypedProgram();
 
         programContext.jClass().forEach(classContext ->
         {
             awsomeJavaParser.ClassBodyContext bodyContext = classContext.classBody();
-            List<FieldDeclaration> fieldDecls = new ArrayList<>();
-            List<MethodDeclaration> methodDecls = new ArrayList<>();
+            bodyContext.fieldDeclaration().forEach(fieldDecl -> {
+                ObjectType type = null;
 
-               bodyContext.fieldDeclaration().forEach(fieldDecl -> {
+                if (fieldDecl.objectType().Identifier() != null){
+                    type = ObjectType.getType(fieldDecl.objectType().Identifier().getText());
+                } else {
+                    String objectType = fieldDecl.objectType().Identifier().getText();
 
-               ObjectType type = null;
-
-               if (fieldDecl.objectType().Identifier() != null){
-                   type = ObjectType.getType(fieldDecl.objectType().Identifier().getText());
-               } else {
-                   String objectType = fieldDecl.objectType().Identifier().getText();
-
-                   switch (objectType){
-                       case "int":
-                           type = ObjectType.IntType;
-                           break;
-                       case "char":
-                           type = ObjectType.CharType;
-                           break;
-                       case "boolean":
-                           type = ObjectType.BoolType;
-                           break;
+                    switch (objectType){
+                        case "int":
+                            type = ObjectType.IntType;
+                            break;
+                        case "char":
+                            type = ObjectType.CharType;
+                            break;
+                        case "boolean":
+                            type = ObjectType.BoolType;
+                            break;
                    }
                }
 
-               awsomeJavaParser.ConstructorContext constructorContext = bodyContext.constructor();
-               methodDecls.add(new MethodDeclaration(ObjectType.VoidType,
-                       constructorContext.Identifier().getText(), methodParameters(constructorContext),null));
-
                FieldDeclaration declaration = new FieldDeclaration(type, fieldDecl.Identifier().getText());
-
                fieldDecls.add(declaration);
            });
 
-           Class clazz = new Class(ObjectType.getType(classContext.Identifier().getText()),fieldDecls,methodDecls);
-           classes.add(clazz);
+            awsomeJavaParser.ConstructorContext constructorContext = bodyContext.constructor();
+            methodDecls.add(new MethodDeclaration(ObjectType.VoidType,
+                    constructorContext.Identifier().getText(), methodParameters(constructorContext),null));
+
+            Class clazz = new Class(ObjectType.getType(classContext.Identifier().getText()),fieldDecls,methodDecls);
+            classes.add(clazz);
         });
 
         program.setClasses(classes);
