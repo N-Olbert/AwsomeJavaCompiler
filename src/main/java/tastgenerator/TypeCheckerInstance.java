@@ -391,6 +391,6 @@ public class TypeCheckerInstance implements TypeChecker
             throw new CannotResolveSymbolException("Class " + typedExpression.getObjectType().getName() + " does not have method " +
                     methodName + " with the given parameters");
         }
-        return new Tuple<List<TypedExpression>, ObjectType>(typedParams, correspondingMethod.getReturnType());
+        return new Tuple<>(typedParams, correspondingMethod.getReturnType());
     }
 }
