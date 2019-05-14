@@ -333,38 +333,9 @@ public class TypeCheckerInstance implements TypeChecker
     @Override
     public TypedMethodCallStatement typeCheck(MethodCallStatement toCheck) {
         TypedExpression typedExpression = toCheck.getObject().toTyped(this);
-        if (!classes.containsKey(typedExpression.getObjectType().getName())) {
-            throw new CannotResolveSymbolException("Class " + typedExpression.getObjectType().getName() + " does not exist");
-        }
-        List<TypedExpression> typedParams = new ArrayList<>();
-        for (Expression param: toCheck.getParameters()) {
-            typedParams.add(param.toTyped(this));
-        }
-        ClassObject classObject = classes.get(typedExpression.getObjectType().getName());
-        if (!classObject.getMethods().containsKey(toCheck.getName())) {
-            throw new CannotResolveSymbolException("Class " + typedExpression.getObjectType().getName() + " does not have the method " + toCheck.getName());
-        }
-        List<Method> methods = classObject.getMethods().get(toCheck.getName());
-        Method correspondingMethod = null;
-        for (Method method: methods) {
-            if (method.getParams().size() == toCheck.getParameters().size()) {
-                correspondingMethod = method;
-                for (int i = 0; i < toCheck.getParameters().size(); i++) {
-                    if (!method.getParams().get(i).getName().equals(typedParams.get(i).getObjectType().getName())) {
-                        correspondingMethod = null;
-                        break;
-                    }
-                }
-                if (correspondingMethod != null) {
-                    break;
-                }
-            }
-        }
-        if (correspondingMethod == null) {
-            throw new CannotResolveSymbolException("Class " + typedExpression.getObjectType().getName() + " does not have method " +
-                    toCheck.getName() + " with the given parameters");
-        }
-        return new TypedMethodCallStatement(typedExpression, toCheck.getName(), typedParams, correspondingMethod.returnType);
+        Tuple<List<TypedExpression>, ObjectType> result = methodCallTypeParamsAndGetReturnType(typedExpression,
+                toCheck.getName(),toCheck.getParameters());
+        return new TypedMethodCallStatement(typedExpression, toCheck.getName(), result.getFirst(), result.getSecond());
     }
 
     @Override
@@ -384,5 +355,42 @@ public class TypeCheckerInstance implements TypeChecker
                 type1.getName().equals("Object")) ||
                 (type1.getName().equals(ObjectType.IntType.getName()) &&
                         type2.getName().equals(ObjectType.CharType.getName()));
+    }
+
+    private Tuple<List<TypedExpression>, ObjectType> methodCallTypeParamsAndGetReturnType(TypedExpression typedExpression,
+                                                                                          String methodName,
+                                                                                          List<Expression> params) {
+        if (!classes.containsKey(typedExpression.getObjectType().getName())) {
+            throw new CannotResolveSymbolException("Class " + typedExpression.getObjectType().getName() + " does not exist");
+        }
+        List<TypedExpression> typedParams = new ArrayList<>();
+        for (Expression param: params) {
+            typedParams.add(param.toTyped(this));
+        }
+        ClassObject classObject = classes.get(typedExpression.getObjectType().getName());
+        if (!classObject.getMethods().containsKey(methodName)) {
+            throw new CannotResolveSymbolException("Class " + typedExpression.getObjectType().getName() + " does not have the method " + methodName);
+        }
+        List<Method> methods = classObject.getMethods().get(methodName);
+        Method correspondingMethod = null;
+        for (Method method: methods) {
+            if (method.getParams().size() == params.size()) {
+                correspondingMethod = method;
+                for (int i = 0; i < params.size(); i++) {
+                    if (!method.getParams().get(i).getName().equals(typedParams.get(i).getObjectType().getName())) {
+                        correspondingMethod = null;
+                        break;
+                    }
+                }
+                if (correspondingMethod != null) {
+                    break;
+                }
+            }
+        }
+        if (correspondingMethod == null) {
+            throw new CannotResolveSymbolException("Class " + typedExpression.getObjectType().getName() + " does not have method " +
+                    methodName + " with the given parameters");
+        }
+        return new Tuple<List<TypedExpression>, ObjectType>(typedParams, correspondingMethod.getReturnType());
     }
 }
