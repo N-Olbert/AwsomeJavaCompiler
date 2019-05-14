@@ -5,8 +5,6 @@ import General.ResourceHelper;
 import common.Global;
 import static org.junit.Assert.*;
 import org.junit.Test;
-
-import java.io.FileOutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -26,6 +24,7 @@ public class IntegrationTests
         constructor.setAccessible(true);
         var thing = constructor.newInstance(null);
         assertNotNull(thing);
-        assertTrue(thing.toString().contains("Test"));
+        System.out.println(thing.toString());
+        assertTrue(thing.toString().startsWith("Test@"));
     }
 }
