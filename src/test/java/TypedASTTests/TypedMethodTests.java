@@ -27,7 +27,7 @@ public class TypedMethodTests
         assertEquals(typed.getObjectType(), ObjectType.VoidType);
     }
 
-    @Test
+    @Test(expected = NullPointerException.class)
     public void testConstructor2()
     {
         var ctor = new MethodDeclaration(ObjectType.VoidType, "Test", new ArrayList<>(), new Block(null));
