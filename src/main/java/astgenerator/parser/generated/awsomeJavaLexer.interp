@@ -59,7 +59,7 @@ JNull
 Super
 This
 JString
-LocalOrFieldVar
+Identifier
 JCharacter
 JInteger
 AssignOperator
@@ -94,7 +94,7 @@ JNull
 Super
 This
 JString
-LocalOrFieldVar
+Identifier
 JCharacter
 JInteger
 AssignOperator

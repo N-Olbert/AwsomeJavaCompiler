@@ -1,4 +1,4 @@
-// Generated from C:/Users/Daniel/IdeaProjects/AwsomeJavaCompiler/src/main/java/astgenerator/parser/grammar\awsomeJava.g4 by ANTLR 4.7.2
+// Generated from C:/Users/david/IdeaProjects/AwsomeJavaCompiler/src/main/java/astgenerator/parser/grammar\awsomeJava.g4 by ANTLR 4.7.2
 package astgenerator.parser.generated;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
@@ -20,7 +20,7 @@ public class awsomeJavaLexer extends Lexer {
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
 		T__9=10, T__10=11, T__11=12, T__12=13, T__13=14, T__14=15, T__15=16, T__16=17, 
 		AccessModifier=18, JBoolean=19, JNull=20, Super=21, This=22, JString=23, 
-		LocalOrFieldVar=24, JCharacter=25, JInteger=26, AssignOperator=27, Comperator=28, 
+		Identifier=24, JCharacter=25, JInteger=26, AssignOperator=27, Comperator=28, 
 		OpBeforeIdentifier=29, OpBeforeOrAfterIdentifier=30, OpInBetweenIdentifier=31, 
 		WS=32, Comment=33;
 	public static String[] channelNames = {
@@ -35,7 +35,7 @@ public class awsomeJavaLexer extends Lexer {
 		return new String[] {
 			"T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "T__6", "T__7", "T__8", 
 			"T__9", "T__10", "T__11", "T__12", "T__13", "T__14", "T__15", "T__16", 
-			"AccessModifier", "JBoolean", "JNull", "Super", "This", "JString", "LocalOrFieldVar", 
+			"AccessModifier", "JBoolean", "JNull", "Super", "This", "JString", "Identifier", 
 			"JCharacter", "JInteger", "AssignOperator", "Comperator", "OpBeforeIdentifier", 
 			"OpBeforeOrAfterIdentifier", "OpInBetweenIdentifier", "WS", "Comment"
 		};
@@ -55,9 +55,9 @@ public class awsomeJavaLexer extends Lexer {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, "AccessModifier", "JBoolean", "JNull", 
-			"Super", "This", "JString", "LocalOrFieldVar", "JCharacter", "JInteger", 
-			"AssignOperator", "Comperator", "OpBeforeIdentifier", "OpBeforeOrAfterIdentifier", 
-			"OpInBetweenIdentifier", "WS", "Comment"
+			"Super", "This", "JString", "Identifier", "JCharacter", "JInteger", "AssignOperator", 
+			"Comperator", "OpBeforeIdentifier", "OpBeforeOrAfterIdentifier", "OpInBetweenIdentifier", 
+			"WS", "Comment"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
