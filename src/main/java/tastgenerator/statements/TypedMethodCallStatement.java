@@ -1,5 +1,6 @@
 package tastgenerator.statements;
 
+import common.ObjectType;
 import org.objectweb.asm.MethodVisitor;
 import tastgenerator.expressions.TypedExpression;
 
@@ -12,11 +13,12 @@ public class TypedMethodCallStatement extends TypedStatement
     private String name;
     private List<TypedExpression> parameters;
 
-    public TypedMethodCallStatement(TypedExpression object, String name, List<TypedExpression> parameters)
+    public TypedMethodCallStatement(TypedExpression object, String name, List<TypedExpression> parameters, ObjectType objectType)
     {
         this.object = object;
         this.name = name;
         this.parameters = parameters;
+        this.objectType = objectType;
     }
 
     public TypedExpression getObject()

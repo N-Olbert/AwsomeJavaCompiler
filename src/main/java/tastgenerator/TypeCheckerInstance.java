@@ -7,6 +7,7 @@ import astgenerator.statements.*;
 import com.sun.jdi.VoidType;
 import common.ObjectType;
 import tastgenerator.exceptions.AlreadyDefinedException;
+import tastgenerator.exceptions.CannotResolveSymbolException;
 import tastgenerator.exceptions.InvalidASTException;
 import tastgenerator.exceptions.TypeMismatchException;
 import tastgenerator.expressions.*;
@@ -66,7 +67,8 @@ public class TypeCheckerInstance implements TypeChecker
     @Override
     public TypedReturn typeCheck(Return toCheck)
     {
-        return new TypedReturn(toCheck.getExp().toTyped(this));
+        TypedExpression expression = toCheck.getExp().toTyped(this);
+        return new TypedReturn(expression, expression.getObjectType());
     }
 
     @Override
@@ -304,10 +306,11 @@ public class TypeCheckerInstance implements TypeChecker
             }
             statements.add(typedStatement);
         }
-        for (int i = 0; i < localVarCount.pop(); i++) {
+        int currentLocalVarCount = localVarCount.pop();
+        for (int i = 0; i < currentLocalVarCount; i++) {
             currentLocalVars.remove(currentLocalVars.size() - 1);
         }
-        return new TypedBlock(statements);
+        return new TypedBlock(statements, type);
     }
 
     @Override
@@ -329,12 +332,51 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedMethodCallStatement typeCheck(MethodCallStatement toCheck) {
-        return null;
+        TypedExpression typedExpression = toCheck.getObject().toTyped(this);
+        if (!classes.containsKey(typedExpression.getObjectType().getName())) {
+            throw new CannotResolveSymbolException("Class " + typedExpression.getObjectType().getName() + " does not exist");
+        }
+        List<TypedExpression> typedParams = new ArrayList<>();
+        for (Expression param: toCheck.getParameters()) {
+            typedParams.add(param.toTyped(this));
+        }
+        ClassObject classObject = classes.get(typedExpression.getObjectType().getName());
+        if (!classObject.getMethods().containsKey(toCheck.getName())) {
+            throw new CannotResolveSymbolException("Class " + typedExpression.getObjectType().getName() + " does not have the method " + toCheck.getName());
+        }
+        List<Method> methods = classObject.getMethods().get(toCheck.getName());
+        Method correspondingMethod = null;
+        for (Method method: methods) {
+            if (method.getParams().size() == toCheck.getParameters().size()) {
+                correspondingMethod = method;
+                for (int i = 0; i < toCheck.getParameters().size(); i++) {
+                    if (!method.getParams().get(i).getName().equals(typedParams.get(i).getObjectType().getName())) {
+                        correspondingMethod = null;
+                        break;
+                    }
+                }
+                if (correspondingMethod != null) {
+                    break;
+                }
+            }
+        }
+        if (correspondingMethod == null) {
+            throw new CannotResolveSymbolException("Class " + typedExpression.getObjectType().getName() + " does not have method " +
+                    toCheck.getName() + " with the given parameters");
+        }
+        return new TypedMethodCallStatement(typedExpression, toCheck.getName(), typedParams, correspondingMethod.returnType);
     }
 
     @Override
     public TypedNewStatement typeCheck(NewStatement toCheck) {
-        return null;
+        if (!classes.containsKey(toCheck.getNewType().getName())) {
+            throw new TypeMismatchException("This class does not exist");
+        }
+        List<TypedExpression> typedParameters = new ArrayList<>();
+        for (Expression parameter: toCheck.getParameters()) {
+            typedParameters.add(parameter.toTyped(this));
+        }
+        return new TypedNewStatement(toCheck.getNewType(), typedParameters, toCheck.getNewType());
     }
 
     private boolean compareTypes(ObjectType type1, ObjectType type2) {

@@ -23,6 +23,7 @@ public class TypedMethodDeclaration extends TypedGeneralThing
         this.name = name;
         this.params = params;
         this.stmt = stmt;
+        this.objectType = returnType;
     }
 
     public ObjectType getReturnType()

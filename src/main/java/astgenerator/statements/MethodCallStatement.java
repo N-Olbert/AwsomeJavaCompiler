@@ -1,6 +1,7 @@
 package astgenerator.statements;
 
 import astgenerator.expressions.Expression;
+import common.ObjectType;
 import tastgenerator.TypeChecker;
 import tastgenerator.statements.TypedStatement;
 
