@@ -1,18 +1,18 @@
 package astgenerator.parser;
 
-import astgenerator.generalelements.FieldDeclaration;
-import astgenerator.generalelements.UntypedProgram;
+import astgenerator.generalelements.*;
 import astgenerator.generalelements.Class;
 import astgenerator.parser.generated.awsomeJavaParser;
 import common.ObjectType;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ParseTreeGenerator {
 
 
-    public UntypedProgram generate(awsomeJavaParser.ProgrammContext programContext){
+    public UntypedProgram generate(awsomeJavaParser.ProgrammContext programContext) {
 
         //@ToDo Access Modifiers
 
@@ -20,43 +20,80 @@ public class ParseTreeGenerator {
 
         UntypedProgram program = new UntypedProgram();
 
-        programContext.jClass().forEach( classContext ->
+        programContext.jClass().forEach(classContext ->
         {
             awsomeJavaParser.ClassBodyContext bodyContext = classContext.classBody();
             List<FieldDeclaration> fieldDecls = new ArrayList<>();
+            List<MethodDeclaration> methodDeclarations = new ArrayList<>();
 
-               bodyContext.fieldDeclaration().forEach(fieldDecl -> {
+            bodyContext.fieldDeclaration().forEach(fieldDecl -> {
+                ObjectType type = null;
 
-               ObjectType type = null;
+                if (fieldDecl.objectType().Identifier() != null) {
+                    type = ObjectType.getType(fieldDecl.objectType().Identifier().getText());
+                } else {
+                    String objectType = fieldDecl.objectType().Identifier().getText();
 
-               if (fieldDecl.objectType().Identifier() != null){
-                   type = ObjectType.getType(fieldDecl.objectType().Identifier().getText());
-               } else {
-                   String objectType = fieldDecl.objectType().Identifier().getText();
+                    switch (objectType) {
+                        case "int":
+                            type = ObjectType.IntType;
+                            break;
+                        case "char":
+                            type = ObjectType.CharType;
+                            break;
+                        case "boolean":
+                            type = ObjectType.BoolType;
+                            break;
+                    }
+                }
 
-                   switch (objectType){
-                       case "int":
-                           type = ObjectType.IntType;
-                           break;
-                       case "char":
-                           type = ObjectType.CharType;
-                           break;
-                       case "boolean":
-                           type = ObjectType.BoolType;
-                           break;
-                   }
-               }
+                FieldDeclaration declaration = new FieldDeclaration(type, fieldDecl.Identifier().getText());
 
-               FieldDeclaration declaration = new FieldDeclaration(type, fieldDecl.Identifier().getText());
+                fieldDecls.add(declaration);
+            });
 
-               fieldDecls.add(declaration);
-           });
+            awsomeJavaParser.ConstructorContext constructorContext = bodyContext.constructor();
+            MethodDeclaration declaration = new MethodDeclaration(ObjectType.VoidType,
+                    constructorContext.Identifier().getText(), methodParameters(constructorContext), null);
+            methodDeclarations.add(declaration);
 
-           Class clazz = new Class(ObjectType.getType(classContext.Identifier().getText()),fieldDecls,null);
-           classes.add(clazz);
+            Class clazz = new Class(ObjectType.getType(classContext.Identifier().getText()), fieldDecls,
+                    methodDeclarations);
+            classes.add(clazz);
         });
 
         program.setClasses(classes);
         return program;
+    }
+
+    private List<MethodParameter> methodParameters(awsomeJavaParser.ConstructorContext constructorContext) {
+        List<MethodParameter> parameters = new ArrayList<>();
+
+        ObjectType type = null;
+
+        for (awsomeJavaParser.MethodParameterContext methodParameterContext :
+                constructorContext.nMethodParameters().methodParameter()) {
+
+            if (methodParameterContext.objectType().Identifier() != null) {
+                type = ObjectType.getType(methodParameterContext.objectType().Identifier().getText());
+            } else {
+                String objectType = methodParameterContext.objectType().Identifier().getText();
+
+                switch (objectType) {
+                    case "int":
+                        type = ObjectType.IntType;
+                        break;
+                    case "char":
+                        type = ObjectType.CharType;
+                        break;
+                    case "boolean":
+                        type = ObjectType.BoolType;
+                        break;
+                }
+
+                parameters.add(new MethodParameter(type, methodParameterContext.Identifier().getText()));
+            }
+        }
+        return parameters;
     }
 }
