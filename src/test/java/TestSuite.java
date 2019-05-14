@@ -1,6 +1,7 @@
 import ASTTests.ASTBaseTest;
 import BytecodeTests.BytecodeTests;
 import General.GeneralTests;
+import IntegrationTests.IntegrationTests;
 import TypedASTTests.TypedASTBaseTests;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -12,6 +13,7 @@ import org.junit.runners.Suite;
         //BytecodeTests.class,
         //GeneralTests.class,
         //TypedASTBaseTests.class
+        IntegrationTests.class
 })
 @RunWith(Suite.class)
 public class TestSuite

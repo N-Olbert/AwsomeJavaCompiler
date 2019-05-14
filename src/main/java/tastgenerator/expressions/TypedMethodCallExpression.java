@@ -1,6 +1,7 @@
 package tastgenerator.expressions;
 
 import common.ObjectType;
+import bytecodegenerator.Context;
 import org.objectweb.asm.MethodVisitor;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class TypedMethodCallExpression extends TypedExpression
     }
 
     @Override
-    public void generateByteCode(MethodVisitor visitor, Map<String, Integer> localVar) {
+    public void generateByteCode(MethodVisitor visitor, Context context) {
 
     }
 }

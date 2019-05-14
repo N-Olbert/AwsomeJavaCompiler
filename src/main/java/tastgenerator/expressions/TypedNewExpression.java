@@ -1,5 +1,6 @@
 package tastgenerator.expressions;
 
+import bytecodegenerator.Context;
 import common.ObjectType;
 import org.objectweb.asm.MethodVisitor;
 
@@ -29,7 +30,7 @@ public class TypedNewExpression extends TypedExpression
     }
 
     @Override
-    public void generateByteCode(MethodVisitor visitor, Map<String, Integer> localVar) {
+    public void generateByteCode(MethodVisitor visitor, Context context) {
 
     }
 }

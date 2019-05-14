@@ -38,28 +38,30 @@ class Point
             add(new TypedFieldDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE,ObjectType.IntType, "y"));
         }};
         var methodParams = new ArrayList<String[]>();
-        methodParams.add(new String[] { ObjectType.IntType.getName(), methodNameGetX });
         methodParams.add(new String[] { ObjectType.VoidType.getName(), methodNameSetX });
-        methodParams.add(new String[] { ObjectType.IntType.getName(), methodNameGetY });
+        methodParams.add(new String[] { ObjectType.IntType.getName(), methodNameGetX });
         methodParams.add(new String[] { ObjectType.VoidType.getName(), methodNameSetY });
+        methodParams.add(new String[] { ObjectType.IntType.getName(), methodNameGetY });
         methodParams.add(new String[] { ObjectType.VoidType.getName(), constructorName });
         var blocks = new ArrayList<TypedBlock>();
         var typedStatements = new ArrayList<TypedStatement>();
+        /* ToDo: Fix
         typedStatements.add(new TypedAssignStatement(new TypedInstVar(new TypedThis(), "x"), new TypedLocalOrFieldVar(ObjectType.IntType, "x")));
         blocks.add(new TypedBlock(typedStatements));
+
         var typedStatements1 = new ArrayList<TypedStatement>();
-        typedStatements.add(new TypedReturn(new TypedInstVar(new TypedThis(), "x")));
+        typedStatements1.add(new TypedReturn(new TypedInstVar(new TypedThis(), "x")));
         blocks.add(new TypedBlock(typedStatements1));
         var typedStatements2 = new ArrayList<TypedStatement>();
         typedStatements2.add(new TypedAssignStatement(new TypedInstVar(new TypedThis(), "y"), new TypedLocalOrFieldVar(ObjectType.IntType, "y")));
         blocks.add(new TypedBlock(typedStatements2));
         var typedStatements3 = new ArrayList<TypedStatement>();
-        typedStatements.add(new TypedReturn(new TypedInstVar(new TypedThis(), "y")));
+        typedStatements3.add(new TypedReturn(new TypedInstVar(new TypedThis(), "y")));
         blocks.add(new TypedBlock(typedStatements3));
         var typedStatements4 = new ArrayList<TypedStatement>();
         typedStatements4.add(new TypedAssignStatement(new TypedInstVar(new TypedThis(), "x"), new TypedLocalOrFieldVar(ObjectType.IntType, "x")));
         typedStatements4.add(new TypedAssignStatement(new TypedInstVar(new TypedThis(), "y"), new TypedLocalOrFieldVar(ObjectType.IntType, "y")));
-        blocks.add(new TypedBlock(typedStatements4));
+        blocks.add(new TypedBlock(typedStatements4));*/
 
         var methodParameters = new ArrayList<ArrayList<TypedMethodParameter>>();
         methodParameters.add(new ArrayList <>(){{
