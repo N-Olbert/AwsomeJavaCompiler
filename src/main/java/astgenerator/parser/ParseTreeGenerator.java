@@ -24,7 +24,7 @@ public class ParseTreeGenerator {
         {
             awsomeJavaParser.ClassBodyContext bodyContext = classContext.classBody();
             List<FieldDeclaration> fieldDecls = new ArrayList<>();
-            List<MethodDeclaration> methodDeclaration = new ArrayList<>();
+            List<MethodDeclaration> methodDecls = new ArrayList<>();
 
                bodyContext.fieldDeclaration().forEach(fieldDecl -> {
 
@@ -49,15 +49,15 @@ public class ParseTreeGenerator {
                }
 
                awsomeJavaParser.ConstructorContext constructorContext = bodyContext.constructor();
-               new MethodDeclaration(ObjectType.VoidType, constructorContext.Identifier().getText(),
-                       methodParameters(constructorContext),null);
+               methodDecls.add(new MethodDeclaration(ObjectType.VoidType,
+                       constructorContext.Identifier().getText(), methodParameters(constructorContext),null));
 
                FieldDeclaration declaration = new FieldDeclaration(type, fieldDecl.Identifier().getText());
 
                fieldDecls.add(declaration);
            });
 
-           Class clazz = new Class(ObjectType.getType(classContext.Identifier().getText()),fieldDecls,new ArrayList<>());
+           Class clazz = new Class(ObjectType.getType(classContext.Identifier().getText()),fieldDecls,methodDecls);
            classes.add(clazz);
         });
 
