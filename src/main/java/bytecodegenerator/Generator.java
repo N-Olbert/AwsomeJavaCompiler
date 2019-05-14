@@ -1,17 +1,22 @@
 package bytecodegenerator;
 
+import astgenerator.expressions.LocalOrFieldVar;
 import common.Modifier;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import tastgenerator.Method;
 import tastgenerator.expressions.TypedExpression;
+import tastgenerator.expressions.TypedInstVar;
 import tastgenerator.expressions.TypedInt;
 import tastgenerator.expressions.TypedLocalOrFieldVar;
+import tastgenerator.expressions.TypedThis;
 import tastgenerator.generalelements.TypedClass;
 import tastgenerator.generalelements.TypedFieldDeclaration;
 import tastgenerator.generalelements.TypedMethodDeclaration;
 import tastgenerator.generalelements.TypedMethodParameter;
 import tastgenerator.generalelements.TypedProgram;
+import tastgenerator.statements.TypedAssignStatement;
 import tastgenerator.statements.TypedBlock;
 import tastgenerator.statements.TypedReturn;
 import tastgenerator.statements.TypedStatement;
@@ -57,6 +62,9 @@ public abstract class Generator {
 
     public static void generate(TypedMethodDeclaration declaration, ClassWriter writer, Context context) {
         MethodVisitor visitor = writer.visitMethod(declaration.getAccessModifier().getCode() | declaration.getModifier().getCode(), declaration.getName(), generate(declaration.getParams()) + declaration.getReturnType().getName(), null, null);
+        if(!Modifier.STATIC.equals(declaration.getModifier())) {
+            context.getLocalVar().put("this", 0);
+        }
         if(declaration.getParams() != null) {
             declaration.getParams().forEach(param -> {
                 context.getLocalVar().put(param.getName(), context.getLocalVar().size());
@@ -87,7 +95,14 @@ public abstract class Generator {
 
     public static void generate(TypedReturn statement, MethodVisitor visitor, Context context) {
         statement.getExp().generateByteCode(visitor, context.clone());
-        visitor.visitInsn(Opcodes.IRETURN);
+        switch(statement.getExp().getObjectType().getName()) {
+            case "I":
+                visitor.visitInsn(Opcodes.IRETURN);
+                break;
+            case "V":
+                visitor.visitInsn(Opcodes.RETURN);
+                break;
+        }
     }
 
     public static void generate(TypedLocalOrFieldVar expression, MethodVisitor visitor, Context context) {
@@ -130,6 +145,23 @@ public abstract class Generator {
                 visitor.visitIntInsn(Opcodes.BIPUSH, expression.getJint());
                 break;
         }
+    }
+
+    public static void generate(TypedAssignStatement statement, MethodVisitor visitor, Context context) {
+        statement.getExpression1().generateByteCode(visitor, context);
+        statement.getExpression2().generateByteCode(visitor, context);
+        if(statement.getExpression1() instanceof TypedInstVar) {
+            visitor.visitFieldInsn(Opcodes.PUTFIELD, context.getClassName(), ((TypedInstVar) statement.getExpression1()).getName(), statement.getExpression2().getObjectType().getName());
+        }
+    }
+
+    public static void generate(TypedThis expression, MethodVisitor visitor, Context context) {
+        visitor.visitVarInsn(Opcodes.ALOAD, 0);
+    }
+
+    public static void generate(TypedInstVar expression, MethodVisitor visitor, Context context) {
+        expression.getExpression().generateByteCode(visitor, context);
+
     }
 
     public static void generate(TypedStatement statement, MethodVisitor visitor, Context context) {
