@@ -1,7 +1,9 @@
 package bytecodegenerator;
 
 import astgenerator.expressions.LocalOrFieldVar;
+import astgenerator.statements.Return;
 import common.Modifier;
+import common.ObjectType;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -61,7 +63,15 @@ public abstract class Generator {
 
 
     public static void generate(TypedMethodDeclaration declaration, ClassWriter writer, Context context) {
-        MethodVisitor visitor = writer.visitMethod(declaration.getAccessModifier().getCode() | declaration.getModifier().getCode(), declaration.getName(), generate(declaration.getParams()) + declaration.getReturnType().getName(), null, null);
+        String name = declaration.getName();
+        if(declaration.getName().equals(context.getClassName())) {
+            name = "<init>";
+        }
+        MethodVisitor visitor = writer.visitMethod(declaration.getAccessModifier().getCode() | declaration.getModifier().getCode(), name, generate(declaration.getParams()) + declaration.getReturnType().getName(), null, null);
+        if(name.equals("<init>")) {
+            visitor.visitVarInsn(Opcodes.ALOAD, 0);
+            visitor.visitMethodInsn(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
+        }
         if(!Modifier.STATIC.equals(declaration.getModifier())) {
             context.getLocalVar().put("this", 0);
         }
@@ -73,6 +83,8 @@ public abstract class Generator {
         }
         visitor.visitCode();
         generate(declaration.getStmt(), visitor, context.clone());
+
+        new TypedReturn(null, ObjectType.VoidType).generateByteCode(visitor, context.clone());
         visitor.visitMaxs(0, 0);
         visitor.visitEnd();
     }
@@ -94,9 +106,9 @@ public abstract class Generator {
     }
 
     public static void generate(TypedReturn statement, MethodVisitor visitor, Context context) {
-        statement.getExp().generateByteCode(visitor, context.clone());
-        switch(statement.getExp().getObjectType().getName()) {
+        switch(statement.getObjectType().getName()) {
             case "I":
+                statement.getExp().generateByteCode(visitor, context.clone());
                 visitor.visitInsn(Opcodes.IRETURN);
                 break;
             case "V":
