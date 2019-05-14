@@ -1,5 +1,6 @@
 package tastgenerator.expressions;
 
+import bytecodegenerator.Context;
 import common.ObjectType;
 import bytecodegenerator.Generator;
 import common.Operators;
@@ -37,7 +38,7 @@ public class TypedBinary extends TypedExpression
     }
 
     @Override
-    public void generateByteCode(MethodVisitor visitor, Map<String, Integer> localVar) {
-        Generator.generate(this, visitor, localVar);
+    public void generateByteCode(MethodVisitor visitor, Context context) {
+        Generator.generate(this, visitor, context);
     }
 }

@@ -9,6 +9,7 @@ import tastgenerator.TypeChecker;
 import tastgenerator.generalelements.TypedGeneralThing;
 import tastgenerator.generalelements.TypedMethodDeclaration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MethodDeclaration extends GeneralThing
@@ -26,8 +27,8 @@ public class MethodDeclaration extends GeneralThing
         this.modifier = modifier;
         this.returnType = returnType;
         this.name = name;
-        this.params = params;
-        this.stmt = stmt;
+        this.params = params == null ? new ArrayList<>() : params;
+        this.stmt = stmt == null ? new Block(new Statement[0]) : stmt;
     }
 
     public MethodDeclaration(ObjectType returnType, String name,
@@ -36,8 +37,8 @@ public class MethodDeclaration extends GeneralThing
         this.modifier = Modifier.NONE;
         this.returnType = returnType;
         this.name = name;
-        this.params = params;
-        this.stmt = stmt;
+        this.params = params == null ? new ArrayList<>() : params;
+        this.stmt = stmt == null ? new Block(new Statement[0]) : stmt;
     }
 
 

@@ -13,12 +13,11 @@ public class TypedProgramGenerator
 {
     static TypedProgram getProgram(String className, List <TypedFieldDeclaration> fields, List <TypedMethodDeclaration> methods)
     {
-        var testProgram = new TypedProgram();
         var classes = new ArrayList <TypedClass>();
         var newClass = new TypedClass(ObjectType.getType(className), fields, methods);
         newClass.setObjectType(ObjectType.getType(className));
         classes.add(newClass);
-        testProgram.setClasses(classes);
+        var testProgram = new TypedProgram(classes);
         return testProgram;
     }
 

@@ -8,5 +8,5 @@ import java.util.HashMap;
 import java.util.Map;
 
 public interface GenerateByteCodeStatement {
-    void generateByteCode(MethodVisitor visitor, Map<String, Integer> localVar);
+    void generateByteCode(MethodVisitor visitor, Context context);
 }
