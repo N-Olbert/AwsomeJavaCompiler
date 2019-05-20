@@ -10,7 +10,16 @@ import java.util.List;
 public class Block extends Statement
 {
     private List<Statement> blockedStatements;
+    public Block(ArrayList<Statement> statements)
+    {
+        var newList = new ArrayList<Statement>();
+        if(statements != null)
+        {
+            newList = statements;
+        }
 
+        this.blockedStatements = newList;
+    }
     public Block(Statement... blockedStatements)
     {
         var newList = new ArrayList<Statement>();

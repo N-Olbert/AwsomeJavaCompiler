@@ -6,6 +6,7 @@ import astgenerator.generalelements.MethodDeclaration;
 import astgenerator.generalelements.MethodParameter;
 import astgenerator.generalelements.UntypedProgram;
 import astgenerator.statements.Block;
+import astgenerator.statements.Statement;
 import common.*;
 import org.junit.Test;
 
@@ -28,8 +29,8 @@ public class ASTDefaultConstructorTest {
         assertNotNull(astGen);
 
         String className = "Test";
-        Class testClass = new Class(ObjectType.getType(className), null, new ArrayList<MethodDeclaration>());
-        testClass.getMethods().add(new MethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.VoidType, className, new ArrayList<MethodParameter>(), new Block(null)));
+        Class testClass = new Class(ObjectType.getType(className), new ArrayList<>(), new ArrayList<>());
+        testClass.getMethods().add(new MethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.VoidType, className, new ArrayList<MethodParameter>(), new Block(new Statement[0])));
         UntypedProgram testProgram = new UntypedProgram();
         List<Class> classes = new ArrayList<Class>();
         classes.add(testClass);
