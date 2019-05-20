@@ -5,20 +5,17 @@ import astgenerator.generalelements.MethodParameter;
 import astgenerator.statements.Block;
 import astgenerator.statements.IfElse;
 import astgenerator.statements.Return;
-import common.Factory;
 import common.Global;
 import common.ObjectType;
 import common.Operators;
-import org.junit.Assert;
 import org.junit.Test;
-import tastgenerator.expressions.TypedThis;
 import tastgenerator.statements.TypedIfElse;
 import tastgenerator.statements.TypedReturn;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class FibonacciClassTest
 {
