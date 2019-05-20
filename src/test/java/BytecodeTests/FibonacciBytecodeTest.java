@@ -7,13 +7,11 @@ import tastgenerator.expressions.*;
 import tastgenerator.generalelements.TypedMethodDeclaration;
 import tastgenerator.generalelements.TypedMethodParameter;
 import tastgenerator.generalelements.TypedProgram;
-import tastgenerator.statements.TypedBlock;
-import tastgenerator.statements.TypedIfElse;
-import tastgenerator.statements.TypedReturn;
-import tastgenerator.statements.TypedStatement;
+import tastgenerator.statements.*;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -61,12 +59,13 @@ public class FibonacciBytecodeTest
                         new TypedMethodCallExpression(new TypedThis(classType), methodName, new ArrayList<>(){{add(nMinusOne);}}, ObjectType.IntType),
                         new TypedMethodCallExpression(new TypedThis(classType), methodName, new ArrayList<>(){{add(nMinusTwo);}}, ObjectType.IntType),
                         Operators.PLUS, ObjectType.IntType),
-                ObjectType.IntType);
+                        ObjectType.IntType);
 
         var statements = new ArrayList<TypedStatement>();
         statements.add(new TypedIfElse(condition,
                                         new TypedBlock(new ArrayList<>(){{add(then);}}, ObjectType.IntType),
-                                        new TypedBlock(new ArrayList<>(){{add(otherwise);}}, ObjectType.IntType)));
+                                        new TypedBlock(new ArrayList<>(){{add(otherwise);}}, ObjectType.IntType),
+                                        ObjectType.IntType));
 
         var methodBody = new TypedBlock(statements, ObjectType.IntType);
         var method = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, ObjectType.IntType,
@@ -77,6 +76,50 @@ public class FibonacciBytecodeTest
         var typedProgram = TypedProgramGenerator.getProgram(className, null,
                                                             new ArrayList<>(){{add(ctor);add(method);}});
         return typedProgram;
+    }
+
+    private TypedProgram getFibonacciIterative()
+    {
+        var className = "Fibonacci";
+        var classType = ObjectType.getType(className);
+        var methodName = "fibonacci";
+
+        /**
+         * if(n <2)
+         *         {
+         *             return 1;
+         *         }
+         *         else
+         *         {
+         *             int a=0;
+         *             int b=1;
+         *             int i=3;
+         *             int temp;
+         *             while(i<= n)
+         *             {
+         *                 temp=b;
+         *                 b=a+b;
+         *                 a=temp;
+         *                 i++;
+         *             }
+         *
+         *             return a + b;
+         *         }
+         */
+        var methodParams = new ArrayList<TypedMethodParameter>();
+        methodParams.add(new TypedMethodParameter(ObjectType.IntType, "n"));
+        var condition = new TypedBinary(
+                new TypedLocalOrFieldVar(ObjectType.IntType, "n"),
+                new TypedInt("2"),
+                Operators.LESSTHAN, ObjectType.BoolType);
+        var then = new TypedReturn(new TypedInt("1"), ObjectType.IntType);
+        var otherwise = new ArrayList<TypedStatement>();
+        otherwise.add(new TypedLocalVarDeclaration(ObjectType.IntType, "a"));
+        otherwise.add(new TypedLocalVarDeclaration(ObjectType.IntType, "b"));
+        otherwise.add(new TypedLocalVarDeclaration(ObjectType.IntType, "i"));
+        otherwise.add(new TypedLocalVarDeclaration(ObjectType.IntType, "temp"));
+        otherwise.add(new TypedAssignStatement())
+
     }
 
 }

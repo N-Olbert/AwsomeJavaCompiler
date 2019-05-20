@@ -1,19 +1,26 @@
 public class Fibonacci
 {
-    public int fibonacci(int n)
+    int fibonacci(int n)
     {
-        if(n <= 1) {
-            return n;
+        if(n <2)
+        {
+            return 1;
         }
+        else
+        {
+            int a=0;
+            int b=1;
+            int i=3;
+            int temp;
+            while(i<= n)
+            {
+                temp=b;
+                b=a+b;
+                a=temp;
+                i++;
+            }
 
-        int fib = 1;
-        int prevFib = 1;
-        for(int i=2; i<n; i++) {
-            int temp = fib;
-            fib+= prevFib;
-            prevFib = temp;
+            return a + b;
         }
-
-        return fib;
     }
 }
