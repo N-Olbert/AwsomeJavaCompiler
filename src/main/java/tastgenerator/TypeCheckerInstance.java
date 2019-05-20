@@ -83,7 +83,7 @@ public class TypeCheckerInstance implements TypeChecker
     @Override
     public TypedAssignExpression typeCheck(AssignExpression toCheck) {
         Tuple<TypedExpression, TypedExpression> result = typeAssign(toCheck.getExpression1(), toCheck.getExpression2());
-        return new TypedAssignExpression(result.getFirst(), result.getSecond(), result.getFirst().getObjectType());
+        return new TypedAssignExpression(result.getFirst(), result.getSecond());
     }
 
     @Override
@@ -313,7 +313,7 @@ public class TypeCheckerInstance implements TypeChecker
     @Override
     public TypedAssignStatement typeCheck(AssignStatement toCheck) {
         Tuple<TypedExpression, TypedExpression> result = typeAssign(toCheck.getExpression1(), toCheck.getExpression2());
-        return new TypedAssignStatement(result.getFirst(), result.getSecond(), ObjectType.VoidType);
+        return new TypedAssignStatement(result.getFirst(), result.getSecond());
     }
 
     @Override
