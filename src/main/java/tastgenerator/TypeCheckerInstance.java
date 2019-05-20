@@ -183,7 +183,19 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedLocalOrFieldVar typeCheck(LocalOrFieldVar toCheck) {
-        return null;
+        ObjectType varType;
+        varType = classes.get(currentClass.getName()).getFields().get(toCheck.getName());
+        if (varType == null) {
+            for (Tuple<String, ObjectType> localVar : currentLocalVars) {
+                if (toCheck.getName().equals(localVar.getFirst())) {
+                    varType = localVar.getSecond();
+                }
+            }
+        }
+        if (varType == null) {
+            throw new CannotResolveSymbolException("The variable " + toCheck.getName() + " does not exist");
+        }
+        return new TypedLocalOrFieldVar(varType, toCheck.getName());
     }
 
     @Override
@@ -274,6 +286,16 @@ public class TypeCheckerInstance implements TypeChecker
         for (MethodParameter parameter: toCheck.getParams()) {
             typedParams.add((TypedMethodParameter) parameter.toTyped(this));
         }
+
+        /*List<Method> definedMethods = classes.get(currentClass.getName()).getMethods().get(toCheck.getName());
+        if (definedMethods != null) {
+            for (Method currentMethod: definedMethods) {
+                if (currentMethod.getParams().size() == typedParams.size()) {
+
+                }
+            }
+        }*/
+
         TypedBlock typedBlock = (TypedBlock) toCheck.getStmt().toTyped(this);
         if (!compareTypes(toCheck.getReturnType(), typedBlock.getObjectType())) {
             throw new TypeMismatchException("Returned type does not equal the specified return type of the method");
@@ -338,7 +360,30 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedIfElse typeCheck(IfElse toCheck) {
-        return null;
+        TypedExpression typedCondition = toCheck.getCondition().toTyped(this);
+        if (typedCondition.getObjectType().getName().equals(ObjectType.BoolType.getName())) {
+            throw new TypeMismatchException("Condition of while must be boolean");
+        }
+        TypedBlock typedThen = (TypedBlock) toCheck.getThen().toTyped(this);
+        TypedBlock typedOtherwise = (TypedBlock) toCheck.getOtherwise().toTyped(this);
+        ObjectType type;
+        if (typedOtherwise.getObjectType().getName().equals(ObjectType.VoidType.getName())) {
+            type = typedThen.getObjectType();
+        } else {
+            if (typedThen.getObjectType().getName().equals(ObjectType.VoidType.getName())) {
+                type = typedOtherwise.getObjectType();
+            } else {
+                if ((typedThen.getObjectType().getName().equals(ObjectType.CharType.getName()) &&
+                    typedOtherwise.getObjectType().getName().equals(ObjectType.IntType.getName())) ||
+                    (typedThen.getObjectType().getName().equals(ObjectType.IntType.getName()) &&
+                    typedOtherwise.getObjectType().getName().equals(ObjectType.CharType.getName()))) {
+                    type = ObjectType.IntType;
+                } else {
+                    type = ObjectType.JObjectType;
+                }
+            }
+        }
+        return new TypedIfElse(typedCondition, typedThen, typedOtherwise, type);
     }
 
     @Override
@@ -416,4 +461,6 @@ public class TypeCheckerInstance implements TypeChecker
         }
         return new Tuple<>(typedParams, correspondingMethod.getReturnType());
     }
+
+    //public Method getCorrespondingMethod(List<Method> methods, )
 }
