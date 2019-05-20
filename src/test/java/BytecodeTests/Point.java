@@ -54,7 +54,7 @@ class Point {
         typedStatements
                 .add(new TypedAssignStatement(
                         new TypedInstVar(new TypedThis(ObjectType.getType(className)), "x", ObjectType.IntType),
-                        new TypedLocalOrFieldVar(ObjectType.IntType, "x"), ObjectType.IntType));
+                        new TypedLocalOrFieldVar(ObjectType.IntType, "x")));
         blocks.add(new TypedBlock(typedStatements, ObjectType.IntType));
 
         var typedStatements1 = new ArrayList<TypedStatement>();
@@ -66,7 +66,7 @@ class Point {
         typedStatements2
                 .add(new TypedAssignStatement(
                         new TypedInstVar(new TypedThis(ObjectType.getType(className)), "y", ObjectType.IntType),
-                        new TypedLocalOrFieldVar(ObjectType.IntType, "y"), ObjectType.IntType));
+                        new TypedLocalOrFieldVar(ObjectType.IntType, "y")));
         blocks.add(new TypedBlock(typedStatements2, ObjectType.IntType));
         var typedStatements3 = new ArrayList<TypedStatement>();
         typedStatements3.add(new TypedReturn(
@@ -77,11 +77,11 @@ class Point {
         typedStatements4
                 .add(new TypedAssignStatement(
                         new TypedInstVar(new TypedThis(ObjectType.getType(className)), "x", ObjectType.IntType),
-                        new TypedLocalOrFieldVar(ObjectType.IntType, "x"), ObjectType.IntType));
+                        new TypedLocalOrFieldVar(ObjectType.IntType, "x")));
         typedStatements4
                 .add(new TypedAssignStatement(
                         new TypedInstVar(new TypedThis(ObjectType.getType(className)), "y", ObjectType.IntType),
-                        new TypedLocalOrFieldVar(ObjectType.IntType, "y"), ObjectType.IntType));
+                        new TypedLocalOrFieldVar(ObjectType.IntType, "y")));
         blocks.add(new TypedBlock(typedStatements4, ObjectType.IntType));
 
         var methodParameters = new ArrayList<ArrayList<TypedMethodParameter>>();
