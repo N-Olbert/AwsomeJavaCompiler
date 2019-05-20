@@ -2,6 +2,7 @@ package tastgenerator.statements;
 
 import bytecodegenerator.Context;
 import bytecodegenerator.Generator;
+import common.ObjectType;
 import org.objectweb.asm.MethodVisitor;
 import tastgenerator.expressions.TypedExpression;
 
@@ -14,11 +15,12 @@ public class TypedIfElse extends TypedStatement
     private TypedBlock then;
     private TypedBlock otherwise;
 
-    public TypedIfElse(TypedExpression condition, TypedBlock then, TypedBlock otherwise)
+    public TypedIfElse(TypedExpression condition, TypedBlock then, TypedBlock otherwise, ObjectType objectType)
     {
         this.condition = condition;
         this.then = then;
         this.otherwise = otherwise;
+        this.objectType = objectType;
     }
 
     public TypedExpression getCondition()
