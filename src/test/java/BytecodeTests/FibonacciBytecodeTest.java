@@ -64,8 +64,7 @@ public class FibonacciBytecodeTest
         var statements = new ArrayList<TypedStatement>();
         statements.add(new TypedIfElse(condition,
                                         new TypedBlock(new ArrayList<>(){{add(then);}}, ObjectType.IntType),
-                                        new TypedBlock(new ArrayList<>(){{add(otherwise);}}, ObjectType.IntType),
-                                        ObjectType.IntType));
+                                        new TypedBlock(new ArrayList<>(){{add(otherwise);}}, ObjectType.IntType), ObjectType.IntType));
 
         var methodBody = new TypedBlock(statements, ObjectType.IntType);
         var method = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, ObjectType.IntType,

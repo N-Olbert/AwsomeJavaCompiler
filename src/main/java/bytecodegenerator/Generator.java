@@ -1,13 +1,9 @@
 package bytecodegenerator;
 
-import astgenerator.expressions.LocalOrFieldVar;
-import astgenerator.statements.Return;
 import common.Modifier;
 import common.ObjectType;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
-import org.objectweb.asm.Opcodes;
-import tastgenerator.Method;
 import tastgenerator.expressions.TypedExpression;
 import tastgenerator.expressions.TypedInstVar;
 import tastgenerator.expressions.TypedInt;
@@ -23,11 +19,10 @@ import tastgenerator.statements.TypedBlock;
 import tastgenerator.statements.TypedReturn;
 import tastgenerator.statements.TypedStatement;
 
-import javax.tools.OptionChecker;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
+
+import static org.objectweb.asm.Opcodes.*;
 
 public abstract class Generator {
     public static List<ClassWriter> generate(TypedProgram program) {
@@ -35,8 +30,8 @@ public abstract class Generator {
     }
 
     public static ClassWriter generate(TypedClass clazz) {
-        ClassWriter cw = new ClassWriter( ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
-        cw.visit(Opcodes.V1_4, Opcodes.ACC_PUBLIC,
+        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
+        cw.visit(V1_4, ACC_PUBLIC,
                 clazz.getClassType().getName(),
                 null, "java/lang/Object", null);
         Context context = new Context(clazz.getClassType().getName());
@@ -58,7 +53,8 @@ public abstract class Generator {
         else {
             context.getLocalFields().add(declaration.getName());
         }
-        writer.visitField(declaration.getAccessModifier().getCode() | declaration.getModifier().getCode(), declaration.getName(), declaration.getVariableType().getName(), null, null);
+        writer.visitField(declaration.getAccessModifier().getCode() | declaration.getModifier().getCode(),
+                declaration.getName(), declaration.getVariableType().getName(), null, null);
     }
 
 
@@ -67,10 +63,12 @@ public abstract class Generator {
         if(declaration.getName().equals(context.getClassName())) {
             name = "<init>";
         }
-        MethodVisitor visitor = writer.visitMethod(declaration.getAccessModifier().getCode() | declaration.getModifier().getCode(), name, generate(declaration.getParams()) + declaration.getReturnType().getName(), null, null);
+        MethodVisitor visitor =
+                writer.visitMethod(declaration.getAccessModifier().getCode() | declaration.getModifier().getCode(),
+                        name, generate(declaration.getParams()) + declaration.getReturnType().getName(), null, null);
         if(name.equals("<init>")) {
-            visitor.visitVarInsn(Opcodes.ALOAD, 0);
-            visitor.visitMethodInsn(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
+            visitor.visitVarInsn(ALOAD, 0);
+            visitor.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
         }
         if(!Modifier.STATIC.equals(declaration.getModifier())) {
             context.getLocalVar().put("this", 0);
@@ -109,71 +107,78 @@ public abstract class Generator {
         switch(statement.getObjectType().getName()) {
             case "I":
                 statement.getExp().generateByteCode(visitor, context.clone());
-                visitor.visitInsn(Opcodes.IRETURN);
+                visitor.visitInsn(IRETURN);
                 break;
             case "V":
-                visitor.visitInsn(Opcodes.RETURN);
+                visitor.visitInsn(RETURN);
                 break;
+            default:
+                visitor.visitInsn(ARETURN);
         }
     }
 
     public static void generate(TypedLocalOrFieldVar expression, MethodVisitor visitor, Context context) {
         if(context.getLocalVar().containsKey(expression.getName())) {
-            visitor.visitVarInsn(Opcodes.ILOAD, context.getLocalVar().get(expression.getName()));
+            visitor.visitVarInsn(ILOAD, context.getLocalVar().get(expression.getName()));
         }
         else if(context.getLocalFields().contains(expression.getName())) {
-            visitor.visitVarInsn(Opcodes.ALOAD, 0);
-            visitor.visitFieldInsn(Opcodes.GETFIELD, context.getClassName(), expression.getName(), expression.getObjectType().getName());
+            visitor.visitVarInsn(ALOAD, 0);
+            visitor.visitFieldInsn(GETFIELD, context.getClassName(), expression.getName(),
+                    expression.getObjectType().getName());
         }
         else if(context.getStaticFields().contains(expression.getName())) {
-            visitor.visitFieldInsn(Opcodes.GETSTATIC, context.getClassName(), expression.getName(), expression.getObjectType().getName());
+            visitor.visitFieldInsn(GETSTATIC, context.getClassName(), expression.getName(),
+                    expression.getObjectType().getName());
         }
     }
 
     public static void generate(TypedInt expression, MethodVisitor visitor, Context context) {
-        switch (expression.getJint()) {
+        switch(expression.getJint()) {
             case -1:
-                visitor.visitInsn(Opcodes.ICONST_M1);
+                visitor.visitInsn(ICONST_M1);
                 break;
             case 0:
-                visitor.visitInsn(Opcodes.ICONST_0);
+                visitor.visitInsn(ICONST_0);
                 break;
             case 1:
-                visitor.visitInsn(Opcodes.ICONST_1);
+                visitor.visitInsn(ICONST_1);
                 break;
             case 2:
-                visitor.visitInsn(Opcodes.ICONST_2);
+                visitor.visitInsn(ICONST_2);
                 break;
             case 3:
-                visitor.visitInsn(Opcodes.ICONST_3);
+                visitor.visitInsn(ICONST_3);
                 break;
             case 4:
-                visitor.visitInsn(Opcodes.ICONST_4);
+                visitor.visitInsn(ICONST_4);
                 break;
             case 5:
-                visitor.visitInsn(Opcodes.ICONST_5);
+                visitor.visitInsn(ICONST_5);
                 break;
             default:
-                visitor.visitIntInsn(Opcodes.BIPUSH, expression.getJint());
+                visitor.visitIntInsn(BIPUSH, expression.getJint());
                 break;
         }
     }
 
     public static void generate(TypedAssignStatement statement, MethodVisitor visitor, Context context) {
-        statement.getExpression1().generateByteCode(visitor, context);
-        statement.getExpression2().generateByteCode(visitor, context);
         if(statement.getExpression1() instanceof TypedInstVar) {
-            visitor.visitFieldInsn(Opcodes.PUTFIELD, context.getClassName(), ((TypedInstVar) statement.getExpression1()).getName(), statement.getExpression2().getObjectType().getName());
+            ((TypedInstVar) statement.getExpression1()).getExpression().generateByteCode(visitor, context);
+            statement.getExpression2().generateByteCode(visitor, context);
+            visitor.visitFieldInsn(PUTFIELD, context.getClassName(),
+                    ((TypedInstVar) statement.getExpression1()).getName(),
+                    statement.getExpression2().getObjectType().getName());
         }
     }
 
     public static void generate(TypedThis expression, MethodVisitor visitor, Context context) {
-        visitor.visitVarInsn(Opcodes.ALOAD, 0);
+        visitor.visitVarInsn(ALOAD, 0);
     }
 
     public static void generate(TypedInstVar expression, MethodVisitor visitor, Context context) {
         expression.getExpression().generateByteCode(visitor, context);
-
+        visitor.visitFieldInsn(GETFIELD, expression.getExpression().getObjectType().getName(), expression.getName(),
+                expression.getObjectType().getName());
     }
 
     public static void generate(TypedStatement statement, MethodVisitor visitor, Context context) {
