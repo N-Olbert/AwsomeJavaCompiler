@@ -18,6 +18,10 @@ public class TypedReturn extends TypedStatement
         this.objectType = objectType;
     }
 
+    public TypedReturn(ObjectType objectType) {
+        this.objectType = objectType;
+    }
+
     public TypedExpression getExp()
     {
         return exp;

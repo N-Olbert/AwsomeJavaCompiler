@@ -13,6 +13,10 @@ public class Return extends Statement
         this.exp = exp;
     }
 
+    public Return () {
+
+    }
+
     public Expression getExp()
     {
         return exp;

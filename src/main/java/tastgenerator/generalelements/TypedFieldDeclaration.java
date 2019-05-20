@@ -19,6 +19,7 @@ public class TypedFieldDeclaration extends TypedGeneralThing
         this.modifier = modifier;
         this.variableType = variableType;
         this.name = name;
+        this.objectType = variableType;
     }
 
     public String getName()
