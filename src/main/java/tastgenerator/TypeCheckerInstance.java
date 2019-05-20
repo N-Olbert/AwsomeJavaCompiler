@@ -82,15 +82,8 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedAssignExpression typeCheck(AssignExpression toCheck) {
-        TypedExpression expression1 = toCheck.getExpression1().toTyped(this);
-        TypedExpression expression2 = toCheck.getExpression2().toTyped(this);
-        if (!(expression1 instanceof TypedLocalOrFieldVar || expression1 instanceof TypedInstVar)) {
-            throw new InvalidASTException("Left side of the assign is not assignable");
-        }
-        if (!compareTypes(expression1.getObjectType(), expression2.getObjectType())) {
-            throw new TypeMismatchException("Types of the left and right side of the assign do not match");
-        }
-        return new TypedAssignExpression(expression1, expression2, expression1.getObjectType());
+        Tuple<TypedExpression, TypedExpression> result = typeAssign(toCheck.getExpression1(), toCheck.getExpression2());
+        return new TypedAssignExpression(result.getFirst(), result.getSecond(), result.getFirst().getObjectType());
     }
 
     @Override
@@ -325,16 +318,8 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedAssignStatement typeCheck(AssignStatement toCheck) {
-        TypedExpression expression1 = toCheck.getExpression1().toTyped(this);
-        TypedExpression expression2 = toCheck.getExpression2().toTyped(this);
-        if (!(expression1 instanceof TypedLocalOrFieldVar || expression1 instanceof TypedInstVar)) {
-            throw new InvalidASTException("Left side of the assign is not assignable");
-        }
-        if (!compareTypes(expression1.getObjectType(), expression2.getObjectType())) {
-            throw new TypeMismatchException("Type " + expression2.getObjectType().getName() + " cannot be assigned to " +
-                    expression1.getObjectType().getName());
-        }
-        return new TypedAssignStatement(expression1, expression2, ObjectType.VoidType);
+        Tuple<TypedExpression, TypedExpression> result = typeAssign(toCheck.getExpression1(), toCheck.getExpression2());
+        return new TypedAssignStatement(result.getFirst(), result.getSecond(), ObjectType.VoidType);
     }
 
     @Override
@@ -422,6 +407,12 @@ public class TypeCheckerInstance implements TypeChecker
         return new TypedNewStatement(toCheck.getNewType(), typedParameters, toCheck.getNewType());
     }
 
+    /**
+     * Compares two types to see if type2 can be applied to type1 (for example for Assign or Return)
+     * @param type1 The first type
+     * @param type2 The second type
+     * @return true, if type2 can be applied to type1, else otherwise
+     */
     private boolean compareTypes(ObjectType type1, ObjectType type2) {
         return (type1.getName().equals(type2.getName()) ||
                 type1.getName().equals("Object")) ||
@@ -429,6 +420,12 @@ public class TypeCheckerInstance implements TypeChecker
                         type2.getName().equals(ObjectType.CharType.getName()));
     }
 
+    /**
+     * @param typedExpression The expression of the methodCall
+     * @param methodName The name of the method that is called
+     * @param params The list of parameters, that are used to call the method
+     * @return A tuple that contains the typed Parameters and the returnType of the method
+     */
     private Tuple<List<TypedExpression>, ObjectType> methodCallTypeParamsAndGetReturnType(TypedExpression typedExpression,
                                                                                           String methodName,
                                                                                           List<Expression> params) {
@@ -454,7 +451,12 @@ public class TypeCheckerInstance implements TypeChecker
         return new Tuple<>(typedParams, correspondingMethod.getReturnType());
     }
 
-    public Method getCorrespondingMethod(List<Method> methods, List<ObjectType> types) {
+    /**
+     * @param methods List of methods with the same name
+     * @param types Types of the parameters
+     * @return The method whose parameter types match the List of types, or null if no matching method is found
+     */
+    private Method getCorrespondingMethod(List<Method> methods, List<ObjectType> types) {
         Method correspondingMethod = null;
         for (Method method: methods) {
             if (method.getParams().size() == types.size()) {
@@ -471,5 +473,23 @@ public class TypeCheckerInstance implements TypeChecker
             }
         }
         return correspondingMethod;
+    }
+
+    /**
+     * @param expression1 The first expression of the assign
+     * @param expression2 The second expression of the assign
+     * @return A Tuple that contains the typed version of both expressions
+     */
+    private Tuple<TypedExpression, TypedExpression> typeAssign(Expression expression1, Expression expression2) {
+        TypedExpression typedExpression1 = expression1.toTyped(this);
+        TypedExpression typedExpression2 = expression2.toTyped(this);
+        if (!(typedExpression1 instanceof TypedLocalOrFieldVar || typedExpression1 instanceof TypedInstVar)) {
+            throw new InvalidASTException("Left side of the assign is not assignable");
+        }
+        if (!compareTypes(typedExpression1.getObjectType(), typedExpression2.getObjectType())) {
+            throw new TypeMismatchException("Type " + typedExpression2.getObjectType().getName() + " cannot be assigned to " +
+                    typedExpression1.getObjectType().getName());
+        }
+        return new Tuple<>(typedExpression1, typedExpression2);
     }
 }
