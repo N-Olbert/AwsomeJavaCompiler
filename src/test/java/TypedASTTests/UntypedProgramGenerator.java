@@ -57,11 +57,11 @@ public class UntypedProgramGenerator
         for(String[] s : params)
         {
             MethodDeclaration m;
-            if(s.length == 4)
+            if(s.length == 2)
             {
                m = new MethodDeclaration(ObjectType.getType(s[0]), s[1], new ArrayList<>(), stmts.get(params.indexOf(s)));
             }
-            else if(s.length == 6)
+            else if(s.length == 4)
             {
                 var amodifier = AccessModifier.valueOf(s[0]);
                 var modifier = Modifier.valueOf(s[1]);
