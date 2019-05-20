@@ -3,11 +3,14 @@ package bytecodegenerator;
 import common.Modifier;
 import common.ObjectType;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
+import tastgenerator.expressions.TypedBinary;
 import tastgenerator.expressions.TypedExpression;
 import tastgenerator.expressions.TypedInstVar;
 import tastgenerator.expressions.TypedInt;
 import tastgenerator.expressions.TypedLocalOrFieldVar;
+import tastgenerator.expressions.TypedMethodCallExpression;
 import tastgenerator.expressions.TypedThis;
 import tastgenerator.generalelements.TypedClass;
 import tastgenerator.generalelements.TypedFieldDeclaration;
@@ -16,6 +19,7 @@ import tastgenerator.generalelements.TypedMethodParameter;
 import tastgenerator.generalelements.TypedProgram;
 import tastgenerator.statements.TypedAssignStatement;
 import tastgenerator.statements.TypedBlock;
+import tastgenerator.statements.TypedIfElse;
 import tastgenerator.statements.TypedReturn;
 import tastgenerator.statements.TypedStatement;
 
@@ -179,6 +183,65 @@ public abstract class Generator {
         expression.getExpression().generateByteCode(visitor, context);
         visitor.visitFieldInsn(GETFIELD, expression.getExpression().getObjectType().getName(), expression.getName(),
                 expression.getObjectType().getName());
+    }
+
+    public static void generate(TypedIfElse expression, MethodVisitor visitor, Context context) {
+        Label l0 = new Label();
+        if(expression.getCondition() instanceof TypedBinary) {
+            TypedBinary typedBinary = (TypedBinary) expression.getCondition();
+            switch(typedBinary.getOperator()) {
+                case LESSOREQUAL:
+                    typedBinary.getExpression().generateByteCode(visitor, context);
+                    typedBinary.getExpression2().generateByteCode(visitor, context);
+                    visitor.visitJumpInsn(IF_ICMPGT, l0);
+                    break;
+                default:
+                    throw new RuntimeException(typedBinary.getOperator() + "Not implemented yet!");
+            }
+        }
+        else {
+            throw new RuntimeException("Not implemented yet!");
+        }
+        expression.getThen().generateByteCode(visitor, context.clone());
+        Label l1 = new Label();
+        visitor.visitJumpInsn(GOTO, l1);
+        visitor.visitLabel(l0);
+        expression.getOtherwise().generateByteCode(visitor, context.clone());
+        visitor.visitJumpInsn(GOTO, l1);
+        visitor.visitLabel(l1);
+    }
+
+    public static void generate(TypedBinary expression, MethodVisitor visitor, Context context) {
+        switch(expression.getOperator()) {
+            case PLUS:
+                expression.getExpression().generateByteCode(visitor, context);
+                expression.getExpression2().generateByteCode(visitor, context);
+                visitor.visitInsn(IADD);
+                break;
+            case MINUS:
+                expression.getExpression().generateByteCode(visitor, context);
+                expression.getExpression2().generateByteCode(visitor, context);
+                visitor.visitInsn(ISUB);
+                break;
+            default:
+                throw new RuntimeException(expression.getOperator() + " Not implemented yet!");
+        }
+    }
+
+    public static void generate(TypedMethodCallExpression expression, MethodVisitor visitor, Context context) {
+        String type =
+                "(" + getType(expression.getParameters()) + ")" + expression.getObjectType().getName();
+        expression.getObject().generateByteCode(visitor, context);
+        expression.getParameters().forEach(exp -> exp.generateByteCode(visitor, context));
+        visitor.visitMethodInsn(INVOKEVIRTUAL, expression.getObject().getObjectType().getName(), expression.getName(),
+                type,
+                false);
+    }
+
+    public static String getType(List<TypedExpression> expressions) {
+        StringBuilder builder = new StringBuilder();
+        expressions.forEach(exp -> builder.append(exp.getObjectType().getName()));
+        return builder.toString();
     }
 
     public static void generate(TypedStatement statement, MethodVisitor visitor, Context context) {
