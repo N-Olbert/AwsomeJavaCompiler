@@ -24,12 +24,6 @@ ifelse: 'if (' expression ')' block ('else if('expression')'block)* ('else ('exp
 jWhile: 'while ('expression ')' block;
 jReturn: 'return' expression;
 unary:  operatorBeforeExpr | operatorAfterExpr;
-/*
-unary: OpBeforeIdentifier(!) Identifier
-binary: Identifier OpInBetweenIdentifier Identifier |
-        opBeforeIdentifier|
-        opAfterIdentifier
-*/
 operatorBeforeExpr: opBeforeIdentifier Identifier;
 opBeforeIdentifier: OpBeforeIdentifier|OpBeforeOrAfterIdentifier;
 operatorAfterExpr: Identifier OpBeforeOrAfterIdentifier;
