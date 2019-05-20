@@ -25,6 +25,7 @@ public class ASTAutoGenerateReturnAtVoidMethodTest {
     {
         InputStream file = ResourceHelper.getFileAsStream("voidMethodWithoutReturn.java");
         Factory factory = Global.getFactory();
+        assertNotNull(factory);
         ASTGenerator astGen = factory.getASTGenerator();
         assertNotNull(astGen);
 
