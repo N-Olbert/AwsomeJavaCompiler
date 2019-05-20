@@ -205,14 +205,8 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedNewExpression typeCheck(NewExpression toCheck) {
-        if (!classes.containsKey(toCheck.getNewType().getName())) {
-            throw new TypeMismatchException("This class does not exist");
-        }
-        List<TypedExpression> typedParameters = new ArrayList<>();
-        for (Expression parameter: toCheck.getParameters()) {
-            typedParameters.add(parameter.toTyped(this));
-        }
-        return new TypedNewExpression(toCheck.getNewType(), typedParameters, toCheck.getNewType());
+        List<TypedExpression> typedParams = typeNew(toCheck.getNewType().getName(), toCheck.getParameters());
+        return new TypedNewExpression(toCheck.getNewType(), typedParams);
     }
 
     @Override
@@ -397,14 +391,8 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedNewStatement typeCheck(NewStatement toCheck) {
-        if (!classes.containsKey(toCheck.getNewType().getName())) {
-            throw new TypeMismatchException("This class does not exist");
-        }
-        List<TypedExpression> typedParameters = new ArrayList<>();
-        for (Expression parameter: toCheck.getParameters()) {
-            typedParameters.add(parameter.toTyped(this));
-        }
-        return new TypedNewStatement(toCheck.getNewType(), typedParameters, toCheck.getNewType());
+        List<TypedExpression> typedParams = typeNew(toCheck.getNewType().getName(), toCheck.getParameters());
+        return new TypedNewStatement(toCheck.getNewType(), typedParams);
     }
 
     /**
@@ -491,5 +479,21 @@ public class TypeCheckerInstance implements TypeChecker
                     typedExpression1.getObjectType().getName());
         }
         return new Tuple<>(typedExpression1, typedExpression2);
+    }
+
+    /**
+     * @param name The name of the class that is instantiated
+     * @param params The parameters for the constructor
+     * @return A list of typedParameters
+     */
+    private List<TypedExpression> typeNew(String name, List<Expression> params) {
+        if (!classes.containsKey(name)) {
+            throw new TypeMismatchException("This class does not exist");
+        }
+        List<TypedExpression> typedParameters = new ArrayList<>();
+        for (Expression parameter: params) {
+            typedParameters.add(parameter.toTyped(this));
+        }
+        return typedParameters;
     }
 }
