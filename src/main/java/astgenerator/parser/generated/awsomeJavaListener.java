@@ -1,4 +1,4 @@
-// Generated from C:/Users/Daniel/IdeaProjects/AwsomeJavaCompiler/src/main/java/astgenerator/parser/grammar\awsomeJava.g4 by ANTLR 4.7.2
+// Generated from C:/Users/david/IdeaProjects/AwsomeJavaCompiler/src/main/java/astgenerator/parser/grammar\awsomeJava.g4 by ANTLR 4.7.2
 package astgenerator.parser.generated;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
@@ -287,6 +287,16 @@ public interface awsomeJavaListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitBinary(awsomeJavaParser.BinaryContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link awsomeJavaParser#binaryelement}.
+	 * @param ctx the parse tree
+	 */
+	void enterBinaryelement(awsomeJavaParser.BinaryelementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link awsomeJavaParser#binaryelement}.
+	 * @param ctx the parse tree
+	 */
+	void exitBinaryelement(awsomeJavaParser.BinaryelementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link awsomeJavaParser#pointBinary}.
 	 * @param ctx the parse tree

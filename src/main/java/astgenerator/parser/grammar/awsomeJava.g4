@@ -4,7 +4,7 @@ programm: jClass+;
 jClass: AccessModifier? 'class' Identifier classBody; //Modifier
 constructor: AccessModifier? Identifier'('nMethodParameters')' block;
 classBody: '{'(methodDeclaration|fieldDeclaration)* constructor (methodDeclaration|fieldDeclaration)*'}';
-methodDeclaration: AccessModifier? (objectType|Void) Identifier '('nMethodParameters')' block;
+methodDeclaration: AccessModifier? objectType Identifier '('nMethodParameters')' block;
 fieldDeclaration: AccessModifier?  objectType Identifier';';
 methodParameter: objectType Identifier;
 nMethodParameters: (methodParameter)? | methodParameter (','methodParameter)+;
@@ -27,7 +27,8 @@ unary:  operatorBeforeExpr | operatorAfterExpr;
 operatorBeforeExpr: opBeforeIdentifier Identifier;
 opBeforeIdentifier: OpBeforeIdentifier|OpBeforeOrAfterIdentifier;
 operatorAfterExpr: Identifier OpBeforeOrAfterIdentifier;
-binary:  (basicexpressions|pointBinary) (AddSubOperator (basicexpressions|pointBinary))+ | pointBinary;
+binary:  binaryelement (AddSubOperator binaryelement)+| pointBinary;
+binaryelement: basicexpressions|pointBinary;
 pointBinary: (basicexpressions) (PointOperator basicexpressions)+;
 baseType: JBoolean | JNull | This | JString | JCharacter | JInteger | Super;
 objectType: 'int'|'char'|'boolean'|Identifier;

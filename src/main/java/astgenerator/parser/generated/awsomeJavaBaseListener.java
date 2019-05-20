@@ -1,4 +1,4 @@
-// Generated from C:/Users/Daniel/IdeaProjects/AwsomeJavaCompiler/src/main/java/astgenerator/parser/grammar\awsomeJava.g4 by ANTLR 4.7.2
+// Generated from C:/Users/david/IdeaProjects/AwsomeJavaCompiler/src/main/java/astgenerator/parser/grammar\awsomeJava.g4 by ANTLR 4.7.2
 package astgenerator.parser.generated;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -347,6 +347,18 @@ public class awsomeJavaBaseListener implements awsomeJavaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBinary(awsomeJavaParser.BinaryContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBinaryelement(awsomeJavaParser.BinaryelementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBinaryelement(awsomeJavaParser.BinaryelementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
