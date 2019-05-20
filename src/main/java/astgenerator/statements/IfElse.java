@@ -4,6 +4,8 @@ import astgenerator.expressions.Expression;
 import tastgenerator.TypeChecker;
 import tastgenerator.statements.TypedStatement;
 
+import java.util.ArrayList;
+
 public class IfElse extends Statement
 {
     private Expression condition;
@@ -15,6 +17,12 @@ public class IfElse extends Statement
         this.condition = condition;
         this.then = then;
         this.otherwise = otherwise;
+    }
+
+    public IfElse (Expression condition, Block then) {
+        this.condition = condition;
+        this.then = then;
+        this.otherwise = new Block(null);
     }
 
     public Expression getCondition()

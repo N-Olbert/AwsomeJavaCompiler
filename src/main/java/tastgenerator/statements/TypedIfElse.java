@@ -6,6 +6,7 @@ import common.ObjectType;
 import org.objectweb.asm.MethodVisitor;
 import tastgenerator.expressions.TypedExpression;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,13 @@ public class TypedIfElse extends TypedStatement
         this.condition = condition;
         this.then = then;
         this.otherwise = otherwise;
+        this.objectType = objectType;
+    }
+
+    public TypedIfElse(TypedExpression condition, TypedBlock then, ObjectType objectType) {
+        this.condition = condition;
+        this.then = then;
+        this.otherwise = new TypedBlock(new ArrayList<>(), ObjectType.VoidType);
         this.objectType = objectType;
     }
 
