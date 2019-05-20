@@ -20,8 +20,10 @@ import tastgenerator.generalelements.TypedProgram;
 import tastgenerator.statements.TypedAssignStatement;
 import tastgenerator.statements.TypedBlock;
 import tastgenerator.statements.TypedIfElse;
+import tastgenerator.statements.TypedLocalVarDeclaration;
 import tastgenerator.statements.TypedReturn;
 import tastgenerator.statements.TypedStatement;
+import tastgenerator.statements.TypedWhile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,7 +87,6 @@ public abstract class Generator {
         }
         visitor.visitCode();
         generate(declaration.getStmt(), visitor, context.clone());
-
         new TypedReturn(null, ObjectType.VoidType).generateByteCode(visitor, context.clone());
         visitor.visitMaxs(0, 0);
         visitor.visitEnd();
@@ -103,7 +104,7 @@ public abstract class Generator {
 
     public static void generate(TypedBlock block, MethodVisitor visitor, Context context) {
         if(block.getBlockedStatements() != null) {
-            block.getBlockedStatements().forEach(statement -> statement.generateByteCode(visitor, context.clone()));
+            block.getBlockedStatements().forEach(statement -> statement.generateByteCode(visitor, context));
         }
     }
 
@@ -173,6 +174,27 @@ public abstract class Generator {
                     ((TypedInstVar) statement.getExpression1()).getName(),
                     statement.getExpression2().getObjectType().getName());
         }
+        else if(statement.getExpression1() instanceof TypedLocalOrFieldVar) {
+            TypedLocalOrFieldVar lofv = (TypedLocalOrFieldVar) statement.getExpression1();
+            if(context.getLocalVar().containsKey(lofv.getName())) {
+                statement.getExpression2().generateByteCode(visitor, context);
+                switch(statement.getExpression1().getObjectType().getName()) {
+                    case "I":
+                        visitor.visitVarInsn(ISTORE, context.getLocalVar().get(lofv.getName()));
+                        break;
+                    default:
+                        throw new RuntimeException("Not implemented yet!");
+                }
+            }
+            else {
+                System.out.println(context.getLocalVar().toString());
+                System.out.println(lofv.getName());
+                throw new RuntimeException("Not implemented yet!");
+            }
+        }
+        else {
+            throw new RuntimeException("Not implemented yet!");
+        }
     }
 
     public static void generate(TypedThis expression, MethodVisitor visitor, Context context) {
@@ -187,13 +209,30 @@ public abstract class Generator {
 
     public static void generate(TypedIfElse expression, MethodVisitor visitor, Context context) {
         Label l0 = new Label();
-        if(expression.getCondition() instanceof TypedBinary) {
-            TypedBinary typedBinary = (TypedBinary) expression.getCondition();
+        generateCondition(expression.getCondition(), visitor, l0, context);
+        expression.getThen().generateByteCode(visitor, context.clone());
+        Label l1 = new Label();
+        visitor.visitJumpInsn(GOTO, l1);
+        visitor.visitLabel(l0);
+        expression.getOtherwise().generateByteCode(visitor, context.clone());
+        visitor.visitJumpInsn(GOTO, l1);
+        visitor.visitLabel(l1);
+    }
+
+    public static void generateCondition(TypedExpression condition, MethodVisitor visitor, Label label,
+                                         Context context) {
+        if(condition instanceof TypedBinary) {
+            TypedBinary typedBinary = (TypedBinary) condition;
             switch(typedBinary.getOperator()) {
                 case LESSOREQUAL:
                     typedBinary.getExpression().generateByteCode(visitor, context);
                     typedBinary.getExpression2().generateByteCode(visitor, context);
-                    visitor.visitJumpInsn(IF_ICMPGT, l0);
+                    visitor.visitJumpInsn(IF_ICMPGT, label);
+                    break;
+                case LESSTHAN:
+                    typedBinary.getExpression().generateByteCode(visitor, context);
+                    typedBinary.getExpression2().generateByteCode(visitor, context);
+                    visitor.visitJumpInsn(IF_ICMPGE, label);
                     break;
                 default:
                     throw new RuntimeException(typedBinary.getOperator() + "Not implemented yet!");
@@ -202,13 +241,6 @@ public abstract class Generator {
         else {
             throw new RuntimeException("Not implemented yet!");
         }
-        expression.getThen().generateByteCode(visitor, context.clone());
-        Label l1 = new Label();
-        visitor.visitJumpInsn(GOTO, l1);
-        visitor.visitLabel(l0);
-        expression.getOtherwise().generateByteCode(visitor, context.clone());
-        visitor.visitJumpInsn(GOTO, l1);
-        visitor.visitLabel(l1);
     }
 
     public static void generate(TypedBinary expression, MethodVisitor visitor, Context context) {
@@ -238,10 +270,25 @@ public abstract class Generator {
                 false);
     }
 
+    public static void generate(TypedLocalVarDeclaration expression, MethodVisitor visitor, Context context) {
+        context.getLocalVar().put(expression.getName(), context.getLocalVar().size());
+    }
+
     public static String getType(List<TypedExpression> expressions) {
         StringBuilder builder = new StringBuilder();
         expressions.forEach(exp -> builder.append(exp.getObjectType().getName()));
         return builder.toString();
+    }
+
+    public static void generate(TypedWhile statement, MethodVisitor visitor, Context context) {
+        Label l0 = new Label();
+        visitor.visitLabel(l0);
+        Label l1 = new Label();
+        generateCondition(statement.getExp(), visitor, l1, context);
+        statement.getStmt().generateByteCode(visitor, context.clone());
+        visitor.visitJumpInsn(GOTO, l0);
+        visitor.visitLabel(l1);
+
     }
 
     public static void generate(TypedStatement statement, MethodVisitor visitor, Context context) {
