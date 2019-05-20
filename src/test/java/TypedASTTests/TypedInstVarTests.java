@@ -29,47 +29,48 @@ public class TypedInstVarTests
     @Test
     public void testBoolInstVar()
     {
-        testBasicInstVar(TypedTestClass1.BOOLVAR_NAME, new JBoolean("true"));
+        testBasicInstVar(TypedTestClass1.BOOLVAR_NAME, new JBoolean("true"), ObjectType.BoolType);
     }
 
     @Test
     public void testIntInstVar()
     {
-        testBasicInstVar(TypedTestClass1.INTVAR_NAME, new JInteger("9"));
+        testBasicInstVar(TypedTestClass1.INTVAR_NAME, new JInteger("9"), ObjectType.IntType);
     }
 
     @Test
     public void testCharInstVar()
     {
-        testBasicInstVar(TypedTestClass1.CHARVAR_NAME, new JCharacter("c"));
+        testBasicInstVar(TypedTestClass1.CHARVAR_NAME, new JCharacter("c"), ObjectType.CharType);
     }
 
     @Test
     public void testOwnTypeInstVar()
     {
         testBasicInstVar(TypedTestClass1.OWNTYPEVAR_NAME,
-                new NewExpression(ObjectType.getType(TypedTestClass1.OWNTYPE_NAME), new ArrayList<>()));
+                new NewExpression(ObjectType.getType(TypedTestClass1.OWNTYPE_NAME), new ArrayList<>()),
+                ObjectType.getType(TypedTestClass1.OWNTYPE_NAME));
     }
 
     @Test(expected = Exception.class)
     public void testInstVarBasicFail1()
     {
-        testBasicInstVar("nope", new JInteger("1"));
+        testBasicInstVar("nope", new JInteger("1"), ObjectType.IntType);
     }
 
     @Test(expected = Exception.class)
     public void testInstVarBasicFail2()
     {
-        testBasicInstVar(TypedTestClass1.BOOLVAR_NAME, new JInteger("1"));
+        testBasicInstVar(TypedTestClass1.BOOLVAR_NAME, new JInteger("1"), ObjectType.BoolType);
     }
 
     @Test(expected = Exception.class)
     public void testInstVarBasicFail3()
     {
-        testBasicInstVar(TypedTestClass1.OWNTYPEVAR_NAME, new JInteger("1"));
+        testBasicInstVar(TypedTestClass1.OWNTYPEVAR_NAME, new JInteger("1"), ObjectType.IntType);
     }
 
-    private static void testBasicInstVar(String instVarName, Expression assignExpression)
+    private static void testBasicInstVar(String instVarName, Expression assignExpression, ObjectType expected)
     {
         var program = TypedTestClass1.getBasicProgram();
         var method =
@@ -89,7 +90,7 @@ public class TypedInstVarTests
         var assign = (TypedAssignStatement)block.getBlockedStatements().get(0);
         assertEquals(assign.getObjectType(), ObjectType.VoidType);
         var localVar = (TypedInstVar)assign.getExpression1();
-        assertEquals(localVar.getObjectType(), ObjectType.getType(instVarName));
+        assertEquals(localVar.getObjectType(), expected);
     }
 
 
