@@ -12,10 +12,10 @@ public class TypedAssignExpression extends TypedExpression
     private TypedExpression expression1;
     private TypedExpression expression2;
 
-    public TypedAssignExpression(TypedExpression expression1, TypedExpression expression2, ObjectType objectType) {
+    public TypedAssignExpression(TypedExpression expression1, TypedExpression expression2) {
         this.expression1 = expression1;
         this.expression2 = expression2;
-        this.objectType = objectType;
+        this.objectType = expression1.getObjectType();
     }
 
     public TypedExpression getExpression1() {
