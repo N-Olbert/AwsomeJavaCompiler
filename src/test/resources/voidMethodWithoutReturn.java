@@ -1,0 +1,6 @@
+class TestVoidMethod{
+    void testWithoutReturn()
+    {
+
+    }
+}
