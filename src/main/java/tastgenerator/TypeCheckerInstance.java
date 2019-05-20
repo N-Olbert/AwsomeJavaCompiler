@@ -72,8 +72,12 @@ public class TypeCheckerInstance implements TypeChecker
     @Override
     public TypedReturn typeCheck(Return toCheck)
     {
-        TypedExpression expression = toCheck.getExp().toTyped(this);
-        return new TypedReturn(expression, expression.getObjectType());
+        if(toCheck.getExp() == null) {
+            return new TypedReturn(ObjectType.VoidType);
+        } else {
+            TypedExpression expression = toCheck.getExp().toTyped(this);
+            return new TypedReturn(expression, expression.getObjectType());
+        }
     }
 
     @Override
@@ -183,14 +187,14 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedLocalOrFieldVar typeCheck(LocalOrFieldVar toCheck) {
-        ObjectType varType;
-        varType = classes.get(currentClass.getName()).getFields().get(toCheck.getName());
-        if (varType == null) {
-            for (Tuple<String, ObjectType> localVar : currentLocalVars) {
-                if (toCheck.getName().equals(localVar.getFirst())) {
-                    varType = localVar.getSecond();
-                }
+        ObjectType varType = null;
+        for (Tuple<String, ObjectType> localVar : currentLocalVars) {
+            if (toCheck.getName().equals(localVar.getFirst())) {
+                varType = localVar.getSecond();
             }
+        }
+        if (varType == null) {
+            varType = classes.get(currentClass.getName()).getFields().get(toCheck.getName());
         }
         if (varType == null) {
             throw new CannotResolveSymbolException("The variable " + toCheck.getName() + " does not exist");
@@ -274,6 +278,9 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedFieldDeclaration typeCheck(FieldDeclaration toCheck) {
+        if (classes.get(currentClass.getName()).getFields().get(toCheck.getName()) != null) {
+            throw new AlreadyDefinedException("The field " + toCheck.getName() + " has already been defined");
+        }
         return new TypedFieldDeclaration(toCheck.getAccessModifier(),
                                          toCheck.getModifier(),
                                          toCheck.getVariableType(),
@@ -283,19 +290,16 @@ public class TypeCheckerInstance implements TypeChecker
     @Override
     public TypedMethodDeclaration typeCheck(MethodDeclaration toCheck) {
         List<TypedMethodParameter> typedParams = new ArrayList<>();
+        List<ObjectType> types = new ArrayList<>();
         for (MethodParameter parameter: toCheck.getParams()) {
             typedParams.add((TypedMethodParameter) parameter.toTyped(this));
+            types.add(parameter.toTyped(this).getObjectType());
         }
-
-        /*List<Method> definedMethods = classes.get(currentClass.getName()).getMethods().get(toCheck.getName());
-        if (definedMethods != null) {
-            for (Method currentMethod: definedMethods) {
-                if (currentMethod.getParams().size() == typedParams.size()) {
-
-                }
-            }
-        }*/
-
+        List<Method> definedMethods = classes.get(currentClass.getName()).getMethods().get(toCheck.getName());
+        Method correspondingMethod = getCorrespondingMethod(definedMethods, types);
+        if (correspondingMethod != null) {
+            throw new AlreadyDefinedException("The method " + toCheck.getName() + " has already been defined with these parameters");
+        }
         TypedBlock typedBlock = (TypedBlock) toCheck.getStmt().toTyped(this);
         if (!compareTypes(toCheck.getReturnType(), typedBlock.getObjectType())) {
             throw new TypeMismatchException("Returned type does not equal the specified return type of the method");
@@ -432,20 +436,31 @@ public class TypeCheckerInstance implements TypeChecker
             throw new CannotResolveSymbolException("Class " + typedExpression.getObjectType().getName() + " does not exist");
         }
         List<TypedExpression> typedParams = new ArrayList<>();
+        List<ObjectType> types = new ArrayList<>();
         for (Expression param: params) {
             typedParams.add(param.toTyped(this));
+            types.add(param.toTyped(this).getObjectType());
         }
         ClassObject classObject = classes.get(typedExpression.getObjectType().getName());
         if (!classObject.getMethods().containsKey(methodName)) {
             throw new CannotResolveSymbolException("Class " + typedExpression.getObjectType().getName() + " does not have the method " + methodName);
         }
         List<Method> methods = classObject.getMethods().get(methodName);
+        Method correspondingMethod = getCorrespondingMethod(methods, types);
+        if (correspondingMethod == null) {
+            throw new CannotResolveSymbolException("Class " + typedExpression.getObjectType().getName() + " does not have method " +
+                    methodName + " with the given parameters");
+        }
+        return new Tuple<>(typedParams, correspondingMethod.getReturnType());
+    }
+
+    public Method getCorrespondingMethod(List<Method> methods, List<ObjectType> types) {
         Method correspondingMethod = null;
         for (Method method: methods) {
-            if (method.getParams().size() == params.size()) {
+            if (method.getParams().size() == types.size()) {
                 correspondingMethod = method;
-                for (int i = 0; i < params.size(); i++) {
-                    if (!method.getParams().get(i).getName().equals(typedParams.get(i).getObjectType().getName())) {
+                for (int i = 0; i < types.size(); i++) {
+                    if (!method.getParams().get(i).getName().equals(types.get(i).getName())) {
                         correspondingMethod = null;
                         break;
                     }
@@ -455,12 +470,6 @@ public class TypeCheckerInstance implements TypeChecker
                 }
             }
         }
-        if (correspondingMethod == null) {
-            throw new CannotResolveSymbolException("Class " + typedExpression.getObjectType().getName() + " does not have method " +
-                    methodName + " with the given parameters");
-        }
-        return new Tuple<>(typedParams, correspondingMethod.getReturnType());
+        return correspondingMethod;
     }
-
-    //public Method getCorrespondingMethod(List<Method> methods, )
 }
