@@ -4,7 +4,7 @@ programm: jClass+;
 jClass: AccessModifier? 'class' Identifier classBody; //Modifier
 constructor: AccessModifier? Identifier'('nMethodParameters')' block;
 classBody: '{'(methodDeclaration|fieldDeclaration)* constructor (methodDeclaration|fieldDeclaration)*'}';
-methodDeclaration: AccessModifier? objectType Identifier '('nMethodParameters')' block;
+methodDeclaration: AccessModifier? (objectType|Void) Identifier '('nMethodParameters')' block;
 fieldDeclaration: AccessModifier?  objectType Identifier';';
 methodParameter: objectType Identifier;
 nMethodParameters: (methodParameter)? | methodParameter (','methodParameter)+;
