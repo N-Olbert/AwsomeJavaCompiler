@@ -10,7 +10,8 @@ methodParameter: objectType Identifier;
 nMethodParameters: (methodParameter)? | methodParameter (','methodParameter)+;
 nArguments: expression? | expression (',' expression)* | instVar;
 instVar:  This '.' Identifier|(Identifier '.')+ Identifier;
-expression: (baseType | instVar | Identifier | binary | unary ); //comparison
+expression:  basicexpressions | binary; //comparison
+basicexpressions: '(' expression ')' | baseType | instVar | Identifier | unary;
 statementExpressions: (assign | jNew | methodCall)';';
 localVarDeclaration: baseType Identifier;
 assign: (objectType|This'.')? Identifier AssignOperator (jNew|methodCall|expression|instVar);
@@ -22,8 +23,18 @@ statementOrStatementExpression: statement|statementExpressions;
 ifelse: 'if (' expression ')' block ('else if('expression')'block)* ('else ('expression')'block)?;
 jWhile: 'while ('expression ')' block;
 jReturn: 'return' expression;
-unary: (OpBeforeIdentifier|OpBeforeOrAfterIdentifier) Identifier | Identifier OpBeforeOrAfterIdentifier;
-binary: Identifier OpInBetweenIdentifier Identifier;
+unary:  operatorBeforeExpr | operatorAfterExpr;
+/*
+unary: OpBeforeIdentifier(!) Identifier
+binary: Identifier OpInBetweenIdentifier Identifier |
+        opBeforeIdentifier|
+        opAfterIdentifier
+*/
+operatorBeforeExpr: opBeforeIdentifier Identifier;
+opBeforeIdentifier: OpBeforeIdentifier|OpBeforeOrAfterIdentifier;
+operatorAfterExpr: Identifier OpBeforeOrAfterIdentifier;
+binary:  (basicexpressions|pointBinary) (AddSubOperator (basicexpressions|pointBinary))+ | pointBinary;
+pointBinary: (basicexpressions) (PointOperator basicexpressions)+;
 baseType: JBoolean | JNull | This | JString | JCharacter | JInteger | Super;
 objectType: 'int'|'char'|'boolean'|Identifier;
 
@@ -31,6 +42,7 @@ AccessModifier: 'public' | 'protected' | 'private';
 //Modifier: 'static'|'final'; //abstract extra
 JBoolean: 'true'|'false';
 JNull: 'null';
+Void: 'void';
 Super: 'super()';
 This: 'this';
 JString: '"'[A-Za-z]'"'+;
@@ -41,7 +53,9 @@ AssignOperator: '='|'+='|'-=';
 Comperator: '=='|'!='|'>='|'<='|'>'|'<';
 OpBeforeIdentifier: '!';
 OpBeforeOrAfterIdentifier: '++'|'--';
-OpInBetweenIdentifier: '+'|'-'|'&&'|'||';
+PointOperator: '*'|'/';
+AddSubOperator: '+'|'-';
+LogicalOperator: '&&'|'||';
 
 WS: [ \t(\r?\n)] -> skip;
 Comment: ('//'[A-Za-z]* | '/*'[A-Za-z]*'*/') -> skip;

@@ -77,6 +77,12 @@ public interface awsomeJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpression(awsomeJavaParser.ExpressionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link awsomeJavaParser#basicexpressions}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBasicexpressions(awsomeJavaParser.BasicexpressionsContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link awsomeJavaParser#statementExpressions}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -149,11 +155,35 @@ public interface awsomeJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitUnary(awsomeJavaParser.UnaryContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link awsomeJavaParser#operatorBeforeExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOperatorBeforeExpr(awsomeJavaParser.OperatorBeforeExprContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link awsomeJavaParser#opBeforeIdentifier}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOpBeforeIdentifier(awsomeJavaParser.OpBeforeIdentifierContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link awsomeJavaParser#operatorAfterExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOperatorAfterExpr(awsomeJavaParser.OperatorAfterExprContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link awsomeJavaParser#binary}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitBinary(awsomeJavaParser.BinaryContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link awsomeJavaParser#pointBinary}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPointBinary(awsomeJavaParser.PointBinaryContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link awsomeJavaParser#baseType}.
 	 * @param ctx the parse tree

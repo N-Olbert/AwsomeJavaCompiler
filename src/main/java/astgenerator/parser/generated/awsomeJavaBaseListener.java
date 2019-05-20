@@ -148,6 +148,18 @@ public class awsomeJavaBaseListener implements awsomeJavaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterBasicexpressions(awsomeJavaParser.BasicexpressionsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBasicexpressions(awsomeJavaParser.BasicexpressionsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterStatementExpressions(awsomeJavaParser.StatementExpressionsContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -292,6 +304,42 @@ public class awsomeJavaBaseListener implements awsomeJavaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterOperatorBeforeExpr(awsomeJavaParser.OperatorBeforeExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOperatorBeforeExpr(awsomeJavaParser.OperatorBeforeExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOpBeforeIdentifier(awsomeJavaParser.OpBeforeIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOpBeforeIdentifier(awsomeJavaParser.OpBeforeIdentifierContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOperatorAfterExpr(awsomeJavaParser.OperatorAfterExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOperatorAfterExpr(awsomeJavaParser.OperatorAfterExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBinary(awsomeJavaParser.BinaryContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -299,6 +347,18 @@ public class awsomeJavaBaseListener implements awsomeJavaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBinary(awsomeJavaParser.BinaryContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPointBinary(awsomeJavaParser.PointBinaryContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPointBinary(awsomeJavaParser.PointBinaryContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
