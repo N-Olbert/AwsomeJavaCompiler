@@ -10,6 +10,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import tastgenerator.TypeCheckerInstance;
 import tastgenerator.expressions.TypedInstVar;
+import tastgenerator.generalelements.TypedProgram;
 import tastgenerator.statements.TypedAssignStatement;
 
 import java.util.ArrayList;
@@ -28,46 +29,47 @@ public class TypedInstVarTests
     @Test
     public void testBoolInstVar()
     {
-        testBasicInstVar(TypedTestClass1.BOOLVAR_NAME, ObjectType.BoolType.getName());
+        testBasicInstVar(TypedTestClass1.BOOLVAR_NAME, new JBoolean("true"));
     }
 
     @Test
     public void testIntInstVar()
     {
-        testBasicInstVar(TypedTestClass1.INTVAR_NAME, ObjectType.IntType.getName());
+        testBasicInstVar(TypedTestClass1.INTVAR_NAME, new JInteger("9"));
     }
 
     @Test
     public void testCharInstVar()
     {
-        testBasicInstVar(TypedTestClass1.CHARVAR_NAME, ObjectType.CharType.getName());
+        testBasicInstVar(TypedTestClass1.CHARVAR_NAME, new JCharacter("c"));
     }
 
     @Test
     public void testOwnTypeInstVar()
     {
-        testBasicInstVar(TypedTestClass1.OWNTYPEVAR_NAME, TypedTestClass1.OWNTYPE_NAME);
+        testBasicInstVar(TypedTestClass1.OWNTYPEVAR_NAME,
+                new NewExpression(ObjectType.getType(TypedTestClass1.OWNTYPE_NAME), new ArrayList<>()));
     }
 
     @Test(expected = Exception.class)
     public void testInstVarBasicFail1()
     {
-        testBasicInstVar("nope", ObjectType.IntType.getName());
+        testBasicInstVar("nope", new JInteger("1"));
     }
 
     @Test(expected = Exception.class)
     public void testInstVarBasicFail2()
     {
-        testBasicInstVar(TypedTestClass1.BOOLVAR_NAME, ObjectType.IntType.getName());
+        testBasicInstVar(TypedTestClass1.BOOLVAR_NAME, new JInteger("1"));
     }
 
     @Test(expected = Exception.class)
     public void testInstVarBasicFail3()
     {
-        testBasicInstVar(TypedTestClass1.OWNTYPEVAR_NAME, ObjectType.JObjectType.getName());
+        testBasicInstVar(TypedTestClass1.OWNTYPEVAR_NAME, new JInteger("1"));
     }
 
-    private static void testBasicInstVar(String instVarName, String instVarType)
+    private static void testBasicInstVar(String instVarName, Expression assignExpression)
     {
         var program = TypedTestClass1.getBasicProgram();
         var method =
@@ -75,12 +77,12 @@ public class TypedInstVarTests
                                       new Block(
                                               new AssignStatement(
                                                       new InstVar(new This(), instVarName),
-                                                      new NewExpression(ObjectType.getType(instVarType),
-                                                                        new ArrayList<>()))));
+                                                      assignExpression)));
 
         program.getClasses().get(0).getMethods().add(method);
         var converter = new TypeCheckerInstance(program);
-        var converted = method.toTyped(converter);
+        var convertedClass = (TypedProgram)program.toTyped(converter);
+        var converted = convertedClass.getClasses().get(0).getMethods().get(0);
         assertEquals(converted.getObjectType(), ObjectType.VoidType);
         var block = converted.getStmt();
         assertNotNull(block);

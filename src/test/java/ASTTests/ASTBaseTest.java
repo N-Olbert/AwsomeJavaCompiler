@@ -6,6 +6,7 @@ import astgenerator.generalelements.MethodDeclaration;
 import astgenerator.generalelements.MethodParameter;
 import astgenerator.generalelements.UntypedProgram;
 import astgenerator.statements.Block;
+import astgenerator.statements.Statement;
 import common.*;
 import org.junit.Test;
 
@@ -29,8 +30,9 @@ public class ASTBaseTest
 
         //Create expected Program
         String className = "Test";
-        Class testClass = new Class(ObjectType.getType(className), null, new ArrayList<MethodDeclaration>());
-        testClass.getMethods().add(new MethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.VoidType, className, new ArrayList<MethodParameter>(), new Block(null)));
+        Class testClass = new Class(ObjectType.getType(className), new ArrayList<>(), new ArrayList<>());
+        testClass.getMethods().add(new MethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE,
+                ObjectType.VoidType, className, new ArrayList<MethodParameter>(), new Block(new Statement[0])));
         UntypedProgram testProgram = new UntypedProgram();
         List<Class> classes = new ArrayList<Class>();
         classes.add(testClass);
@@ -52,6 +54,5 @@ public class ASTBaseTest
         assertEquals(method.getParams().size(), 0);
         assertEquals(method.getName(), className);
         assertTrue(method.getStmt() instanceof Block);
-        assertTrue(((Block)(method.getStmt())).getBlockedStatements() == null);
     }
 }

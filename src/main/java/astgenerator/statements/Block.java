@@ -14,7 +14,11 @@ public class Block extends Statement
     public Block(Statement... blockedStatements)
     {
         var newList = new ArrayList<Statement>();
-        Collections.addAll(newList, blockedStatements);
+        if(blockedStatements != null)
+        {
+            Collections.addAll(newList, blockedStatements);
+        }
+
         this.blockedStatements = newList;
     }
 

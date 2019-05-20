@@ -4,6 +4,7 @@ import common.ObjectType;
 import tastgenerator.TypeChecker;
 import tastgenerator.generalelements.TypedGeneralThing;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Class extends GeneralThing
@@ -15,8 +16,8 @@ public class Class extends GeneralThing
     public Class(ObjectType classType, List<FieldDeclaration> fields, List<MethodDeclaration> methods)
     {
         this.classType = classType;
-        this.fields = fields;
-        this.methods = methods;
+        this.fields = fields == null ? new ArrayList<>() : fields;
+        this.methods = methods == null ? new ArrayList<>() : methods;
     }
 
     public ObjectType getClassType()
