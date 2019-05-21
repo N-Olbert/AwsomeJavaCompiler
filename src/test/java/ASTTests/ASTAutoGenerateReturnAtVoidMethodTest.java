@@ -21,6 +21,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class ASTAutoGenerateReturnAtVoidMethodTest {
+    /**
+     * @author Lukas
+     * TODO: Need more testing on the structure of a method.
+     */
     @Test
     public void testVoidMethodWithNoReturn()
     {

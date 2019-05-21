@@ -38,21 +38,24 @@ public class ASTDefaultConstructorTest {
 
 
         UntypedProgram ast = astGen.getAST(file);
-        var untypedTestClass = ast.getClasses().get(0);
+        var classGeneratedByAST = ast.getClasses().get(0);
         assertNotNull(ast);
         assertEquals(ast.getClasses().size(), 1);
-        assertEquals(untypedTestClass.getClassType(), ObjectType.getType(className));
+        assertEquals(classGeneratedByAST.getClassType(), ObjectType.getType(className));
 
-        assertEquals(testClass.getFields().size(), untypedTestClass.getFields().size() );
-        assertEquals(testClass.getMethods().size(), untypedTestClass.getMethods().size());
-        var method = untypedTestClass.getMethods().get(0);
-        assertEquals(method.getAccessModifier(), AccessModifier.PACKAGE_PRIVATE);
-        assertEquals(method.getModifier(), Modifier.NONE);
-        assertEquals(method.getReturnType(), ObjectType.VoidType);
-        assertEquals(method.getParams().size(), 0);
-        assertEquals(method.getName(), className);
-        assertTrue(method.getStmt() instanceof Block);
-        assertEquals(((Block)(method.getStmt())).getBlockedStatements().size(), ((Block)(testClass.getMethods().get(0).getStmt())).getBlockedStatements().size());
+        assertEquals(testClass.getFields().size(), classGeneratedByAST.getFields().size() );
+        assertEquals(testClass.getMethods().size(), classGeneratedByAST.getMethods().size());
+        var ctorFromAST = classGeneratedByAST.getMethods().get(0);
+        var expectedCtor = testClass.getMethods().get(0);
+        assertEquals(expectedCtor.getAccessModifier(), ctorFromAST.getAccessModifier());
+        assertEquals(expectedCtor.getModifier(), ctorFromAST.getModifier());
+        assertEquals(expectedCtor.getReturnType(), ctorFromAST.getReturnType());
+        assertEquals(expectedCtor.getParams().size(), ctorFromAST.getParams().size());
+        assertEquals(expectedCtor.getName(), ctorFromAST.getName());
+        assertTrue(ctorFromAST.getStmt() instanceof Block);
+        assertEquals(
+                ((Block)(ctorFromAST.getStmt())).getBlockedStatements().size(),
+                ((Block)(testClass.getMethods().get(0).getStmt())).getBlockedStatements().size());
 
     }
 }
