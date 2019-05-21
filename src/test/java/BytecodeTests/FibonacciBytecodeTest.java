@@ -81,7 +81,7 @@ public class FibonacciBytecodeTest
         var method = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, ObjectType.IntType,
                                          "fibonacci", methodParams, methodBody);
 
-        var ctor = new TypedMethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.getType(className), className, new ArrayList<>(), new TypedBlock(new ArrayList<>(), ObjectType.VoidType));
+        var ctor = new TypedMethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.VoidType, className, new ArrayList<>(), new TypedBlock(new ArrayList<>(), ObjectType.VoidType));
         ctor.setObjectType(ObjectType.VoidType);
         var typedProgram = TypedProgramGenerator.getProgram(className, null,
                                                             new ArrayList<>(){{add(ctor);add(method);}});
@@ -160,7 +160,7 @@ public class FibonacciBytecodeTest
         var method = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, ObjectType.IntType,
                 "fibonacci", methodParams, methodBody);
 
-        var ctor = new TypedMethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.getType(className),
+        var ctor = new TypedMethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.VoidType,
                                               className, new ArrayList<>(), new TypedBlock(new ArrayList<>(), ObjectType.VoidType));
         ctor.setObjectType(ObjectType.VoidType);
         var typedProgram = TypedProgramGenerator.getProgram(className, null,

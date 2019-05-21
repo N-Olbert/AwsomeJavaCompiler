@@ -7,7 +7,6 @@ import tastgenerator.statements.TypedStatement;
 public class Return extends Statement
 {
     private Expression exp;
-    public Return(){}
     public Return(Expression exp)
     {
         this.exp = exp;

@@ -30,11 +30,16 @@ public class TypeCheckerInstance implements TypeChecker
 
     private Stack<Integer> localVarCount= new Stack<>();
 
+    private List<TypedMethodParameter> methodParameters;
+
     public TypeCheckerInstance(UntypedProgram program) {
         classes = new HashMap<>();
         for (Class currentClass: program.getClasses()) {
             HashMap<String, ObjectType> fields = new HashMap<>();
             for (FieldDeclaration fieldDecl: currentClass.getFields()) {
+                if (fields.get(fieldDecl.getName()) != null) {
+                    throw new AlreadyDefinedException("The field variable " + fieldDecl.getName() + " has already been defined");
+                }
                 fields.put(fieldDecl.getName(), fieldDecl.getVariableType());
             }
             HashMap<String, List<Method>> methods = new HashMap<>();
@@ -46,6 +51,11 @@ public class TypeCheckerInstance implements TypeChecker
                 Method newMethod = new Method(methodDecl.getReturnType(), params);
                 if (methods.containsKey(methodDecl.getName())) {
                     List<Method> methodList = methods.get(methodDecl.getName());
+                    Method correspondingMethod = getCorrespondingMethod(methodList, params);
+                    if (correspondingMethod != null) {
+                        throw new AlreadyDefinedException("The method " + methodDecl.getName() +
+                                " has already been defined with these parameter types");
+                    }
                     methodList.add(newMethod);
                     methods.put(methodDecl.getName(), methodList);
                 } else {
@@ -97,8 +107,10 @@ public class TypeCheckerInstance implements TypeChecker
             case MULTIPLICATION:
             case DIVISION:
             case MODULO:
-                if ((expression1.getObjectType() == ObjectType.IntType || expression1.getObjectType() == ObjectType.CharType) &&
-                    (expression2.getObjectType() == ObjectType.IntType || expression2.getObjectType() == ObjectType.CharType)) {
+                if ((expression1.getObjectType().getName().equals(ObjectType.IntType.getName()) ||
+                        expression1.getObjectType().getName().equals(ObjectType.CharType.getName())) &&
+                    (expression2.getObjectType().getName().equals(ObjectType.IntType.getName()) ||
+                            expression2.getObjectType().getName().equals(ObjectType.CharType.getName()))) {
                     return new TypedBinary(expression1, expression2, toCheck.getOperator(), ObjectType.IntType);
                 } else {
                     throw new TypeMismatchException("Type Mismatch: Cannot apply " + toCheck.getOperator().name() + " to '" +
@@ -184,6 +196,15 @@ public class TypeCheckerInstance implements TypeChecker
         for (Tuple<String, ObjectType> localVar : currentLocalVars) {
             if (toCheck.getName().equals(localVar.getFirst())) {
                 varType = localVar.getSecond();
+                break;
+            }
+        }
+        if (varType == null) {
+            for (TypedMethodParameter typedParam: methodParameters) {
+                if (toCheck.getName().equals(typedParam.getName())) {
+                    varType = typedParam.getObjectType();
+                    break;
+                }
             }
         }
         if (varType == null) {
@@ -200,7 +221,7 @@ public class TypeCheckerInstance implements TypeChecker
         TypedExpression typedExpression = toCheck.getObject().toTyped(this);
         Tuple<List<TypedExpression>, ObjectType> result = methodCallTypeParamsAndGetReturnType(typedExpression,
                 toCheck.getName(),toCheck.getParameters());
-        return new TypedMethodCallExpression(typedExpression, toCheck.getName(), result.getFirst(), ObjectType.VoidType);
+        return new TypedMethodCallExpression(typedExpression, toCheck.getName(), result.getFirst(), result.getSecond());
     }
 
     @Override
@@ -265,9 +286,6 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedFieldDeclaration typeCheck(FieldDeclaration toCheck) {
-        if (classes.get(currentClass.getName()).getFields().get(toCheck.getName()) != null) {
-            throw new AlreadyDefinedException("The field " + toCheck.getName() + " has already been defined");
-        }
         return new TypedFieldDeclaration(toCheck.getAccessModifier(),
                                          toCheck.getModifier(),
                                          toCheck.getVariableType(),
@@ -282,11 +300,8 @@ public class TypeCheckerInstance implements TypeChecker
             typedParams.add((TypedMethodParameter) parameter.toTyped(this));
             types.add(parameter.toTyped(this).getObjectType());
         }
-        List<Method> definedMethods = classes.get(currentClass.getName()).getMethods().get(toCheck.getName());
-        Method correspondingMethod = getCorrespondingMethod(definedMethods, types);
-        if (correspondingMethod != null) {
-            throw new AlreadyDefinedException("The method " + toCheck.getName() + " has already been defined with these parameters");
-        }
+        //Update the list of methodparameters so a local or field var has access to them
+        methodParameters = typedParams;
         TypedBlock typedBlock = (TypedBlock) toCheck.getStmt().toTyped(this);
         if (!compareTypes(toCheck.getReturnType(), typedBlock.getObjectType())) {
             throw new TypeMismatchException("Returned type does not equal the specified return type of the method");
@@ -323,7 +338,9 @@ public class TypeCheckerInstance implements TypeChecker
         ObjectType type = ObjectType.VoidType;
         for(Statement statement: toCheck.getBlockedStatements()) {
             TypedStatement typedStatement = statement.toTyped(this);
-            if (!typedStatement.getObjectType().getName().equals(ObjectType.VoidType.getName()) &&
+            if (type.getName().equals(ObjectType.VoidType.getName())) {
+                type = typedStatement.getObjectType();
+            } else if (!typedStatement.getObjectType().getName().equals(ObjectType.VoidType.getName()) &&
                     !typedStatement.getObjectType().getName().equals(type.getName())) {
                 if (type.getName().equals(ObjectType.CharType.getName()) &&
                         typedStatement.getObjectType().getName().equals(ObjectType.IntType.getName())) {
@@ -344,13 +361,14 @@ public class TypeCheckerInstance implements TypeChecker
     @Override
     public TypedIfElse typeCheck(IfElse toCheck) {
         TypedExpression typedCondition = toCheck.getCondition().toTyped(this);
-        if (typedCondition.getObjectType().getName().equals(ObjectType.BoolType.getName())) {
+        if (!typedCondition.getObjectType().getName().equals(ObjectType.BoolType.getName())) {
             throw new TypeMismatchException("Condition of while must be boolean");
         }
         TypedBlock typedThen = (TypedBlock) toCheck.getThen().toTyped(this);
         TypedBlock typedOtherwise = (TypedBlock) toCheck.getOtherwise().toTyped(this);
         ObjectType type;
-        if (typedOtherwise.getObjectType().getName().equals(ObjectType.VoidType.getName())) {
+        if (typedOtherwise.getObjectType().getName().equals(ObjectType.VoidType.getName()) ||
+                typedThen.getObjectType().getName().equals(typedOtherwise.getObjectType().getName())) {
             type = typedThen.getObjectType();
         } else {
             if (typedThen.getObjectType().getName().equals(ObjectType.VoidType.getName())) {
@@ -376,6 +394,11 @@ public class TypeCheckerInstance implements TypeChecker
                 throw new AlreadyDefinedException("Variable " + toCheck.getName() + " is already defined in the local scope");
             }
         }
+        for (TypedMethodParameter typedParam: methodParameters) {
+            if (toCheck.getName().equals(typedParam.getName())) {
+                throw new AlreadyDefinedException("Variable " + toCheck.getName() + " is already defined in the local scope");
+            }
+        }
         currentLocalVars.add(new Tuple<String, ObjectType>(toCheck.getName(), toCheck.getVariableType()));
         localVarCount.push(localVarCount.pop() + 1);
         return new TypedLocalVarDeclaration(toCheck.getVariableType(), toCheck.getName());
@@ -386,7 +409,7 @@ public class TypeCheckerInstance implements TypeChecker
         TypedExpression typedExpression = toCheck.getObject().toTyped(this);
         Tuple<List<TypedExpression>, ObjectType> result = methodCallTypeParamsAndGetReturnType(typedExpression,
                 toCheck.getName(),toCheck.getParameters());
-        return new TypedMethodCallStatement(typedExpression, toCheck.getName(), result.getFirst(), result.getSecond());
+        return new TypedMethodCallStatement(typedExpression, toCheck.getName(), result.getFirst(), ObjectType.VoidType);
     }
 
     @Override
