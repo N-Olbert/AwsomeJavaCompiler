@@ -19,66 +19,63 @@ public class ASTClassCommentsIgnoredTest {
     @Test
     public void testASTCommentsIgnored()
     {
-        //Generate AST from BasisClass.java
         InputStream file = ResourceHelper.getFileAsStream("TestCommentsareIgnored.java");
         Factory factory = Global.getFactory();
         assertNotNull(factory);
         ASTGenerator astGen = factory.getASTGenerator();
         assertNotNull(astGen);
 
-        //Create expected Program
         String className = "TestComment";
-        Class testClass = new Class(ObjectType.getType(className), new ArrayList<FieldDeclaration>(), new ArrayList<MethodDeclaration>());
-        testClass.getMethods().add(new MethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.VoidType, className, new ArrayList<MethodParameter>(), new Block(null)));
-        testClass.getFields().add(new FieldDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.IntType, "tralala"));
-        testClass.getFields().add(new FieldDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.IntType, "dassollgesehenwerden"));
-        testClass.getFields().add(new FieldDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.CharType, "genauwiedas"));
+        Class expectedClass = new Class(ObjectType.getType(className), new ArrayList<FieldDeclaration>(), new ArrayList<MethodDeclaration>());
+        expectedClass.getMethods().add(new MethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.VoidType, className, new ArrayList<MethodParameter>(), new Block()));
+        expectedClass.getFields().add(new FieldDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.IntType, "tralala"));
+        expectedClass.getFields().add(new FieldDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.IntType, "dassollgesehenwerden"));
+        expectedClass.getFields().add(new FieldDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.CharType, "genauwiedas"));
 
         UntypedProgram testProgram = new UntypedProgram();
         List<Class> classes = new ArrayList<Class>();
-        classes.add(testClass);
+        classes.add(expectedClass);
         testProgram.setClasses(classes);
 
         UntypedProgram ast = astGen.getAST(file);
-        var untypedTestClass = ast.getClasses().get(0);
+        var classGeneratedByAST = ast.getClasses().get(0);
         assertNotNull(ast);
         assertEquals(ast.getClasses().size(), testProgram.getClasses().size());
-        assertEquals(untypedTestClass.getClassType(), ObjectType.getType(className));
-        assertEquals(untypedTestClass.getFields().size(), testClass.getFields().size());
-        assertEquals(untypedTestClass.getMethods().size(), testClass.getMethods().size());
+        assertEquals(ObjectType.getType(className), classGeneratedByAST.getClassType());
+        assertEquals(expectedClass.getFields().size(), classGeneratedByAST.getFields().size());
+        assertEquals(expectedClass.getMethods().size(), classGeneratedByAST.getMethods().size());
 
-        var method = untypedTestClass.getMethods().get(0);
-        var constructorTest = testClass.getMethods().get(0);
-        assertEquals(method.getAccessModifier(), constructorTest.getAccessModifier());
-        assertEquals(method.getModifier(), constructorTest.getModifier());
-        assertEquals(method.getReturnType(), constructorTest.getReturnType());
-        assertEquals(method.getParams().size(), constructorTest.getParams().size());
-        assertEquals(method.getName(), constructorTest.getName());
-        assertTrue(method.getStmt() instanceof Block);
-        assertNull(((Block)(method.getStmt())).getBlockedStatements());
+        var generatedCtor = classGeneratedByAST.getMethods().get(0);
+        var expectedCtor = expectedClass.getMethods().get(0);
+        assertEquals(expectedCtor.getAccessModifier(), generatedCtor.getAccessModifier() );
+        assertEquals(expectedCtor.getModifier(), generatedCtor.getModifier());
+        assertEquals(expectedCtor.getReturnType(), generatedCtor.getReturnType());
+        assertEquals(expectedCtor.getParams().size(), generatedCtor.getParams().size());
+        assertEquals(expectedCtor.getName(), generatedCtor.getName());
+        assertTrue(generatedCtor.getStmt() instanceof Block);
 
-        var field1 = untypedTestClass.getFields().get(0);
-        var fieldTest1 = testClass.getFields().get(0);
+        var field1Expected = expectedClass.getFields().get(0);
+        var field1AST = classGeneratedByAST.getFields().get(0);
 
-        assertEquals(field1.getVariableType(), fieldTest1.getVariableType());
-        assertEquals(field1.getName(), fieldTest1.getName());
-        assertEquals(field1.getModifier(), fieldTest1.getModifier());
-        assertEquals(field1.getAccessModifier(), fieldTest1.getAccessModifier());
+        assertEquals(field1Expected.getVariableType(), field1AST.getVariableType());
+        assertEquals(field1Expected.getName(), field1AST.getName());
+        assertEquals(field1Expected.getModifier(), field1AST.getModifier());
+        assertEquals(field1Expected.getAccessModifier(), field1AST.getAccessModifier());
 
-        var field2 = untypedTestClass.getFields().get(1);
-        var fieldTest2 = testClass.getFields().get(1);
+        var field2Expected = expectedClass.getFields().get(1);
+        var field2AST = classGeneratedByAST.getFields().get(1);
 
-        assertEquals(field2.getAccessModifier(), fieldTest2.getAccessModifier());
-        assertEquals(field2.getModifier(), fieldTest2.getModifier());
-        assertEquals(field2.getName(), fieldTest2.getName());
-        assertEquals(field2.getVariableType(), fieldTest2.getVariableType());
+        assertEquals(field2Expected.getAccessModifier(), field2AST.getAccessModifier());
+        assertEquals(field2Expected.getModifier(), field2AST.getModifier());
+        assertEquals(field2Expected.getName(), field2AST.getName());
+        assertEquals(field2Expected.getVariableType(), field2AST.getVariableType());
 
-        var field3 = untypedTestClass.getFields().get(2);
-        var fieldTest3 = testClass.getFields().get(2);
+        var field3Expected = expectedClass.getFields().get(2);
+        var field3AST = expectedClass.getFields().get(2);
 
-        assertEquals(field3.getAccessModifier(), fieldTest3.getAccessModifier());
-        assertEquals(field3.getModifier(), fieldTest3.getModifier());
-        assertEquals(field3.getVariableType(), fieldTest3.getVariableType());
-        assertEquals(field3.getName(), fieldTest3.getName());
+        assertEquals(field3Expected.getAccessModifier(), field3AST.getAccessModifier());
+        assertEquals(field3Expected.getModifier(), field3AST.getModifier());
+        assertEquals(field3Expected.getVariableType(), field3AST.getVariableType());
+        assertEquals(field3Expected.getName(), field3AST.getName());
     }
 }

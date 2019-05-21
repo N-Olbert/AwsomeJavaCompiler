@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -56,14 +57,17 @@ public class ASTAutoGenerateReturnAtVoidMethodTest {
         assertEquals(ctorExpected.getModifier(), ctor.getModifier());
         assertEquals(ctorExpected.getName(), ctor.getName());
         assertEquals(ctorExpected.getParams().size(), ctor.getParams().size());
-        assertEquals(ctorExpected.getStmt(), ctor.getStmt());
+        assertTrue(ctor.getStmt() instanceof Block);
+        assertEquals(((Block)ctorExpected.getStmt()).getBlockedStatements().size(), ((Block)ctor.getStmt()).getBlockedStatements().size());
         assertEquals(ctorExpected.getReturnType(), ctor.getReturnType());
 
         var voidMethod = astClass.getMethods().get(1);
         var expectedVoidMethod = testClass.getMethods().get(1);
 
         assertEquals(expectedVoidMethod.getReturnType(), voidMethod.getReturnType());
-        assertEquals(expectedVoidMethod.getStmt(), voidMethod.getStmt());
+        assertTrue(voidMethod.getStmt() instanceof Block);
+        assertEquals(((Block)expectedVoidMethod.getStmt()).getBlockedStatements().size(), ((Block)voidMethod.getStmt()).getBlockedStatements().size());
+        assertTrue(((Block)expectedVoidMethod.getStmt()).getBlockedStatements().get(0) instanceof Return);
         assertEquals(expectedVoidMethod.getParams().size(), voidMethod.getParams().size());
         assertEquals(expectedVoidMethod.getName(), voidMethod.getName());
         assertEquals(expectedVoidMethod.getAccessModifier(), voidMethod.getAccessModifier());

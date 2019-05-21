@@ -43,8 +43,8 @@ public class ASTDefaultConstructorTest {
         assertEquals(ast.getClasses().size(), 1);
         assertEquals(untypedTestClass.getClassType(), ObjectType.getType(className));
 
-        assertEquals(untypedTestClass.getFields().size(), 0);
-        assertEquals(untypedTestClass.getMethods().size(), 1);
+        assertEquals(testClass.getFields().size(), untypedTestClass.getFields().size() );
+        assertEquals(testClass.getMethods().size(), untypedTestClass.getMethods().size());
         var method = untypedTestClass.getMethods().get(0);
         assertEquals(method.getAccessModifier(), AccessModifier.PACKAGE_PRIVATE);
         assertEquals(method.getModifier(), Modifier.NONE);
@@ -52,6 +52,7 @@ public class ASTDefaultConstructorTest {
         assertEquals(method.getParams().size(), 0);
         assertEquals(method.getName(), className);
         assertTrue(method.getStmt() instanceof Block);
-        assertTrue(((Block)(method.getStmt())).getBlockedStatements() == null);
+        assertEquals(((Block)(method.getStmt())).getBlockedStatements().size(), ((Block)(testClass.getMethods().get(0).getStmt())).getBlockedStatements().size());
+
     }
 }
