@@ -16,7 +16,7 @@ public class TypedNewExpression extends TypedExpression
     {
         this.newType = newType;
         this.parameters = expressions;
-        this.objectType = ObjectType.VoidType;
+        this.objectType = newType;
     }
 
     public ObjectType getNewType()

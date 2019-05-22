@@ -17,7 +17,7 @@ public class TypedNewStatement extends TypedStatement
     {
         this.newType = newType;
         this.parameters = expressions;
-        this.objectType = newType;
+        this.objectType = ObjectType.VoidType;
     }
 
     public ObjectType getNewType()

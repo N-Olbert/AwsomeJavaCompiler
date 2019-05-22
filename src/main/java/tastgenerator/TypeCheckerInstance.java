@@ -30,7 +30,7 @@ public class TypeCheckerInstance implements TypeChecker
 
     private Stack<Integer> localVarCount= new Stack<>();
 
-    private List<TypedMethodParameter> methodParameters;
+    private List<TypedMethodParameter> methodParameters = new ArrayList<>();
 
     public TypeCheckerInstance(UntypedProgram program) {
         classes = new HashMap<>();
@@ -48,7 +48,7 @@ public class TypeCheckerInstance implements TypeChecker
                 for (MethodParameter parameter: methodDecl.getParams()) {
                     params.add(parameter.getType());
                 }
-                Method newMethod = new Method(methodDecl.getReturnType(), params);
+                Method newMethod = new Method(methodDecl.getReturnType(), params, methodDecl.getAccessModifier());
                 if (methods.containsKey(methodDecl.getName())) {
                     List<Method> methodList = methods.get(methodDecl.getName());
                     Method correspondingMethod = getCorrespondingMethod(methodList, params);
@@ -60,7 +60,7 @@ public class TypeCheckerInstance implements TypeChecker
                     methods.put(methodDecl.getName(), methodList);
                 } else {
                     List<Method> methodList = new ArrayList<Method>();
-                    methodList.add(new Method(methodDecl.getReturnType(), params));
+                    methodList.add(newMethod);
                     methods.put(methodDecl.getName(), methodList);
                 }
             }
