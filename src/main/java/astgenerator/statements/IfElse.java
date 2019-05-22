@@ -22,7 +22,7 @@ public class IfElse extends Statement
     public IfElse (Expression condition, Block then) {
         this.condition = condition;
         this.then = then;
-        this.otherwise = new Block(null);
+        this.otherwise = new Block(new ArrayList<>());
     }
 
     public Expression getCondition()
