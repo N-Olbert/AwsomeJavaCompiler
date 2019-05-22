@@ -6,6 +6,7 @@ import astgenerator.generalelements.MethodDeclaration;
 import astgenerator.generalelements.MethodParameter;
 import astgenerator.generalelements.UntypedProgram;
 import astgenerator.statements.Block;
+import astgenerator.statements.Statement;
 import common.*;
 import org.junit.Test;
 
@@ -28,8 +29,8 @@ public class ASTDefaultConstructorTest {
         assertNotNull(astGen);
 
         String className = "Test";
-        Class testClass = new Class(ObjectType.getType(className), null, new ArrayList<MethodDeclaration>());
-        testClass.getMethods().add(new MethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.VoidType, className, new ArrayList<MethodParameter>(), new Block(null)));
+        Class testClass = new Class(ObjectType.getType(className), new ArrayList<>(), new ArrayList<>());
+        testClass.getMethods().add(new MethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.VoidType, className, new ArrayList<MethodParameter>(), new Block(new Statement[0])));
         UntypedProgram testProgram = new UntypedProgram();
         List<Class> classes = new ArrayList<Class>();
         classes.add(testClass);
@@ -37,20 +38,24 @@ public class ASTDefaultConstructorTest {
 
 
         UntypedProgram ast = astGen.getAST(file);
-        var untypedTestClass = ast.getClasses().get(0);
+        var classGeneratedByAST = ast.getClasses().get(0);
         assertNotNull(ast);
         assertEquals(ast.getClasses().size(), 1);
-        assertEquals(untypedTestClass.getClassType(), ObjectType.getType(className));
+        assertEquals(classGeneratedByAST.getClassType(), ObjectType.getType(className));
 
-        assertEquals(untypedTestClass.getFields().size(), 0);
-        assertEquals(untypedTestClass.getMethods().size(), 1);
-        var method = untypedTestClass.getMethods().get(0);
-        assertEquals(method.getAccessModifier(), AccessModifier.PACKAGE_PRIVATE);
-        assertEquals(method.getModifier(), Modifier.NONE);
-        assertEquals(method.getReturnType(), ObjectType.VoidType);
-        assertEquals(method.getParams().size(), 0);
-        assertEquals(method.getName(), className);
-        assertTrue(method.getStmt() instanceof Block);
-        assertTrue(((Block)(method.getStmt())).getBlockedStatements() == null);
+        assertEquals(testClass.getFields().size(), classGeneratedByAST.getFields().size() );
+        assertEquals(testClass.getMethods().size(), classGeneratedByAST.getMethods().size());
+        var ctorFromAST = classGeneratedByAST.getMethods().get(0);
+        var expectedCtor = testClass.getMethods().get(0);
+        assertEquals(expectedCtor.getAccessModifier(), ctorFromAST.getAccessModifier());
+        assertEquals(expectedCtor.getModifier(), ctorFromAST.getModifier());
+        assertEquals(expectedCtor.getReturnType(), ctorFromAST.getReturnType());
+        assertEquals(expectedCtor.getParams().size(), ctorFromAST.getParams().size());
+        assertEquals(expectedCtor.getName(), ctorFromAST.getName());
+        assertTrue(ctorFromAST.getStmt() instanceof Block);
+        assertEquals(
+                ((Block)(ctorFromAST.getStmt())).getBlockedStatements().size(),
+                ((Block)(testClass.getMethods().get(0).getStmt())).getBlockedStatements().size());
+
     }
 }
