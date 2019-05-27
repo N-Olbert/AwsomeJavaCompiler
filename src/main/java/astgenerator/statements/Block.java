@@ -6,6 +6,7 @@ import tastgenerator.statements.TypedStatement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class Block extends Statement
 {
@@ -39,5 +40,18 @@ public class Block extends Statement
     @Override
     public TypedStatement toTyped(TypeChecker converter) {
         return converter.typeCheck(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Block block = (Block) o;
+        return Objects.equals(blockedStatements, block.blockedStatements);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(blockedStatements);
     }
 }
