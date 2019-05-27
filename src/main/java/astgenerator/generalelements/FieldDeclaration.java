@@ -6,6 +6,8 @@ import common.ObjectType;
 import tastgenerator.TypeChecker;
 import tastgenerator.generalelements.TypedGeneralThing;
 
+import java.util.Objects;
+
 public class FieldDeclaration extends GeneralThing
 {
     private AccessModifier accessModifier;
@@ -49,5 +51,21 @@ public class FieldDeclaration extends GeneralThing
     @Override
     public TypedGeneralThing toTyped(TypeChecker converter) {
         return converter.typeCheck(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FieldDeclaration that = (FieldDeclaration) o;
+        return accessModifier == that.accessModifier &&
+                modifier == that.modifier &&
+                Objects.equals(variableType, that.variableType) &&
+                Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(accessModifier, modifier, variableType, name);
     }
 }

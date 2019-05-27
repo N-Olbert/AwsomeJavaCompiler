@@ -5,6 +5,7 @@ import tastgenerator.TypeChecker;
 import tastgenerator.statements.TypedStatement;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class IfElse extends Statement
 {
@@ -22,7 +23,7 @@ public class IfElse extends Statement
     public IfElse (Expression condition, Block then) {
         this.condition = condition;
         this.then = then;
-        this.otherwise = new Block(null);
+        this.otherwise = new Block(new ArrayList<>());
     }
 
     public Expression getCondition()
@@ -43,5 +44,20 @@ public class IfElse extends Statement
     @Override
     public TypedStatement toTyped(TypeChecker converter) {
         return converter.typeCheck(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        IfElse ifElse = (IfElse) o;
+        return Objects.equals(condition, ifElse.condition) &&
+                Objects.equals(then, ifElse.then) &&
+                Objects.equals(otherwise, ifElse.otherwise);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(condition, then, otherwise);
     }
 }
