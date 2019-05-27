@@ -3,12 +3,12 @@ package TypedASTTests;
 import astgenerator.expressions.*;
 import astgenerator.generalelements.MethodParameter;
 import astgenerator.statements.*;
-import common.Global;
-import common.ObjectType;
-import common.Operators;
+import common.*;
 import org.junit.Test;
+import tastgenerator.expressions.TypedThis;
 import tastgenerator.statements.TypedIfElse;
 import tastgenerator.statements.TypedReturn;
+import tastgenerator.statements.TypedWhile;
 
 import java.util.ArrayList;
 
@@ -25,7 +25,7 @@ public class FibonacciClassTest
 
         var methodParams = new ArrayList<String[]>(){{
             add(new String[]{ObjectType.VoidType.getName(),className});
-            add(new String[]{ObjectType.IntType.getName(),methodName});
+            add(new String[]{String.valueOf(AccessModifier.PUBLIC), String.valueOf(Modifier.NONE),ObjectType.IntType.getName(),methodName});
         }};
 
         var blocks = new ArrayList<Block>();
@@ -60,6 +60,9 @@ public class FibonacciClassTest
 
         var typedProgram = Global.getFactory().getTypedAstGenerator().getTypedProgram(program);
 
+        var typedProgramexpected = FibonacciTastGeneration.getFibonacciTastRecursion();
+
+        assertEquals(typedProgram, typedProgramexpected);
         var classCount = typedProgram.getClasses().size();
         var classes = typedProgram.getClasses().get(0);
 
@@ -82,7 +85,7 @@ public class FibonacciClassTest
 
         var methodParams = new ArrayList<String[]>(){{
             add(new String[]{ObjectType.VoidType.getName(),className});
-            add(new String[]{ObjectType.IntType.getName(),methodName});
+            add(new String[]{String.valueOf(AccessModifier.PUBLIC), String.valueOf(Modifier.NONE),ObjectType.IntType.getName(),methodName});
         }};
 
         var blocks = new ArrayList<Block>();
@@ -126,17 +129,8 @@ public class FibonacciClassTest
 
         var typedProgram = Global.getFactory().getTypedAstGenerator().getTypedProgram(program);
 
-        var classCount = typedProgram.getClasses().size();
-        var classes = typedProgram.getClasses().get(0);
+        var typedProgramexpected = FibonacciTastGeneration.getFibonacciTastIterative();
 
-        assertEquals(classCount, 1);
-        assertEquals(classes.getMethods().size(), 2);
-        var method = classes.getMethods().get(1);
-        assertEquals(method.getParams().size(), 1);
-        assertEquals(method.getName(), methodName);
-        assertTrue(method.getStmt().getBlockedStatements().get(0) instanceof TypedIfElse);
-        TypedIfElse tife = (TypedIfElse) method.getStmt().getBlockedStatements().get(0);
-        assertTrue(tife.getThen().getBlockedStatements().get(0) instanceof TypedReturn);
-        assertTrue(tife.getOtherwise().getBlockedStatements().get(9) instanceof TypedReturn);
+        assertEquals(typedProgramexpected, typedProgram);
     }
 }

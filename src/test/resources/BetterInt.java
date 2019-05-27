@@ -22,24 +22,8 @@ public class BetterInt
         return new BetterInt(x-y.x);
     }
 
-    public BetterInt Multiply(BetterInt y)
-    {
-        return new BetterInt(x*y.x);
-    }
-
-    public BetterInt Divide(BetterInt y)
-    {
-        return new BetterInt(x/y.x);
-    }
-
-    public boolean GreaterThan(BetterInt y)
-    {
-        return x > y.x;
-    }
-
     public boolean LessThan(BetterInt y)
     {
         return x < y.x;
     }
-
 }
