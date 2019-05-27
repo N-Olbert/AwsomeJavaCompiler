@@ -16,7 +16,7 @@ instVar:  This '.' Identifier|(This '.')? (Identifier '.')+ Identifier;
 statementExpressions: assign | jNew | methodCall;
 localVarDeclaration: objectType Identifier;
 assign: basicexpressions AssignOperator expression;
-jNew: 'new' Identifier '('nMethodParameters')';
+jNew: 'new' Identifier '('nArguments')';
 methodCall: (instVar'.')? Identifier'('nArguments')';
 statement: ifelse | localVarDeclaration';' | jReturn';' | jWhile | block | assign';' | binary | statementExpressions;
 block: '{' (statement)* '}';
