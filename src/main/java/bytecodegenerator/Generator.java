@@ -38,9 +38,9 @@ public abstract class Generator {
     public static ClassWriter generate(TypedClass clazz) {
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
         cw.visit(V1_4, ACC_PUBLIC,
-                clazz.getClassType().getName(),
+                clazz.getClassType().getByteCodeName(),
                 null, "java/lang/Object", null);
-        Context context = new Context(clazz.getClassType().getName());
+        Context context = new Context(clazz.getClassType().getByteCodeName());
         if(clazz.getFields() != null) {
             clazz.getFields().forEach(declaration -> generate(declaration, cw, context));
         }
@@ -60,7 +60,7 @@ public abstract class Generator {
             context.getLocalFields().add(declaration.getName());
         }
         writer.visitField(declaration.getAccessModifier().getCode() | declaration.getModifier().getCode(),
-                declaration.getName(), declaration.getVariableType().getName(), null, null);
+                declaration.getName(), declaration.getVariableType().getByteCodeName(), null, null);
     }
 
 
@@ -71,7 +71,8 @@ public abstract class Generator {
         }
         MethodVisitor visitor =
                 writer.visitMethod(declaration.getAccessModifier().getCode() | declaration.getModifier().getCode(),
-                        name, generate(declaration.getParams()) + declaration.getReturnType().getName(), null, null);
+                        name, generate(declaration.getParams()) + declaration.getReturnType().getByteCodeName(), null,
+                        null);
         if(name.equals("<init>")) {
             visitor.visitVarInsn(ALOAD, 0);
             visitor.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
@@ -96,7 +97,7 @@ public abstract class Generator {
         StringBuilder builder = new StringBuilder();
         builder.append('(');
         if(typedMethodParameters != null) {
-            typedMethodParameters.forEach(param -> builder.append(param.getObjectType().getName()));
+            typedMethodParameters.forEach(param -> builder.append(param.getObjectType().getByteCodeName()));
         }
         builder.append(')');
         return builder.toString();
@@ -109,7 +110,7 @@ public abstract class Generator {
     }
 
     public static void generate(TypedReturn statement, MethodVisitor visitor, Context context) {
-        switch(statement.getObjectType().getName()) {
+        switch(statement.getObjectType().getByteCodeName()) {
             case "I":
                 statement.getExp().generateByteCode(visitor, context.clone());
                 visitor.visitInsn(IRETURN);
@@ -118,6 +119,7 @@ public abstract class Generator {
                 visitor.visitInsn(RETURN);
                 break;
             default:
+                statement.getExp().generateByteCode(visitor, context.clone());
                 visitor.visitInsn(ARETURN);
         }
     }
@@ -129,11 +131,11 @@ public abstract class Generator {
         else if(context.getLocalFields().contains(expression.getName())) {
             visitor.visitVarInsn(ALOAD, 0);
             visitor.visitFieldInsn(GETFIELD, context.getClassName(), expression.getName(),
-                    expression.getObjectType().getName());
+                    expression.getObjectType().getByteCodeName());
         }
         else if(context.getStaticFields().contains(expression.getName())) {
             visitor.visitFieldInsn(GETSTATIC, context.getClassName(), expression.getName(),
-                    expression.getObjectType().getName());
+                    expression.getObjectType().getByteCodeName());
         }
     }
 
@@ -172,13 +174,13 @@ public abstract class Generator {
             statement.getExpression2().generateByteCode(visitor, context);
             visitor.visitFieldInsn(PUTFIELD, context.getClassName(),
                     ((TypedInstVar) statement.getExpression1()).getName(),
-                    statement.getExpression2().getObjectType().getName());
+                    statement.getExpression2().getObjectType().getByteCodeName());
         }
         else if(statement.getExpression1() instanceof TypedLocalOrFieldVar) {
             TypedLocalOrFieldVar lofv = (TypedLocalOrFieldVar) statement.getExpression1();
             if(context.getLocalVar().containsKey(lofv.getName())) {
                 statement.getExpression2().generateByteCode(visitor, context);
-                switch(statement.getExpression1().getObjectType().getName()) {
+                switch(statement.getExpression1().getObjectType().getByteCodeName()) {
                     case "I":
                         visitor.visitVarInsn(ISTORE, context.getLocalVar().get(lofv.getName()));
                         break;
@@ -187,8 +189,6 @@ public abstract class Generator {
                 }
             }
             else {
-                System.out.println(context.getLocalVar().toString());
-                System.out.println(lofv.getName());
                 throw new RuntimeException("Not implemented yet!");
             }
         }
@@ -203,8 +203,9 @@ public abstract class Generator {
 
     public static void generate(TypedInstVar expression, MethodVisitor visitor, Context context) {
         expression.getExpression().generateByteCode(visitor, context);
-        visitor.visitFieldInsn(GETFIELD, expression.getExpression().getObjectType().getName(), expression.getName(),
-                expression.getObjectType().getName());
+        visitor.visitFieldInsn(GETFIELD, expression.getExpression().getObjectType().getByteCodeName(),
+                expression.getName(),
+                expression.getObjectType().getByteCodeName());
     }
 
     public static void generate(TypedIfElse expression, MethodVisitor visitor, Context context) {
@@ -233,7 +234,45 @@ public abstract class Generator {
                     typedBinary.getExpression().generateByteCode(visitor, context);
                     typedBinary.getExpression2().generateByteCode(visitor, context);
                     visitor.visitJumpInsn(IF_ICMPGE, label);
+                case GREATEROREQUAL:
+                    typedBinary.getExpression().generateByteCode(visitor, context);
+                    typedBinary.getExpression2().generateByteCode(visitor, context);
+                    visitor.visitJumpInsn(IF_ICMPLT, label);
                     break;
+                case GREATERTHAN:
+                    typedBinary.getExpression().generateByteCode(visitor, context);
+                    typedBinary.getExpression2().generateByteCode(visitor, context);
+                    visitor.visitJumpInsn(IF_ICMPLE, label);
+                    break;
+                case EQUALS:
+                    typedBinary.getExpression().generateByteCode(visitor, context);
+                    typedBinary.getExpression2().generateByteCode(visitor, context);
+                    if((typedBinary.getExpression().getObjectType().getByteCodeName().equals("I") &&
+                            typedBinary.getExpression2().getObjectType().getByteCodeName().equals("I")) ||
+                            typedBinary.getExpression().getObjectType().getByteCodeName().equals("C") &&
+                                    typedBinary.getExpression2().getObjectType().getByteCodeName().equals("C")) {
+                        visitor.visitJumpInsn(IF_ICMPNE, label);
+                    }
+                    else {
+                        visitor.visitJumpInsn(IF_ACMPNE, label);
+                    }
+                    break;
+                case NOTEQUALS:
+                    typedBinary.getExpression().generateByteCode(visitor, context);
+                    typedBinary.getExpression2().generateByteCode(visitor, context);
+                    if((typedBinary.getExpression().getObjectType().getByteCodeName().equals("I") &&
+                            typedBinary.getExpression2().getObjectType().getByteCodeName().equals("I")) ||
+                            typedBinary.getExpression().getObjectType().getByteCodeName().equals("C") &&
+                                    typedBinary.getExpression2().getObjectType().getByteCodeName().equals("C")) {
+                        visitor.visitJumpInsn(IF_ICMPEQ, label);
+                    }
+                    else {
+                        visitor.visitJumpInsn(IF_ACMPEQ, label);
+                    }
+                    break;
+                case AND:
+                    typedBinary.getExpression().generateByteCode(visitor, context);
+                    typedBinary.getExpression2().generateByteCode(visitor, context);
                 default:
                     throw new RuntimeException(typedBinary.getOperator() + "Not implemented yet!");
             }
@@ -262,10 +301,11 @@ public abstract class Generator {
 
     public static void generate(TypedMethodCallExpression expression, MethodVisitor visitor, Context context) {
         String type =
-                "(" + getType(expression.getParameters()) + ")" + expression.getObjectType().getName();
+                "(" + getType(expression.getParameters()) + ")" + expression.getObjectType().getByteCodeName();
         expression.getObject().generateByteCode(visitor, context);
         expression.getParameters().forEach(exp -> exp.generateByteCode(visitor, context));
-        visitor.visitMethodInsn(INVOKEVIRTUAL, expression.getObject().getObjectType().getName(), expression.getName(),
+        visitor.visitMethodInsn(INVOKEVIRTUAL, expression.getObject().getObjectType().getByteCodeName(),
+                expression.getName(),
                 type,
                 false);
     }
@@ -276,7 +316,7 @@ public abstract class Generator {
 
     public static String getType(List<TypedExpression> expressions) {
         StringBuilder builder = new StringBuilder();
-        expressions.forEach(exp -> builder.append(exp.getObjectType().getName()));
+        expressions.forEach(exp -> builder.append(exp.getObjectType().getByteCodeName()));
         return builder.toString();
     }
 

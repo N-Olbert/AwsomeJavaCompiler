@@ -32,6 +32,15 @@ public class ObjectType {
         return name;
     }
 
+    public String getByteCodeName() {
+        if(typeMap.values().contains(this)) {
+            return getName();
+        }
+        else {
+            return "L" + getName().replace('.', '/') + ";";
+        }
+    }
+
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof ObjectType) {
