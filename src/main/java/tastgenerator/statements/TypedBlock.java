@@ -3,6 +3,7 @@ package tastgenerator.statements;
 import bytecodegenerator.Context;
 import bytecodegenerator.Generator;
 import common.ObjectType;
+import edu.emory.mathcs.backport.java.util.Arrays;
 import org.objectweb.asm.MethodVisitor;
 
 import java.util.HashMap;
@@ -18,6 +19,12 @@ public class TypedBlock extends TypedStatement
         this.blockedStatements = blockedStatements;
         this.objectType = objectType;
     }
+    public TypedBlock(ObjectType objectType, TypedStatement... blockedStatements)
+    {
+        this.blockedStatements = Arrays.asList(blockedStatements);
+        this.objectType = objectType;
+    }
+
 
     public List<TypedStatement> getBlockedStatements()
     {

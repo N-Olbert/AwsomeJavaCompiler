@@ -38,7 +38,7 @@ public class UntypedProgramGenerator
             {
                 var amodifier = AccessModifier.valueOf(s[0]);
                 var modifier = Modifier.valueOf(s[1]);
-                f = new FieldDeclaration(amodifier, modifier, ObjectType.getType(s[0]), s[1]);
+                f = new FieldDeclaration(amodifier, modifier, ObjectType.getType(s[2]), s[3]);
             }
             else
             {
