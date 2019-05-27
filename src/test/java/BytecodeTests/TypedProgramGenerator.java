@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TypedProgramGenerator
 {
-    static TypedProgram getProgram(String className, List <TypedFieldDeclaration> fields, List <TypedMethodDeclaration> methods)
+    public static TypedProgram getProgram(String className, List <TypedFieldDeclaration> fields, List <TypedMethodDeclaration> methods)
     {
         var classes = new ArrayList <TypedClass>();
         var newClass = new TypedClass(ObjectType.getType(className), fields, methods);
