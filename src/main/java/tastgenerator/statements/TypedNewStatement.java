@@ -34,4 +34,39 @@ public class TypedNewStatement extends TypedStatement
     public void generateByteCode(MethodVisitor visitor, Context context) {
 
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+        if (!super.equals(o))
+        {
+            return false;
+        }
+
+        TypedNewStatement that = (TypedNewStatement) o;
+
+        if (newType != null ? !newType.equals(that.newType) : that.newType != null)
+        {
+            return false;
+        }
+        return parameters != null ? parameters.equals(that.parameters) : that.parameters == null;
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = super.hashCode();
+        result = 31 * result + (newType != null ? newType.hashCode() : 0);
+        result = 31 * result + (parameters != null ? parameters.hashCode() : 0);
+        return result;
+    }
 }
