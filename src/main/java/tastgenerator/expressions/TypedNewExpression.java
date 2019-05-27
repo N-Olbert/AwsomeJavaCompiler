@@ -1,59 +1,50 @@
 package tastgenerator.expressions;
 
 import bytecodegenerator.Context;
+import bytecodegenerator.Generator;
 import common.ObjectType;
 import org.objectweb.asm.MethodVisitor;
 
 import java.util.List;
-import java.util.Map;
 
-public class TypedNewExpression extends TypedExpression
-{
+public class TypedNewExpression extends TypedExpression {
     private ObjectType newType;
     private List<TypedExpression> parameters;
 
-    public TypedNewExpression(ObjectType newType, List<TypedExpression> expressions)
-    {
+    public TypedNewExpression(ObjectType newType, List<TypedExpression> expressions) {
         this.newType = newType;
         this.parameters = expressions;
         this.objectType = newType;
     }
 
-    public ObjectType getNewType()
-    {
+    public ObjectType getNewType() {
         return newType;
     }
 
-    public List<TypedExpression> getParameters()
-    {
+    public List<TypedExpression> getParameters() {
         return parameters;
     }
 
     @Override
     public void generateByteCode(MethodVisitor visitor, Context context) {
-
+        Generator.generate(this, visitor, context);
     }
 
     @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-        {
+    public boolean equals(Object o) {
+        if(this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass())
-        {
+        if(o == null || getClass() != o.getClass()) {
             return false;
         }
-        if (!super.equals(o))
-        {
+        if(!super.equals(o)) {
             return false;
         }
 
         TypedNewExpression that = (TypedNewExpression) o;
 
-        if (newType != null ? !newType.equals(that.newType) : that.newType != null)
-        {
+        if(newType != null ? !newType.equals(that.newType) : that.newType != null) {
             return false;
         }
         return super.equals(o) && parameters != null ? parameters.equals(that.parameters) : that.parameters == null;
@@ -61,8 +52,7 @@ public class TypedNewExpression extends TypedExpression
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (newType != null ? newType.hashCode() : 0);
         result = 31 * result + (parameters != null ? parameters.hashCode() : 0);

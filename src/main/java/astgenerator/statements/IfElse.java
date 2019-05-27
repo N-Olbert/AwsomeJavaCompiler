@@ -7,37 +7,32 @@ import tastgenerator.statements.TypedStatement;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class IfElse extends Statement
-{
+public class IfElse extends Statement {
     private Expression condition;
     private Block then;
     private Block otherwise;
 
-    public IfElse(Expression condition, Block then, Block otherwise)
-    {
+    public IfElse(Expression condition, Block then, Block otherwise) {
         this.condition = condition;
         this.then = then;
         this.otherwise = otherwise;
     }
 
-    public IfElse (Expression condition, Block then) {
+    public IfElse(Expression condition, Block then) {
         this.condition = condition;
         this.then = then;
         this.otherwise = new Block(new ArrayList<>());
     }
 
-    public Expression getCondition()
-    {
+    public Expression getCondition() {
         return condition;
     }
 
-    public Block getThen()
-    {
+    public Block getThen() {
         return then;
     }
 
-    public Block getOtherwise()
-    {
+    public Block getOtherwise() {
         return otherwise;
     }
 
