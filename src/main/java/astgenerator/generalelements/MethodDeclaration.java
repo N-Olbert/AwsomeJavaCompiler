@@ -11,6 +11,7 @@ import tastgenerator.generalelements.TypedMethodDeclaration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MethodDeclaration extends GeneralThing
 {
@@ -69,5 +70,23 @@ public class MethodDeclaration extends GeneralThing
     @Override
     public TypedMethodDeclaration toTyped(TypeChecker converter) {
         return converter.typeCheck(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MethodDeclaration that = (MethodDeclaration) o;
+        return accessModifier == that.accessModifier &&
+                modifier == that.modifier &&
+                Objects.equals(returnType, that.returnType) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(params, that.params) &&
+                Objects.equals(stmt, that.stmt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(accessModifier, modifier, returnType, name, params, stmt);
     }
 }

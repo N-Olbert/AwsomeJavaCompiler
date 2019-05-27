@@ -14,12 +14,10 @@ import common.*;
 import org.junit.Test;
 
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class ASTFibonacciRekursiv {
 
@@ -91,7 +89,8 @@ public class ASTFibonacciRekursiv {
         assertEquals(expectedCtor.getModifier(), ctor.getModifier());
         assertEquals(expectedCtor.getName(), ctor.getName());
         assertEquals(expectedCtor.getParams().size(), ctor.getParams().size());
-        assertEquals(expectedCtor.getStmt(), ctor.getStmt());
+        assertTrue(ctor.getStmt() instanceof Block);
+        assertEquals(((Block)expectedCtor.getStmt()).getBlockedStatements().size(), ((Block)ctor.getStmt()).getBlockedStatements().size());
         assertEquals(expectedCtor.getReturnType(), ctor.getReturnType());
 
         var fibonacciMethod = untypedClass.getMethods().get(1);
@@ -113,8 +112,5 @@ public class ASTFibonacciRekursiv {
         assertEquals("n", exp1.getName());
         assertEquals(1, exp2.getJint());
         assertEquals(Operators.LESSOREQUAL, operator);
-
-        //TODO: Check more statements
-
     }
 }
