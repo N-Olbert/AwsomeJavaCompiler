@@ -98,16 +98,6 @@ public interface awsomeJavaListener extends ParseTreeListener {
 	 */
 	void exitNArguments(awsomeJavaParser.NArgumentsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link awsomeJavaParser#instVar}.
-	 * @param ctx the parse tree
-	 */
-	void enterInstVar(awsomeJavaParser.InstVarContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link awsomeJavaParser#instVar}.
-	 * @param ctx the parse tree
-	 */
-	void exitInstVar(awsomeJavaParser.InstVarContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link awsomeJavaParser#expression}.
 	 * @param ctx the parse tree
 	 */
@@ -117,6 +107,26 @@ public interface awsomeJavaListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitExpression(awsomeJavaParser.ExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link awsomeJavaParser#basicexpressions}.
+	 * @param ctx the parse tree
+	 */
+	void enterBasicexpressions(awsomeJavaParser.BasicexpressionsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link awsomeJavaParser#basicexpressions}.
+	 * @param ctx the parse tree
+	 */
+	void exitBasicexpressions(awsomeJavaParser.BasicexpressionsContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link awsomeJavaParser#instVar}.
+	 * @param ctx the parse tree
+	 */
+	void enterInstVar(awsomeJavaParser.InstVarContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link awsomeJavaParser#instVar}.
+	 * @param ctx the parse tree
+	 */
+	void exitInstVar(awsomeJavaParser.InstVarContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link awsomeJavaParser#statementExpressions}.
 	 * @param ctx the parse tree
@@ -198,6 +208,36 @@ public interface awsomeJavaListener extends ParseTreeListener {
 	 */
 	void exitIfelse(awsomeJavaParser.IfelseContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link awsomeJavaParser#jIf}.
+	 * @param ctx the parse tree
+	 */
+	void enterJIf(awsomeJavaParser.JIfContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link awsomeJavaParser#jIf}.
+	 * @param ctx the parse tree
+	 */
+	void exitJIf(awsomeJavaParser.JIfContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link awsomeJavaParser#jElseIf}.
+	 * @param ctx the parse tree
+	 */
+	void enterJElseIf(awsomeJavaParser.JElseIfContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link awsomeJavaParser#jElseIf}.
+	 * @param ctx the parse tree
+	 */
+	void exitJElseIf(awsomeJavaParser.JElseIfContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link awsomeJavaParser#jElse}.
+	 * @param ctx the parse tree
+	 */
+	void enterJElse(awsomeJavaParser.JElseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link awsomeJavaParser#jElse}.
+	 * @param ctx the parse tree
+	 */
+	void exitJElse(awsomeJavaParser.JElseContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link awsomeJavaParser#jWhile}.
 	 * @param ctx the parse tree
 	 */
@@ -238,6 +278,26 @@ public interface awsomeJavaListener extends ParseTreeListener {
 	 */
 	void exitBinary(awsomeJavaParser.BinaryContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link awsomeJavaParser#operatorBeforeExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterOperatorBeforeExpr(awsomeJavaParser.OperatorBeforeExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link awsomeJavaParser#operatorBeforeExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitOperatorBeforeExpr(awsomeJavaParser.OperatorBeforeExprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link awsomeJavaParser#operatorAfterExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterOperatorAfterExpr(awsomeJavaParser.OperatorAfterExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link awsomeJavaParser#operatorAfterExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitOperatorAfterExpr(awsomeJavaParser.OperatorAfterExprContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link awsomeJavaParser#baseType}.
 	 * @param ctx the parse tree
 	 */
@@ -257,4 +317,14 @@ public interface awsomeJavaListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitObjectType(awsomeJavaParser.ObjectTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link awsomeJavaParser#operators}.
+	 * @param ctx the parse tree
+	 */
+	void enterOperators(awsomeJavaParser.OperatorsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link awsomeJavaParser#operators}.
+	 * @param ctx the parse tree
+	 */
+	void exitOperators(awsomeJavaParser.OperatorsContext ctx);
 }
