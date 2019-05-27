@@ -23,6 +23,6 @@ public class TypedThis extends TypedExpression
     @Override
     public boolean equals(Object o)
     {
-        return super.equals(o) && o instanceof TypedSuper;
+        return super.equals(o) && o instanceof TypedThis;
     }
 }

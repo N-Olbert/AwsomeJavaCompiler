@@ -17,7 +17,7 @@ public class TypedLocalVarDeclaration extends TypedStatement
     {
         this.variableType = variableType;
         this.name = name;
-        this.objectType = variableType;
+        this.objectType = ObjectType.VoidType;
     }
 
     public ObjectType getVariableType()
