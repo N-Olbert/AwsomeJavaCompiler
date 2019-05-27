@@ -6,7 +6,7 @@ import astgenerator.statements.AssignStatement;
 public class AssignStatementGenerator {
 
     public static AssignStatement generate(awsomeJavaParser.AssignContext assignContext){
-        return new AssignStatement(BasicExpressionGenerator.generate(assignContext.basicexpressions()),
+        return new AssignStatement(BasicExpressionGenerator.generate(assignContext.),
                 ExpressionGenerator.generate(assignContext.expression()));
     }
 }

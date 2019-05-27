@@ -3,19 +3,20 @@ grammar awsomeJava;
 programm: jClass+;
 jClass: AccessModifier? 'class' Identifier classBody;
 constructor: AccessModifier? Identifier'('nMethodParameters')' block;
-classBody: '{'(methodDeclaration|fieldDeclaration)* constructor? (methodDeclaration|fieldDeclaration)*'}';
+mainMethod: 'public' 'static' Void 'main' '(String[]' 'args)' block;
+classBody: '{'(methodDeclaration|fieldDeclaration)* constructor? mainMethod? (methodDeclaration|fieldDeclaration)*'}';
 methodDeclaration: AccessModifier? (objectType|Void) Identifier '('nMethodParameters')' block;
-fieldDeclaration: AccessModifier?  objectType Identifier';';
+fieldDeclaration: AccessModifier?  objectType Identifier ('=' expression)?';';
 methodParameter: objectType Identifier;
 nMethodParameters: (methodParameter)? | methodParameter (','methodParameter)+;
 
 nArguments: expression? | expression (',' expression)* | instVar;
-expression:  basicexpressions | binary | statementExpressions;
-basicexpressions: '(' expression ')' | baseType | instVar | Identifier | unary ;
+expression:  basicexpressions | binary | statementExpressions | '(' expression ')';
+basicexpressions:  baseType | instVar | Identifier | unary';' ;
 instVar:  This '.' Identifier|(This '.')? (Identifier '.')+ Identifier;
-statementExpressions: assign | jNew | methodCall;
-localVarDeclaration: objectType Identifier;
-assign: basicexpressions AssignOperator expression;
+statementExpressions: (assign | jNew | methodCall)';';
+localVarDeclaration: objectType Identifier ('=' expression);
+assign: (instVar | Identifier | localVarDeclaration) AssignOperator expression;
 jNew: 'new' Identifier '('nArguments')';
 methodCall: (instVar'.')? Identifier'('nArguments')';
 statement: ifelse | localVarDeclaration';' | jReturn';' | jWhile | block | assign';' | binary | statementExpressions;
@@ -35,7 +36,6 @@ objectType: 'int'|'char'|'boolean'|'String'|Identifier;
 operators: LogicalOperator|Comperator|AddSubOperator|PointOperator;
 
 AccessModifier: 'public' | 'protected' | 'private';
-//Modifier: 'static'|'final'; //abstract extra
 JBoolean: 'true'|'false';
 JNull: 'null';
 Void: 'void';

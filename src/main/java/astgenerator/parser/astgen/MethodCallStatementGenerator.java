@@ -1,7 +1,6 @@
 package astgenerator.parser.astgen;
 
 import astgenerator.expressions.Expression;
-import astgenerator.expressions.This;
 import astgenerator.parser.generated.awsomeJavaParser;
 import astgenerator.statements.MethodCallStatement;
 
@@ -17,7 +16,8 @@ public class MethodCallStatementGenerator {
             context.nArguments().expression()
                     .forEach(expression -> arguments.add(ExpressionGenerator.generate(expression)));
 
-
+        return new MethodCallStatement(InstVarGenerator.generate(context.instVar()),context.Identifier().getText(),
+                arguments);
     }
 
 }

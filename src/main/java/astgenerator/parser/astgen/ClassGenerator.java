@@ -21,15 +21,10 @@ class ClassGenerator {
             bodyContext.fieldDeclaration().forEach(fieldDecl -> fieldDecls.add(FieldGenerator.generate(fieldDecl)));
         }
 
-        bodyContext.methodDeclaration().forEach(methodDecl -> {
-            System.out.println(methodDecl.Identifier().getText());
-        });
-
         methodDecls.add(MethodGenerator.generateConstructor(bodyContext,classContext.Identifier().getText()));
 
-        bodyContext.methodDeclaration().forEach(methodDecl -> {
-            methodDecls.add(MethodGenerator.generateMethod(methodDecl));
-        });
+        bodyContext.methodDeclaration().forEach(methodDecl ->
+                methodDecls.add(MethodGenerator.generateMethod(methodDecl)));
 
         return new Class(ObjectType.getType(classContext.Identifier().getText()),fieldDecls,methodDecls);
     }

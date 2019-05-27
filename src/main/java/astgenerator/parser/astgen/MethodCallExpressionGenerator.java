@@ -6,7 +6,9 @@ import astgenerator.parser.generated.awsomeJavaParser;
 public class MethodCallExpressionGenerator {
 
     public static MethodCallExpression generate(awsomeJavaParser.MethodCallContext methodCallContext){
-        return new MethodCallExpression(methodCallContext.)
+        return new MethodCallExpression(InstVarGenerator.generate(methodCallContext.instVar()),
+                methodCallContext.Identifier().getText(),
+                ArgumentGenerator.generate(methodCallContext.nArguments()));
     }
 
 }

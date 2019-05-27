@@ -52,6 +52,18 @@ public class awsomeJavaBaseListener implements awsomeJavaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterMainMethod(awsomeJavaParser.MainMethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMainMethod(awsomeJavaParser.MainMethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterClassBody(awsomeJavaParser.ClassBodyContext ctx) { }
 	/**
 	 * {@inheritDoc}

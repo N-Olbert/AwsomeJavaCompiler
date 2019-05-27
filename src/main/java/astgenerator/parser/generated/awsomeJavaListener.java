@@ -38,6 +38,16 @@ public interface awsomeJavaListener extends ParseTreeListener {
 	 */
 	void exitConstructor(awsomeJavaParser.ConstructorContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link awsomeJavaParser#mainMethod}.
+	 * @param ctx the parse tree
+	 */
+	void enterMainMethod(awsomeJavaParser.MainMethodContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link awsomeJavaParser#mainMethod}.
+	 * @param ctx the parse tree
+	 */
+	void exitMainMethod(awsomeJavaParser.MainMethodContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link awsomeJavaParser#classBody}.
 	 * @param ctx the parse tree
 	 */

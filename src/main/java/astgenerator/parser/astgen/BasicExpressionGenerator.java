@@ -5,6 +5,10 @@ import astgenerator.expressions.InstVar;
 import astgenerator.expressions.LocalOrFieldVar;
 import astgenerator.parser.generated.awsomeJavaParser;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 class BasicExpressionGenerator {
 
     static Expression generate(awsomeJavaParser.BasicexpressionsContext basicexpressionsContext){

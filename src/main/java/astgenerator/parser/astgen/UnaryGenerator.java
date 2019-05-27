@@ -5,10 +5,15 @@ import astgenerator.parser.generated.awsomeJavaParser;
 import astgenerator.statements.Block;
 import astgenerator.statements.Return;
 import common.Operators;
+import jdk.jshell.spi.ExecutionControl;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class UnaryGenerator {
 
-    public static Expression generate(awsomeJavaParser.UnaryContext unaryContext){
+    public static Expression generate(awsomeJavaParser.UnaryContext unaryContext) throws ExecutionControl.NotImplementedException {
 
         if(unaryContext.operatorBeforeExpr()!=null) {
             String operator = unaryContext.operatorBeforeExpr().Identifier().getText();
@@ -26,7 +31,7 @@ public class UnaryGenerator {
             } else if ("++".equals(operator)){
                 return new AssignExpression(identifier, new Binary(identifier,new JInteger("1"),Operators.PLUS));
             } else { //--
-                return new AssignExpression(identifier, new Binary(identifier,new JInteger("1"),Operators.MINUS));
+                return new AssignExpression(identifier, new Binary(identifier, new JInteger("1"),Operators.MINUS));
             }
 
         } else { //operator after expression
@@ -41,10 +46,11 @@ public class UnaryGenerator {
             }
 
             if ("++".equals(operator)) {
-                //
+                throw new ExecutionControl.NotImplementedException("Increment after not implemented");
             } else { //--
-                //
+                throw new ExecutionControl.NotImplementedException("Incremented before not implemented");
             }
+
         }
     }
 }

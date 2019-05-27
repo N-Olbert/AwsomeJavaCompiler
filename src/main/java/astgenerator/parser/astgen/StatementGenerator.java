@@ -3,6 +3,7 @@ package astgenerator.parser.astgen;
 import astgenerator.parser.generated.awsomeJavaParser;
 import astgenerator.statements.LocalVarDeclaration;
 import astgenerator.statements.MethodCallStatement;
+import astgenerator.statements.NewStatement;
 import astgenerator.statements.Statement;
 
 public class StatementGenerator {
@@ -23,8 +24,11 @@ public class StatementGenerator {
                     statementContext.statementExpressions();
             if (statementExpressionsContext.methodCall() != null){
                 return MethodCallStatementGenerator.generate(statementExpressionsContext.methodCall());
+            } else if (statementExpressionsContext.assign() != null){
+                return AssignStatementGenerator.generate(statementExpressionsContext.assign());
+            } else { //new
+                return NewStatementGenerator.generate(statementExpressionsContext.jNew());
             }
-            return null;
         }
 
     }

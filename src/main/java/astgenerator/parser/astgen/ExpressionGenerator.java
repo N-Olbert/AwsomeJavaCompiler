@@ -11,16 +11,15 @@ public class ExpressionGenerator {
         } else if (expressionContext.basicexpressions() != null){
             return BasicExpressionGenerator.generate(expressionContext.basicexpressions());
         } else { //statementExpression
-                awsomeJavaParser.StatementExpressionsContext expressionsContext =
-                        expressionContext.statementExpressions();
+            awsomeJavaParser.StatementExpressionsContext statementExpressionsContext =
+                    expressionContext.statementExpressions();
 
-                if (expressionsContext.assign() != null){
-                    return AssignExpressionGenerator.generate(expressionsContext.assign());
-                } else if (expressionsContext.methodCall() != null){
-                    return MethodCallExpressionGenerator.generate(expressionsContext.methodCall());
-                } else {
-                    return NewExpressionGenerator();
-                }
+            if (statementExpressionsContext.assign() != null){
+                return AssignExpressionGenerator.generate(statementExpressionsContext.assign());
+            } else if (statementExpressionsContext.methodCall() != null){
+                return MethodCallExpressionGenerator.generate(statementExpressionsContext.methodCall());
+            } else { //New
+                return NewExpressionGenerator.generate(statementExpressionsContext.jNew());
             }
         }
     }
