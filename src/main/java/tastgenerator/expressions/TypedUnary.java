@@ -34,4 +34,39 @@ public class TypedUnary extends TypedExpression
     public void generateByteCode(MethodVisitor visitor, Context context) {
         Generator.generate(this, visitor, context);
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+        if (!super.equals(o))
+        {
+            return false;
+        }
+
+        TypedUnary that = (TypedUnary) o;
+
+        if (expression != null ? !expression.equals(that.expression) : that.expression != null)
+        {
+            return false;
+        }
+        return operator == that.operator;
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = super.hashCode();
+        result = 31 * result + (expression != null ? expression.hashCode() : 0);
+        result = 31 * result + (operator != null ? operator.hashCode() : 0);
+        return result;
+    }
 }

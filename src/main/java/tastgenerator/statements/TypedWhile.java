@@ -35,4 +35,39 @@ public class TypedWhile extends TypedStatement
     public void generateByteCode(MethodVisitor visitor, Context context) {
         Generator.generate(this, visitor, context);
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+        if (!super.equals(o))
+        {
+            return false;
+        }
+
+        TypedWhile that = (TypedWhile) o;
+
+        if (exp != null ? !exp.equals(that.exp) : that.exp != null)
+        {
+            return false;
+        }
+        return stmt != null ? stmt.equals(that.stmt) : that.stmt == null;
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = super.hashCode();
+        result = 31 * result + (exp != null ? exp.hashCode() : 0);
+        result = 31 * result + (stmt != null ? stmt.hashCode() : 0);
+        return result;
+    }
 }
