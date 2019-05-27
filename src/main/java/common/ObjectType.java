@@ -33,7 +33,7 @@ public class ObjectType {
     }
 
     public String getByteCodeName() {
-        if(typeMap.values().contains(this)) {
+        if("I".equals(getName()) || "Z".equals(getName()) || "C".equals(getName()) || "V".equals(getName())) {
             return getName();
         }
         else {
