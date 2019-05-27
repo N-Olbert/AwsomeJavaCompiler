@@ -1,4 +1,4 @@
-package ASTTests;
+package General;
 
 import TypedASTTests.UntypedProgramGenerator;
 import astgenerator.expressions.*;
@@ -18,7 +18,7 @@ import tastgenerator.statements.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BetterIntAst
+public class BetterInt
 {
     public static Class getBetterIntClass()
     {
@@ -55,15 +55,11 @@ public class BetterIntAst
                 new ArrayList<>() {{ add(new MethodParameter(classType, "y"));}},
                 new Block( new Return(new NewExpression(classType, args))));
 
-        args = new ArrayList<>();
-        args.add(
-                new Binary(
-                        new InstVar(new This(), "x"),
-                        new InstVar(new LocalOrFieldVar("y"), "x"), Operators.LESSTHAN));
-
-        var lessThan = new MethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, classType, "LessThan",
+        var lessThan = new MethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, ObjectType.BoolType, "LessThan",
                 new ArrayList<>() {{ add(new MethodParameter(classType, "y"));}},
-                new Block( new Return(new NewExpression(classType, args))));
+                new Block( new Return(new Binary(
+                        new InstVar(new This(), "x"),
+                        new InstVar(new LocalOrFieldVar("y"), "x"), Operators.LESSTHAN))));
 
         var methods = new ArrayList<MethodDeclaration>();
         methods.add(ctor1);
@@ -75,6 +71,13 @@ public class BetterIntAst
         return UntypedProgramGenerator.getProgram(className, fields, methods).getClasses().get(0);
     }
 
+    public static UntypedProgram getBetterIntProgram()
+    {
+        var program = new UntypedProgram();
+        program.getClasses().add(getBetterIntClass());
+        return program;
+    }
+
     public static TypedClass getTypedBetterIntClass()
     {
         var className = "BetterInt";
@@ -84,54 +87,65 @@ public class BetterIntAst
 
         var ctor1 = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, ObjectType.VoidType, "BetterInt",
                 new ArrayList<>() {{add(new TypedMethodParameter(ObjectType.IntType, "x"));}},
-                new TypedBlock(classType,
+                new TypedBlock(ObjectType.VoidType,
                         new TypedAssignStatement(new TypedInstVar(new TypedThis(classType), "x", ObjectType.IntType),
                         new TypedLocalOrFieldVar(ObjectType.IntType, "x"))));
 
-        /**
         var ctor2 = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, ObjectType.VoidType, "BetterInt",
                 new ArrayList<>(),
-                new Block(new AssignStatement(new InstVar(new This(), "x"), new JInteger("0"))));
+                new TypedBlock(ObjectType.VoidType,
+                               new TypedAssignStatement(new TypedInstVar(new TypedThis(classType), "x", ObjectType.IntType), new TypedInt("0"))));
 
-        List<Expression> args = new ArrayList<>();
+        List<TypedExpression> args = new ArrayList<>();
         args.add(
-                new Binary(
-                        new InstVar(new This(), "x"),
-                        new InstVar(new LocalOrFieldVar("y"), "x"), Operators.PLUS));
+                new TypedBinary(
+                        new TypedInstVar(new TypedThis(classType), "x", ObjectType.IntType),
+                        new TypedInstVar(new TypedLocalOrFieldVar(classType,"y"), "x", ObjectType.IntType),
+                        Operators.PLUS, ObjectType.IntType));
 
-        var add = new MethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, classType, "Add",
-                new ArrayList<>() {{ add(new MethodParameter(classType, "y"));}},
-                new Block( new Return(new NewExpression(classType, args))));
+        var add = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, classType, "Add",
+                new ArrayList<>() {{ add(new TypedMethodParameter(classType, "y"));}},
+                new TypedBlock(classType, new TypedReturn(new TypedNewExpression(classType, args), classType)));
 
         args = new ArrayList<>();
         args.add(
-                new Binary(
-                        new InstVar(new This(), "x"),
-                        new InstVar(new LocalOrFieldVar("y"), "x"), Operators.MINUS));
+                new TypedBinary(
+                        new TypedInstVar(new TypedThis(classType), "x", ObjectType.IntType),
+                        new TypedInstVar(new TypedLocalOrFieldVar(classType,"y"), "x", ObjectType.IntType),
+                        Operators.MINUS, ObjectType.IntType));
 
-        var subtract = new MethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, classType, "Subtract",
-                new ArrayList<>() {{ add(new MethodParameter(classType, "y"));}},
-                new Block( new Return(new NewExpression(classType, args))));
+        var subtract = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, classType, "Subtract",
+                new ArrayList<>() {{ add(new TypedMethodParameter(classType, "y"));}},
+                new TypedBlock(classType, new TypedReturn(new TypedNewExpression(classType, args), classType)));
 
         args = new ArrayList<>();
         args.add(
-                new Binary(
-                        new InstVar(new This(), "x"),
-                        new InstVar(new LocalOrFieldVar("y"), "x"), Operators.LESSTHAN));
+                new TypedBinary(
+                        new TypedInstVar(new TypedThis(classType), "x", classType),
+                        new TypedInstVar(new TypedLocalOrFieldVar(classType, "y"), "x", ObjectType.IntType),
+                        Operators.LESSTHAN, ObjectType.BoolType));
 
-        var lessThan = new MethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, classType, "LessThan",
-                new ArrayList<>() {{ add(new MethodParameter(classType, "y"));}},
-                new Block( new Return(new NewExpression(classType, args))));
+        var lessThan = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, ObjectType.BoolType, "LessThan",
+                new ArrayList<>() {{ add(new TypedMethodParameter(classType, "y"));}},
+                new TypedBlock(ObjectType.BoolType, new TypedReturn(new TypedBinary(
+                        new TypedInstVar(new TypedThis(classType), "x", ObjectType.IntType),
+                        new TypedInstVar(new TypedLocalOrFieldVar(classType, "y"), "x", ObjectType.IntType),
+                        Operators.LESSTHAN, ObjectType.BoolType), ObjectType.BoolType)));
 
-        var methods = new ArrayList<MethodDeclaration>();
+        var methods = new ArrayList<TypedMethodDeclaration>();
         methods.add(ctor1);
         methods.add(ctor2);
         methods.add(add);
         methods.add(subtract);
         methods.add(lessThan);
 
-        return UntypedProgramGenerator.getProgram(className, fields, methods).getClasses().get(0);
-         **/
-        return null;
+        return new TypedClass(classType, fields, methods);
+    }
+
+    public static TypedProgram getTypedBetterIntProgram()
+    {
+        var expected = new TypedProgram(new ArrayList<>());
+        expected.getClasses().add(BetterInt.getTypedBetterIntClass());
+        return expected;
     }
 }
