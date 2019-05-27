@@ -13,6 +13,7 @@ import tastgenerator.expressions.TypedLocalOrFieldVar;
 import tastgenerator.expressions.TypedMethodCallExpression;
 import tastgenerator.expressions.TypedNewExpression;
 import tastgenerator.expressions.TypedThis;
+import tastgenerator.expressions.TypedUnary;
 import tastgenerator.generalelements.TypedClass;
 import tastgenerator.generalelements.TypedFieldDeclaration;
 import tastgenerator.generalelements.TypedMethodDeclaration;
@@ -242,12 +243,52 @@ public abstract class Generator {
             case PLUS:
                 expression.getExpression().generateByteCode(visitor, context);
                 expression.getExpression2().generateByteCode(visitor, context);
-                visitor.visitInsn(IADD);
+                if(isInteger(expression.getObjectType())) {
+                    visitor.visitInsn(IADD);
+                }
+                else {
+                    throw new RuntimeException("Not implemented yet!");
+                }
                 break;
             case MINUS:
                 expression.getExpression().generateByteCode(visitor, context);
                 expression.getExpression2().generateByteCode(visitor, context);
-                visitor.visitInsn(ISUB);
+                if(isInteger(expression.getObjectType())) {
+                    visitor.visitInsn(ISUB);
+                }
+                else {
+                    throw new RuntimeException("Not implemented yet!");
+                }
+                break;
+            case MULTIPLICATION:
+                expression.getExpression().generateByteCode(visitor, context);
+                expression.getExpression2().generateByteCode(visitor, context);
+                if(isInteger(expression.getObjectType())) {
+                    visitor.visitInsn(IMUL);
+                }
+                else {
+                    throw new RuntimeException("Not implemented yet!");
+                }
+                break;
+            case DIVISION:
+                expression.getExpression().generateByteCode(visitor, context);
+                expression.getExpression2().generateByteCode(visitor, context);
+                if(isInteger(expression.getObjectType())) {
+                    visitor.visitInsn(IDIV);
+                }
+                else {
+                    throw new RuntimeException("Not implemented yet!");
+                }
+                break;
+            case MODULO:
+                expression.getExpression().generateByteCode(visitor, context);
+                expression.getExpression2().generateByteCode(visitor, context);
+                if(isInteger(expression.getObjectType())) {
+                    visitor.visitInsn(IREM);
+                }
+                else {
+                    throw new RuntimeException("Not implemented yet!");
+                }
                 break;
             default:
                 generateBinary(expression, visitor, context);
@@ -257,35 +298,53 @@ public abstract class Generator {
 
     public static void generateBinary(TypedBinary expression, MethodVisitor visitor, Context context) {
         Label label = new Label();
+        Label skip = new Label();
         Label finish = new Label();
         switch(expression.getOperator()) {
             case LESSOREQUAL:
                 expression.getExpression().generateByteCode(visitor, context);
                 expression.getExpression2().generateByteCode(visitor, context);
-                visitor.visitJumpInsn(IF_ICMPGT, label);
+                if(isInteger(expression.getObjectType())) {
+                    visitor.visitJumpInsn(IF_ICMPGT, label);
+                }
+                else {
+                    throw new RuntimeException("Not implemented yet!");
+                }
                 break;
             case LESSTHAN:
                 expression.getExpression().generateByteCode(visitor, context);
                 expression.getExpression2().generateByteCode(visitor, context);
-                visitor.visitJumpInsn(IF_ICMPGE, label);
+                if(isInteger(expression.getObjectType())) {
+                    visitor.visitJumpInsn(IF_ICMPGE, label);
+                }
+                else {
+                    throw new RuntimeException("Not implemented yet!");
+                }
                 break;
             case GREATEROREQUAL:
                 expression.getExpression().generateByteCode(visitor, context);
                 expression.getExpression2().generateByteCode(visitor, context);
-                visitor.visitJumpInsn(IF_ICMPLT, label);
+                if(isInteger(expression.getObjectType())) {
+                    visitor.visitJumpInsn(IF_ICMPLT, label);
+                }
+                else {
+                    throw new RuntimeException("Not implemented yet!");
+                }
                 break;
             case GREATERTHAN:
                 expression.getExpression().generateByteCode(visitor, context);
                 expression.getExpression2().generateByteCode(visitor, context);
-                visitor.visitJumpInsn(IF_ICMPLE, label);
+                if(isInteger(expression.getObjectType())) {
+                    visitor.visitJumpInsn(IF_ICMPLE, label);
+                }
+                else {
+                    throw new RuntimeException("Not implemented yet!");
+                }
                 break;
             case EQUALS:
                 expression.getExpression().generateByteCode(visitor, context);
                 expression.getExpression2().generateByteCode(visitor, context);
-                if((expression.getExpression().getObjectType().getName().equals("I") &&
-                        expression.getExpression2().getObjectType().getName().equals("I")) ||
-                        expression.getExpression().getObjectType().getName().equals("C") &&
-                                expression.getExpression2().getObjectType().getName().equals("C")) {
+                if(isInteger(expression.getObjectType())) {
                     visitor.visitJumpInsn(IF_ICMPNE, label);
                 }
                 else {
@@ -295,10 +354,7 @@ public abstract class Generator {
             case NOTEQUALS:
                 expression.getExpression().generateByteCode(visitor, context);
                 expression.getExpression2().generateByteCode(visitor, context);
-                if((expression.getExpression().getObjectType().getName().equals("I") &&
-                        expression.getExpression2().getObjectType().getName().equals("I")) ||
-                        expression.getExpression().getObjectType().getName().equals("C") &&
-                                expression.getExpression2().getObjectType().getName().equals("C")) {
+                if(isInteger(expression.getObjectType())) {
                     visitor.visitJumpInsn(IF_ICMPEQ, label);
                 }
                 else {
@@ -306,9 +362,28 @@ public abstract class Generator {
                 }
                 break;
             case AND:
+                expression.getExpression().generateByteCode(visitor, context);
+                visitor.visitJumpInsn(IFEQ, label);
+                expression.getExpression2().generateByteCode(visitor, context);
+                visitor.visitJumpInsn(IFEQ, label);
+            case OR:
+                expression.getExpression().generateByteCode(visitor, context);
+                visitor.visitJumpInsn(IFNE, skip);
+                expression.getExpression2().generateByteCode(visitor, context);
+                visitor.visitJumpInsn(IFEQ, label);
+            case XOR:
+                expression.getExpression().generateByteCode(visitor, context);
+                Label firstTrue = new Label();
+                visitor.visitJumpInsn(IFNE, firstTrue);
+                expression.getExpression2().generateByteCode(visitor, context);
+                visitor.visitJumpInsn(IFEQ, label);
+                visitor.visitLabel(firstTrue);
+                expression.getExpression2().generateByteCode(visitor, context);
+                visitor.visitJumpInsn(IFNE, label);
             default:
                 throw new RuntimeException(expression.getOperator() + " Not implemented yet!");
         }
+        visitor.visitLabel(skip);
         visitor.visitInsn(ICONST_1);
         visitor.visitJumpInsn(GOTO, finish);
         visitor.visitLabel(label);
@@ -353,9 +428,28 @@ public abstract class Generator {
         expression.getParameters().forEach(param -> param.generateByteCode(visitor, context));
         visitor.visitMethodInsn(INVOKESPECIAL, expression.getNewType().getName(), "<init>",
                 "(" + getType(expression.getParameters()) + ")V", false);
-
     }
 
+    public static void generate(TypedUnary expression, MethodVisitor visitor, Context context) {
+        Label label = new Label();
+        Label finish = new Label();
+        switch(expression.getOperator()) {
+            case NEGATION:
+                expression.getExpression().generateByteCode(visitor, context);
+                visitor.visitJumpInsn(IFEQ, label);
+                break;
+            default:
+                throw new RuntimeException("Not implemented yet!");
+        }
+        visitor.visitInsn(ICONST_0);
+        visitor.visitLabel(label);
+        visitor.visitInsn(ICONST_1);
+        visitor.visitLabel(finish);
+    }
+
+    public static boolean isInteger(ObjectType type) {
+        return "I".equals(type.getName()) || "C".equals(type.getName()) || "Z".equals(type.getName());
+    }
 
     public static void generate(TypedStatement statement, MethodVisitor visitor, Context context) {
         throw new RuntimeException("Not implemented yet!");
