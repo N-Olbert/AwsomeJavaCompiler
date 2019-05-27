@@ -68,6 +68,10 @@ public class FieldDeclaration extends GeneralThing
         return modifier;
     }
 
+    public Expression getExpression() {
+        return expression;
+    }
+
     @Override
     public TypedGeneralThing toTyped(TypeChecker converter) {
         return converter.typeCheck(this);
