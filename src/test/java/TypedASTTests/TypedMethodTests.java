@@ -30,7 +30,7 @@ public class TypedMethodTests
     @Test
     public void testConstructor2()
     {
-        var ctor = new MethodDeclaration(ObjectType.VoidType, "Test", new ArrayList<>(), new Block(null));
+        var ctor = new MethodDeclaration(ObjectType.VoidType, "Test", new ArrayList<>(), new Block((ArrayList<Statement>) null));
         var converter = new TypeCheckerInstance(new UntypedProgram());
         var typed = ctor.toTyped(converter);
         assertEquals(typed.getObjectType(), ObjectType.VoidType);
