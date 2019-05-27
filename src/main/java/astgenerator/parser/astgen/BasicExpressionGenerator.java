@@ -14,8 +14,6 @@ class BasicExpressionGenerator {
     static Expression generate(awsomeJavaParser.BasicexpressionsContext basicexpressionsContext){
         if (basicexpressionsContext.baseType() != null){
             return BaseTypeGenerator.generate(basicexpressionsContext.baseType());
-        } else if (basicexpressionsContext.expression() != null){
-            return ExpressionGenerator.generate(basicexpressionsContext.expression());
         } else if (basicexpressionsContext.instVar() != null){
             return InstVarGenerator.generate(basicexpressionsContext.instVar());
         } else if (basicexpressionsContext.unary() != null){

@@ -148,16 +148,6 @@ public interface awsomeJavaListener extends ParseTreeListener {
 	 */
 	void exitStatementExpressions(awsomeJavaParser.StatementExpressionsContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link awsomeJavaParser#localVarDeclaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterLocalVarDeclaration(awsomeJavaParser.LocalVarDeclarationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link awsomeJavaParser#localVarDeclaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitLocalVarDeclaration(awsomeJavaParser.LocalVarDeclarationContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link awsomeJavaParser#assign}.
 	 * @param ctx the parse tree
 	 */
@@ -167,6 +157,16 @@ public interface awsomeJavaListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAssign(awsomeJavaParser.AssignContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link awsomeJavaParser#localVarDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterLocalVarDeclaration(awsomeJavaParser.LocalVarDeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link awsomeJavaParser#localVarDeclaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitLocalVarDeclaration(awsomeJavaParser.LocalVarDeclarationContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link awsomeJavaParser#jNew}.
 	 * @param ctx the parse tree
