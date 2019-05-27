@@ -56,7 +56,7 @@ public class TypedAssignTests
         assertEquals(typed.getObjectType(), ObjectType.BoolType);
         var localVar = (TypedLocalVarDeclaration)((TypedBlock)typed).getBlockedStatements().get(0);
         assertNotNull(localVar);
-        assertEquals(localVar.getObjectType(), ObjectType.BoolType);
+        assertEquals(localVar.getObjectType(), ObjectType.VoidType);
 
         var ifElse = (TypedIfElse)((TypedBlock)typed).getBlockedStatements().get(1);
         assertEquals(ifElse.getObjectType(), ObjectType.BoolType);
