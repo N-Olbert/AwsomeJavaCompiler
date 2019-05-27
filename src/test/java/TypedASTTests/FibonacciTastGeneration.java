@@ -1,6 +1,10 @@
 package TypedASTTests;
 
 import BytecodeTests.TypedProgramGenerator;
+import astgenerator.expressions.*;
+import astgenerator.generalelements.MethodDeclaration;
+import astgenerator.generalelements.UntypedProgram;
+import astgenerator.statements.MethodCallStatement;
 import common.AccessModifier;
 import common.Modifier;
 import common.ObjectType;
@@ -13,7 +17,10 @@ import tastgenerator.generalelements.TypedMethodParameter;
 import tastgenerator.generalelements.TypedProgram;
 import tastgenerator.statements.*;
 
+import javax.enterprise.inject.Typed;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class FibonacciTastGeneration
 {
@@ -153,12 +160,61 @@ public class FibonacciTastGeneration
                 }});
     }
 
-    @Test
-    public void TestEquals()
+    public static TypedProgram getFibonacciRecursiveWithBetterInt()
     {
-        var p1 = getFibonacciTastIterative();
-        var p2 = getFibonacciTastIterative();
+        var className = "Fibonacci";
+        var classType = ObjectType.getType(className);
+        var methodName = "fibonacci";
+        var methodParams = new ArrayList<TypedMethodParameter>();
+        var betterInt = "BetterInt";
+        methodParams.add(new TypedMethodParameter(ObjectType.getType(betterInt), "n"));
+        var condition = new TypedMethodCallExpression(
+                new TypedLocalOrFieldVar(ObjectType.getType(betterInt), "n"), "LessThan",
+                new ArrayList <>(){{
+                    add(new TypedNewExpression(ObjectType.getType(betterInt),
+                            new ArrayList <>(){{
+                                add(new TypedInt("2"));
+                            }})
+                    );
+                }} ,
+                ObjectType.BoolType
+        );
+        var innermethodCall1 = new ArrayList<TypedExpression>() {{
+            add(new TypedNewExpression(ObjectType.getType(betterInt), new ArrayList <>(){{add(new TypedInt("1"));}}));
+        }};
+        var methodCall1 = new ArrayList<TypedExpression>() {{
+            add(new TypedMethodCallExpression(new TypedLocalOrFieldVar(ObjectType.getType(betterInt), "n"),
+                    "Subtract", innermethodCall1, ObjectType.getType(betterInt)));
+        }};
 
-        Assert.assertEquals(p1, p2);
+        var innermethodCall3 = new ArrayList<TypedExpression>() {{
+            add(new TypedNewExpression(ObjectType.getType(betterInt), new ArrayList <>(){{add(new TypedInt("2"));}}));
+        }};
+        var innermethodCall2 = new ArrayList<TypedExpression>(){{
+            add(new TypedMethodCallExpression(new TypedLocalOrFieldVar(ObjectType.getType(betterInt), "n"), "Subtract", innermethodCall3, ObjectType.getType(betterInt)));
+        }};
+        var methodCall2 = new ArrayList<TypedExpression>() {{
+            add(new TypedMethodCallExpression(new TypedThis(classType), methodName, innermethodCall2, ObjectType.getType(betterInt)));
+        }};
+        var then = new TypedReturn(new TypedLocalOrFieldVar(ObjectType.getType(betterInt), "n"), ObjectType.getType(betterInt));
+        var otherwise = new TypedReturn(
+                new TypedMethodCallExpression(
+                        new TypedMethodCallExpression(new TypedThis(classType), methodName, methodCall1,ObjectType.getType(betterInt)),
+                        "Add",
+                        methodCall2,
+                        ObjectType.getType(betterInt))
+                , ObjectType.getType(betterInt)
+        );
+
+        var block = new TypedBlock(ObjectType.IntType,new TypedIfElse(condition, new TypedBlock(ObjectType.getType(betterInt), then), new TypedBlock(ObjectType.getType(betterInt), otherwise), ObjectType.getType(betterInt)));
+
+        var ctor = new TypedMethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.VoidType,
+                className, new ArrayList<>(), new TypedBlock(new ArrayList<>(), ObjectType.VoidType));
+        ctor.setObjectType(ObjectType.VoidType);
+
+        var method = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, ObjectType.VoidType, methodName,
+                new ArrayList <>() {{add(new TypedMethodParameter(ObjectType.getType(betterInt), "n"));}}, block);
+
+        return TypedProgramGenerator.getProgram(className, new ArrayList <>(), Collections.singletonList(method));
     }
 }
