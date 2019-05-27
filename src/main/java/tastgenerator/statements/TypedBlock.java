@@ -28,4 +28,34 @@ public class TypedBlock extends TypedStatement
     public void generateByteCode(MethodVisitor visitor, Context context) {
         Generator.generate(this, visitor, context);
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+        if (!super.equals(o))
+        {
+            return false;
+        }
+
+        TypedBlock that = (TypedBlock) o;
+
+        return blockedStatements != null ? blockedStatements.equals(that.blockedStatements) : that.blockedStatements == null;
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = super.hashCode();
+        result = 31 * result + (blockedStatements != null ? blockedStatements.hashCode() : 0);
+        return result;
+    }
 }
