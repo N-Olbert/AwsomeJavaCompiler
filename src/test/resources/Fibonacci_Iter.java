@@ -1,6 +1,6 @@
 public class Fibonacci
 {
-    int fibonacci(int n)
+    public int fibonacci(int n)
     {
         if(n <2)
         {
