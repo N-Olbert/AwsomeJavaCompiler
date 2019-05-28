@@ -394,7 +394,7 @@ public abstract class Generator {
 
     public static void generate(TypedMethodCallExpression expression, MethodVisitor visitor, Context context) {
         String type =
-                "(" + getType(expression.getParameters()) + ")" + expression.getObjectType().getName();
+                "(" + getType(expression.getParameters()) + ")" + expression.getObjectType().getByteCodeName();
         expression.getObject().generateByteCode(visitor, context);
         expression.getParameters().forEach(exp -> exp.generateByteCode(visitor, context));
         visitor.visitMethodInsn(INVOKEVIRTUAL, expression.getObject().getObjectType().getName(),
