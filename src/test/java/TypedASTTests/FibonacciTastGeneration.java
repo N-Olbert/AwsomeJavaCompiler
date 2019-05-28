@@ -165,9 +165,7 @@ public class FibonacciTastGeneration
         var className = "Fibonacci";
         var classType = ObjectType.getType(className);
         var methodName = "fibonacci";
-        var methodParams = new ArrayList<TypedMethodParameter>();
         var betterInt = "BetterInt";
-        methodParams.add(new TypedMethodParameter(ObjectType.getType(betterInt), "n"));
         var condition = new TypedMethodCallExpression(
                 new TypedLocalOrFieldVar(ObjectType.getType(betterInt), "n"), "LessThan",
                 new ArrayList <>(){{
@@ -212,9 +210,13 @@ public class FibonacciTastGeneration
                 className, new ArrayList<>(), new TypedBlock(new ArrayList<>(), ObjectType.VoidType));
         ctor.setObjectType(ObjectType.VoidType);
 
-        var method = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, ObjectType.VoidType, methodName,
+        var method = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, ObjectType.getType(betterInt), methodName,
                 new ArrayList <>() {{add(new TypedMethodParameter(ObjectType.getType(betterInt), "n"));}}, block);
 
-        return TypedProgramGenerator.getProgram(className, new ArrayList <>(), Collections.singletonList(method));
+
+        return TypedProgramGenerator.getProgram(className, new ArrayList <>(), new ArrayList <>() {{
+            add(ctor);
+            add(method);
+        }});
     }
 }

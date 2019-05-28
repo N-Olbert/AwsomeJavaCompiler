@@ -32,22 +32,26 @@ public class BetterIntFibonacciBytecodeTest
         List<ClassWriter> cws = byteCodeGen.generate(program);
         assertNotNull(cws);
 
-        assertEquals(cws.size(), 1);
+        assertEquals(cws.size(), 2);
         byte[] bytes = cws.get(0).toByteArray();
+        byte[] bytes2 = cws.get(1).toByteArray();
         BytecodeTests.saveClass(bytes, "target/fibonacciBetterInt.class");
+        BytecodeTests.saveClass(bytes2, "target/fibonacciBetterInt2.class");
         BytecodeLoader loader = new BytecodeLoader(bytes);
-        var Class = loader.findClass("Fibonacci");
-        var betterInt = loader.findClass("BetterInt");
-        assertNotNull(Class);
-        assertNotNull(betterInt);
+        BytecodeLoader betterIntLoader = new BytecodeLoader(bytes2);
+        //var Class = loader.findClass("Fibonacci");
+        var betterInt = betterIntLoader.findClass("BetterInt");
+        //assertNotNull(Class);
+        //assertNotNull(betterInt);
         Object classObject;
         Object betterIntObject;
         try {
-            var betterIntConstructor = loader.getConstructor("BetterInt", int.class);
+            var betterIntConstructor = betterIntLoader.getConstructor("BetterInt", int.class);
             betterIntObject = betterIntConstructor.newInstance(11);
-            var constructor = loader.getConstructor("Fibonacci");
-            classObject = constructor.newInstance();
-            var method = loader.getMethod("Fibonacci", "fibonacci");
+            var theClass = loader.findClass("Fibonacci");
+            assertEquals(theClass.getDeclaredConstructors().length, 1);
+            classObject = theClass.getDeclaredConstructors()[0].newInstance();
+            var method = loader.getMethod("Fibonacci", "fibonacci", betterInt);
             assertEquals(int.class, method.getReturnType());
             assertEquals(89, method.invoke(classObject, betterIntObject));
         }
