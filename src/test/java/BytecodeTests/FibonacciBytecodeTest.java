@@ -1,44 +1,25 @@
 package BytecodeTests;
 
 import General.BytecodeLoader;
-import TypedASTTests.FibonacciTastGeneration;
-import common.AccessModifier;
+import General.Fibonacci;
 import common.Global;
-import common.Modifier;
-import common.ObjectType;
-import common.Operators;
 import org.junit.Test;
-import tastgenerator.expressions.TypedBinary;
-import tastgenerator.expressions.TypedInt;
-import tastgenerator.expressions.TypedLocalOrFieldVar;
-import tastgenerator.expressions.TypedMethodCallExpression;
-import tastgenerator.expressions.TypedThis;
-import tastgenerator.generalelements.TypedMethodDeclaration;
-import tastgenerator.generalelements.TypedMethodParameter;
 import tastgenerator.generalelements.TypedProgram;
-import tastgenerator.statements.TypedAssignStatement;
-import tastgenerator.statements.TypedBlock;
-import tastgenerator.statements.TypedIfElse;
-import tastgenerator.statements.TypedLocalVarDeclaration;
-import tastgenerator.statements.TypedReturn;
-import tastgenerator.statements.TypedStatement;
-import tastgenerator.statements.TypedWhile;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
 public class FibonacciBytecodeTest {
     @Test
     public void testFibonacciRecursive() throws Exception {
-        var program = FibonacciTastGeneration.getFibonacciTastRecursion();
+        var program = Fibonacci.getTypedRecursiveFibonacciProgram();
         assertFibonacci(program);
     }
 
     @Test
     public void testFibonacciIterative() throws Exception {
-        var program = FibonacciTastGeneration.getFibonacciTastIterative();
+        var program = Fibonacci.getTypedIterativeFibonacciProgram();
         assertFibonacci(program);
     }
 

@@ -70,7 +70,6 @@ public class ASTAutoGenerateReturnAtVoidMethodTest {
 
         assertEquals(expectedVoidMethod.getReturnType(), voidMethod.getReturnType());
         assertTrue(voidMethod.getStmt() instanceof Block);
-        assertEquals(((Block)expectedVoidMethod.getStmt()).getBlockedStatements().size(), ((Block)voidMethod.getStmt()).getBlockedStatements().size());
         assertTrue(((Block)expectedVoidMethod.getStmt()).getBlockedStatements().get(0) instanceof Return);
         assertEquals(expectedVoidMethod.getParams().size(), voidMethod.getParams().size());
         assertEquals(expectedVoidMethod.getName(), voidMethod.getName());

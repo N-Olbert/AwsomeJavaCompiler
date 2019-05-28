@@ -17,7 +17,7 @@ public class Fibonacci
                 temp=b;
                 b=a+b;
                 a=temp;
-                i++;
+                i = i + 1;
             }
 
             return a + b;
