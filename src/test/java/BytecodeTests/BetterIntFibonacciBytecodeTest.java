@@ -3,24 +3,20 @@ package BytecodeTests;
 import General.BetterInt;
 import General.BytecodeLoader;
 import TypedASTTests.FibonacciTastGeneration;
-import common.BytecodeGenerator;
-import common.Factory;
 import common.Global;
 import org.junit.Test;
 import org.objectweb.asm.ClassWriter;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.ibm.icu.impl.Assert.fail;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
-public class BetterIntFibonacciBytecodeTest
-{
+public class BetterIntFibonacciBytecodeTest {
     @Test
-    public void FibonacciBetterIntBytecode()
-    {
+    public void FibonacciBetterIntBytecode() {
         var program = FibonacciTastGeneration.getFibonacciRecursiveWithBetterInt();
         program.getClasses().add(BetterInt.getTypedBetterIntClass());
 
@@ -37,30 +33,30 @@ public class BetterIntFibonacciBytecodeTest
         byte[] bytes2 = cws.get(1).toByteArray();
         BytecodeTests.saveClass(bytes, "target/fibonacciBetterInt.class");
         BytecodeTests.saveClass(bytes2, "target/fibonacciBetterInt2.class");
-        BytecodeLoader loader = new BytecodeLoader(bytes);
-        BytecodeLoader betterIntLoader = new BytecodeLoader(bytes2);
+        var map = new HashMap<String, byte[]>();
+        map.put("Fibonacci", bytes);
+        map.put("BetterInt", bytes2);
+        BytecodeLoader loader = new BytecodeLoader(map);
         //var Class = loader.findClass("Fibonacci");
-        var betterInt = betterIntLoader.findClass("BetterInt");
+        var betterInt = loader.findClass("BetterInt");
         //assertNotNull(Class);
         //assertNotNull(betterInt);
         Object classObject;
         Object betterIntObject;
         try {
-            var betterIntConstructor = betterIntLoader.getConstructor("BetterInt", int.class);
+            var betterIntConstructor = loader.getConstructor("BetterInt", int.class);
             betterIntObject = betterIntConstructor.newInstance(11);
             var theClass = loader.findClass("Fibonacci");
             assertEquals(theClass.getDeclaredConstructors().length, 1);
-            classObject = theClass.getDeclaredConstructors()[0].newInstance();
+            classObject = loader.getConstructor("Fibonacci").newInstance();
             var method = loader.getMethod("Fibonacci", "fibonacci", betterInt);
-            assertEquals(int.class, method.getReturnType());
-            assertEquals(89, method.invoke(classObject, betterIntObject));
+            assertEquals(betterInt, method.getReturnType());
+            assertEquals(89,
+                    loader.getField("BetterInt", "x").get(method.invoke(classObject, betterIntObject)));
         }
-        catch(IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            fail("fibonacci" + " failed");
-        }
-        catch (InstantiationException e)
-        {
+        catch(IllegalAccessException | NoSuchMethodException | InvocationTargetException | InstantiationException | NoSuchFieldException e) {
             e.printStackTrace();
+            fail("fibonacci" + " failed");
         }
     }
 }
