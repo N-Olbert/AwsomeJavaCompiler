@@ -10,22 +10,26 @@ public class InstVarGenerator {
 
     static InstVar generate(awsomeJavaParser.InstVarContext instVarContext){
 
-        Object generated = generateInstVar(instVarContext.Identifier());
+        Object generated = generateInstVar(instVarContext.Identifier(),null,0);
 
-        if (generated instanceof LocalOrFieldVar){
-            if (instVarContext.This() != null){
-                return new InstVar(new This(),((LocalOrFieldVar) generated).getName());
-            }
+        if (generated instanceof LocalOrFieldVar){ //this
+            return new InstVar(new This(),((LocalOrFieldVar) generated).getName());
         }
-        return (InstVar) generateInstVar(instVarContext.Identifier());
+        return (InstVar) generated;
     }
 
-    private static Expression generateInstVar(List<TerminalNode> identifiers){
-        if (identifiers.size() > 1){
-            return new InstVar(generateInstVar(identifiers.subList(1,identifiers.size())),identifiers.get(0).getText());
+    private static Expression generateInstVar(List<TerminalNode> identifiers, Expression previous, int position){
+
+        if (previous == null){
+            previous = new LocalOrFieldVar(identifiers.get(position).getText());
         } else {
-            return new LocalOrFieldVar(identifiers.get(0).getText());
+            previous = new InstVar(previous,identifiers.get(position).getText());
         }
+
+        if (position < identifiers.size()-1){
+            return generateInstVar(identifiers,previous,position+1);
+        }
+        return previous;
     }
 
 }

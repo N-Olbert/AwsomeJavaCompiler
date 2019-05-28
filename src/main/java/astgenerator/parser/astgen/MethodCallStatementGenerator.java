@@ -12,6 +12,7 @@ public class MethodCallStatementGenerator {
     static MethodCallStatement generate(awsomeJavaParser.MethodCallContext context){
 
         List<Expression> arguments = new ArrayList<>();
+
         if (context.nArguments() != null)
             context.nArguments().expression()
                     .forEach(expression -> arguments.add(ExpressionGenerator.generate(expression)));

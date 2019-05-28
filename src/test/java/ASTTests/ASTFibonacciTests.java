@@ -2,7 +2,6 @@ package ASTTests;
 
 import General.Fibonacci;
 import General.ResourceHelper;
-import astgenerator.generalelements.UntypedProgram;
 import common.*;
 import org.junit.Test;
 

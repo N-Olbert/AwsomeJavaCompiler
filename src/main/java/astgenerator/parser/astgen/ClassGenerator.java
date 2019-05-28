@@ -4,6 +4,7 @@ import astgenerator.generalelements.Class;
 import astgenerator.generalelements.FieldDeclaration;
 import astgenerator.generalelements.MethodDeclaration;
 import astgenerator.parser.generated.awsomeJavaParser;
+import common.AccessModifier;
 import common.ObjectType;
 
 import java.util.ArrayList;

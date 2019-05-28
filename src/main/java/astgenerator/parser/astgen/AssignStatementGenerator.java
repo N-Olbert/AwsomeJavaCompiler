@@ -14,7 +14,6 @@ public class AssignStatementGenerator {
 
         if (assignContext.Equal() != null) {
             if (assignContext.instVar() != null) {
-                System.out.println(assignContext.getText());
                 return new AssignStatement(InstVarGenerator.generate(assignContext.instVar()),
                         ExpressionGenerator.generate(assignContext.expression()));
             } else { //localOrFieldVar

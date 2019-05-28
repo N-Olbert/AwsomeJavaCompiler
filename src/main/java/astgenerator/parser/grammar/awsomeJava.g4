@@ -4,7 +4,7 @@ programm: jClass+;
 jClass: AccessModifier? 'class' Identifier classBody;
 constructor: AccessModifier? Identifier LBracket nMethodParameters RBracket block;
 mainMethod: AccessModifier 'static' Void 'main' LBracket 'String[]' 'args' RBracket block;
-classBody: CurlyLBracket (methodDeclaration|fieldDeclaration)* (constructor*) mainMethod?
+classBody: CurlyLBracket (methodDeclaration|fieldDeclaration)* constructor* mainMethod?
     (methodDeclaration|fieldDeclaration)* CurlyRBracket;
 methodDeclaration: AccessModifier? (objectType|Void) Identifier LBracket nMethodParameters RBracket block;
 fieldDeclaration: AccessModifier?  objectType Identifier (Equal expression)? Semicolon;

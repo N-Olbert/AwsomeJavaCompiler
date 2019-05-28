@@ -34,6 +34,16 @@ class MethodGenerator{
                     block));
         });
 
+        if (constructorDecls.size() == 0){
+            
+            constructorDecls.add(new MethodDeclaration(AccessModifier.PACKAGE_PRIVATE,
+                    Modifier.NONE,
+                    ObjectType.VoidType,
+                    classname,
+                    new ArrayList<>(),
+                    new Block(new ArrayList<>())));
+        }
+
         return constructorDecls;
     }
 
