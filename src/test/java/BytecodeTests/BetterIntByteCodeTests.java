@@ -41,6 +41,11 @@ public class BetterIntByteCodeTests {
         var add = theClass.getDeclaredMethod("Add", theClass);
         add.setAccessible(true);
 
+        var sub = theClass.getDeclaredMethod("Subtract", theClass);
+        sub.setAccessible(true);
+        var res = sub.invoke(bi10, bi5);
+        assertNotNull(res);
+
         var biResult = add.invoke(bi10, biM5);
         assertNotNull(biResult);
         assertEquals(5, field.get(biResult));
