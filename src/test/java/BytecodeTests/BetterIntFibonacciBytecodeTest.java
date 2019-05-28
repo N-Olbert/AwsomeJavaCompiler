@@ -1,5 +1,6 @@
 package BytecodeTests;
 
+import General.BetterInt;
 import General.BytecodeLoader;
 import TypedASTTests.FibonacciTastGeneration;
 import common.BytecodeGenerator;
@@ -21,6 +22,7 @@ public class BetterIntFibonacciBytecodeTest
     public void FibonacciBetterIntBytecode()
     {
         var program = FibonacciTastGeneration.getFibonacciRecursiveWithBetterInt();
+        program.getClasses().add(BetterInt.getTypedBetterIntClass());
 
         var factory = Global.getFactory();
         assertNotNull(factory);
@@ -35,14 +37,19 @@ public class BetterIntFibonacciBytecodeTest
         BytecodeTests.saveClass(bytes, "target/fibonacciBetterInt.class");
         BytecodeLoader loader = new BytecodeLoader(bytes);
         var Class = loader.findClass("Fibonacci");
+        var betterInt = loader.findClass("BetterInt");
         assertNotNull(Class);
+        assertNotNull(betterInt);
         Object classObject;
+        Object betterIntObject;
         try {
+            var betterIntConstructor = loader.getConstructor("BetterInt", int.class);
+            betterIntObject = betterIntConstructor.newInstance(11);
             var constructor = loader.getConstructor("Fibonacci");
             classObject = constructor.newInstance();
             var method = loader.getMethod("Fibonacci", "fibonacci");
             assertEquals(int.class, method.getReturnType());
-            assertEquals(3, method.invoke(classObject/* ToDo BetterInt übergeben */));
+            assertEquals(89, method.invoke(classObject, betterIntObject));
         }
         catch(IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             fail("fibonacci" + " failed");
