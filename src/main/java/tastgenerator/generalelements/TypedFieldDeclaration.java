@@ -5,6 +5,7 @@ import astgenerator.generalelements.GeneralThing;
 import common.AccessModifier;
 import common.Modifier;
 import common.ObjectType;
+import tastgenerator.expressions.TypedExpression;
 
 public class TypedFieldDeclaration extends TypedGeneralThing
 {
@@ -12,6 +13,7 @@ public class TypedFieldDeclaration extends TypedGeneralThing
     private Modifier modifier;
     private ObjectType variableType;
     private String name;
+    private TypedExpression expression;
 
     public TypedFieldDeclaration(AccessModifier accessModifier, Modifier modifier, ObjectType variableType, String name)
     {
@@ -20,6 +22,17 @@ public class TypedFieldDeclaration extends TypedGeneralThing
         this.variableType = variableType;
         this.name = name;
         this.objectType = variableType;
+        this.expression = null;
+    }
+
+    public TypedFieldDeclaration(AccessModifier accessModifier, Modifier modifier, ObjectType variableType, String name, TypedExpression expression)
+    {
+        this.accessModifier = accessModifier;
+        this.modifier = modifier;
+        this.variableType = variableType;
+        this.name = name;
+        this.objectType = variableType;
+        this.expression = expression;
     }
 
     public String getName()
@@ -37,5 +50,9 @@ public class TypedFieldDeclaration extends TypedGeneralThing
     public Modifier getModifier()
     {
         return modifier;
+    }
+
+    public TypedExpression getExpression() {
+        return expression;
     }
 }

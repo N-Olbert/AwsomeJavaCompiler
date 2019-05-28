@@ -35,6 +35,10 @@ public class LocalVarDeclaration extends Statement
         return name;
     }
 
+    public Expression getExpression() {
+        return expression;
+    }
+
     @Override
     public TypedStatement toTyped(TypeChecker converter) {
         return converter.typeCheck(this);
