@@ -297,8 +297,7 @@ public class TypeCheckerInstance implements TypeChecker
         return new TypedFieldDeclaration(toCheck.getAccessModifier(),
                                          toCheck.getModifier(),
                                          toCheck.getVariableType(),
-                                         toCheck.getName(),
-                                         typedExpression);
+                                         toCheck.getName());
     }
 
     @Override
