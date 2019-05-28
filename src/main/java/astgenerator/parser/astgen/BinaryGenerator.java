@@ -50,12 +50,17 @@ public class BinaryGenerator {
                     }
                     newExpressions.add(new Binary(expressions.get(i), expressions.get(i + 1), getoperatorFromString(operators.get(i))));
                 } else {
+                    if (newExpressions.isEmpty()) {
+                        newExpressions.add(expressions.get(i));
+                    }
                     newExpressions.add(expressions.get(i + 1));
                     newOperators.add(operators.get(i));
                 }
             }
-            expressions = newExpressions;
-            operators = newOperators;
+            if (operators.size() > 0) {
+                expressions = newExpressions;
+                operators = newOperators;
+            }
         }
         return (Binary) expressions.get(0);
     }
