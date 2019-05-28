@@ -32,6 +32,11 @@ public class IfElseGenerator {
     }
 
     private static Block handleElseIf(List<awsomeJavaParser.JElseIfContext> elseIfs, Block elseBlock, int position){
+
+        if (elseIfs.size() == 0){
+            return elseBlock;
+        }
+
         if (position == elseIfs.size()-1){
             if (elseBlock == null)
                 return new Block(new IfElse(ExpressionGenerator.generate(elseIfs.get(position).expression()),

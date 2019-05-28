@@ -20,7 +20,7 @@ statementExpressions: assign | jNew | methodCall; //| unary;
 assign: (instVar | Identifier) (Equal|PlusEqual|MinusEqual) expression;
 localVarDeclaration: objectType Identifier ((Equal|PlusEqual|MinusEqual) expression)?;
 jNew: 'new' Identifier LBracket nArguments RBracket;
-methodCall: (instVar Dot)? Identifier LBracket nArguments RBracket;
+methodCall: (instVar|Identifier) LBracket nArguments RBracket;
 statement: ifelse | localVarDeclaration Semincolor | jReturn Semincolor | jWhile | block | assign Semincolor
     | statementExpressions Semincolor;
 block: CurlyLBracket (statement)* CurlyRBracket;
