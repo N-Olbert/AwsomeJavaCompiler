@@ -7,6 +7,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import java.io.InputStream;
+import java.io.SequenceInputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -73,9 +74,19 @@ public class IntegrationTests
         assertFibonacci(file);
     }
 
+    @Test
     public void testFibonacciIterative() throws Exception
     {
         var file = ResourceHelper.getFileAsStream("Fibonacci_Iter.java");
+        assertFibonacci(file);
+    }
+
+    @Test
+    public void testFibonacciBetterIntRecursive() throws Exception
+    {
+        InputStream file1 = ResourceHelper.getFileAsStream("BetterInt.java");
+        InputStream file2 = ResourceHelper.getFileAsStream("FibonacciWithBetterInt.java");
+        var file = new SequenceInputStream(file1, file2);
         assertFibonacci(file);
     }
 

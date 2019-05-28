@@ -2,7 +2,7 @@ package BytecodeTests;
 
 import General.BetterInt;
 import General.BytecodeLoader;
-import TypedASTTests.FibonacciTastGeneration;
+import General.Fibonacci;
 import common.Global;
 import org.junit.Test;
 import org.objectweb.asm.ClassWriter;
@@ -17,8 +17,7 @@ import static org.junit.Assert.*;
 public class BetterIntFibonacciBytecodeTest {
     @Test
     public void FibonacciBetterIntBytecode() {
-        var program = FibonacciTastGeneration.getFibonacciRecursiveWithBetterInt();
-        program.getClasses().add(BetterInt.getTypedBetterIntClass());
+        var program = Fibonacci.getTypedRecursiveBetterIntFibonacciProgram();
 
         var factory = Global.getFactory();
         assertNotNull(factory);
