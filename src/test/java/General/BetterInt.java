@@ -94,7 +94,7 @@ public class BetterInt
         var ctor2 = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, ObjectType.VoidType, "BetterInt",
                 new ArrayList<>(),
                 new TypedBlock(ObjectType.VoidType,
-                               new TypedAssignStatement(new TypedInstVar(new TypedThis(classType), "x", ObjectType.IntType), new TypedInt("0"))));
+                               new TypedAssignStatement(new TypedLocalOrFieldVar(ObjectType.IntType, "x"), new TypedInt("0"))));
 
         List<TypedExpression> args = new ArrayList<>();
         args.add(

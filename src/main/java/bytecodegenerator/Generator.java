@@ -6,6 +6,7 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import tastgenerator.expressions.TypedBinary;
+import tastgenerator.expressions.TypedBoolean;
 import tastgenerator.expressions.TypedExpression;
 import tastgenerator.expressions.TypedInstVar;
 import tastgenerator.expressions.TypedInt;
@@ -205,6 +206,12 @@ public abstract class Generator {
                         throw new RuntimeException("Not implemented yet!");
                 }
             }
+            else if(context.getLocalFields().contains(lofv.getName())) {
+                visitor.visitVarInsn(ALOAD, 0);
+                statement.getExpression2().generateByteCode(visitor, context);
+                visitor.visitFieldInsn(PUTFIELD, context.getClassName(), lofv.getName(),
+                        lofv.getObjectType().getName());
+            }
             else {
                 throw new RuntimeException("Not implemented yet!");
             }
@@ -366,20 +373,24 @@ public abstract class Generator {
                 visitor.visitJumpInsn(IFEQ, label);
                 expression.getExpression2().generateByteCode(visitor, context);
                 visitor.visitJumpInsn(IFEQ, label);
+                break;
             case OR:
                 expression.getExpression().generateByteCode(visitor, context);
                 visitor.visitJumpInsn(IFNE, skip);
                 expression.getExpression2().generateByteCode(visitor, context);
                 visitor.visitJumpInsn(IFEQ, label);
+                break;
             case XOR:
                 expression.getExpression().generateByteCode(visitor, context);
                 Label firstTrue = new Label();
                 visitor.visitJumpInsn(IFNE, firstTrue);
                 expression.getExpression2().generateByteCode(visitor, context);
                 visitor.visitJumpInsn(IFEQ, label);
+                visitor.visitJumpInsn(GOTO, skip);
                 visitor.visitLabel(firstTrue);
                 expression.getExpression2().generateByteCode(visitor, context);
                 visitor.visitJumpInsn(IFNE, label);
+                break;
             default:
                 throw new RuntimeException(expression.getOperator() + " Not implemented yet!");
         }
@@ -445,6 +456,15 @@ public abstract class Generator {
         visitor.visitLabel(label);
         visitor.visitInsn(ICONST_1);
         visitor.visitLabel(finish);
+    }
+
+    public static void generate(TypedBoolean typedBoolean, MethodVisitor visitor, Context context) {
+        if(typedBoolean.getJBool()) {
+            visitor.visitInsn(ICONST_1);
+        }
+        else {
+            visitor.visitInsn(ICONST_0);
+        }
     }
 
     public static boolean isInteger(ObjectType type) {
