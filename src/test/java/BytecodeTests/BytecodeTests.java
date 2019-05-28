@@ -10,13 +10,16 @@ import common.ObjectType;
 import org.junit.Assert;
 import org.junit.Test;
 import org.objectweb.asm.ClassWriter;
+import tastgenerator.expressions.TypedInstVar;
 import tastgenerator.expressions.TypedInt;
 import tastgenerator.expressions.TypedLocalOrFieldVar;
+import tastgenerator.expressions.TypedThis;
 import tastgenerator.generalelements.TypedClass;
 import tastgenerator.generalelements.TypedFieldDeclaration;
 import tastgenerator.generalelements.TypedMethodDeclaration;
 import tastgenerator.generalelements.TypedMethodParameter;
 import tastgenerator.generalelements.TypedProgram;
+import tastgenerator.statements.TypedAssignStatement;
 import tastgenerator.statements.TypedBlock;
 import tastgenerator.statements.TypedReturn;
 import tastgenerator.statements.TypedStatement;
@@ -170,6 +173,65 @@ public class BytecodeTests {
             assertEquals(Integer.MIN_VALUE, method.invoke(null, Integer.MIN_VALUE));
             assertEquals(-5, method.invoke(null, -5));
             assertEquals(0, method.invoke(null, 0));
+        }
+        catch(NoSuchMethodException e) {
+            fail("Method: \"" + methodName + "\" not found");
+        }
+        catch(IllegalAccessException | InvocationTargetException e) {
+            fail("Invoking Method: \"" + methodName + " \"");
+        }
+    }
+
+    @Test
+    public void testASTClassGenerationWithParamConst() {
+        var className = "TestConst";
+        var methodName = "getX";
+        Factory factory = Global.getFactory();
+        assertNotNull(factory);
+        BytecodeGenerator byteCodeGen = factory.getBytecodeGenerator();
+        assertNotNull(byteCodeGen);
+
+        List<TypedFieldDeclaration> fields = new ArrayList<>();
+        var field = new TypedFieldDeclaration(AccessModifier.PUBLIC, Modifier.NONE, ObjectType.IntType, "x");
+        fields.add(field);
+        var methods = new ArrayList<TypedMethodDeclaration>();
+        var constrParam = new ArrayList<TypedMethodParameter>();
+        constrParam.add(new TypedMethodParameter(ObjectType.IntType, "x"));
+        var constStatements = new ArrayList<TypedStatement>();
+        constStatements.add(new TypedAssignStatement(
+                new TypedInstVar(new TypedThis(ObjectType.getType(className)), "x", ObjectType.IntType),
+                new TypedLocalOrFieldVar(ObjectType.IntType, "x")));
+        var constr = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, ObjectType.VoidType, className,
+                constrParam, new TypedBlock(constStatements, ObjectType.VoidType));
+        methods.add(constr);
+        var statements = new ArrayList<TypedStatement>();
+        statements.add(new TypedReturn(new TypedLocalOrFieldVar(ObjectType.IntType, "x"), ObjectType.IntType));
+        var typedBlock = new TypedBlock(statements, ObjectType.IntType);
+        var typedMethod = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE,
+                ObjectType.IntType, methodName, new ArrayList<>(), typedBlock);
+        methods.add(typedMethod);
+
+        var program = getProgram(className, fields, methods);
+        List<ClassWriter> cws = byteCodeGen.generate(program);
+        assertNotNull(cws);
+        assertEquals(cws.size(), 1);
+        byte[] code = cws.get(0).toByteArray();
+        saveClass(code, "target/class3.class");
+        BytecodeLoader loader = new BytecodeLoader(code);
+
+        try {
+            var clazz = loader.findClass(className);
+            assertNotNull(clazz);
+            var constructor = clazz.getConstructor(int.class);
+            assertNotNull(clazz);
+            var instance = constructor.newInstance(5);
+            assertNotNull(instance);
+            var method = loader.getMethod(className, methodName);
+            assertEquals(int.class, method.getReturnType());
+            assertEquals(5, method.invoke(instance));
+        }
+        catch(InstantiationException e) {
+            fail("Constructor instantiation exception");
         }
         catch(NoSuchMethodException e) {
             fail("Method: \"" + methodName + "\" not found");
