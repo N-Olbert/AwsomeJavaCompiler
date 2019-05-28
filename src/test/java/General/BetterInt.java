@@ -99,7 +99,7 @@ public class BetterInt
         List<TypedExpression> args = new ArrayList<>();
         args.add(
                 new TypedBinary(
-                        new TypedInstVar(new TypedThis(classType), "x", ObjectType.IntType),
+                        new TypedLocalOrFieldVar(ObjectType.IntType, "x"),
                         new TypedInstVar(new TypedLocalOrFieldVar(classType,"y"), "x", ObjectType.IntType),
                         Operators.PLUS, ObjectType.IntType));
 
@@ -110,7 +110,7 @@ public class BetterInt
         args = new ArrayList<>();
         args.add(
                 new TypedBinary(
-                        new TypedInstVar(new TypedThis(classType), "x", ObjectType.IntType),
+                        new TypedLocalOrFieldVar(ObjectType.IntType, "x"),
                         new TypedInstVar(new TypedLocalOrFieldVar(classType,"y"), "x", ObjectType.IntType),
                         Operators.MINUS, ObjectType.IntType));
 
@@ -121,14 +121,14 @@ public class BetterInt
         args = new ArrayList<>();
         args.add(
                 new TypedBinary(
-                        new TypedInstVar(new TypedThis(classType), "x", classType),
+                        new TypedLocalOrFieldVar(ObjectType.IntType, "x"),
                         new TypedInstVar(new TypedLocalOrFieldVar(classType, "y"), "x", ObjectType.IntType),
                         Operators.LESSTHAN, ObjectType.BoolType));
 
         var lessThan = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, ObjectType.BoolType, "LessThan",
                 new ArrayList<>() {{ add(new TypedMethodParameter(classType, "y"));}},
                 new TypedBlock(ObjectType.BoolType, new TypedReturn(new TypedBinary(
-                        new TypedInstVar(new TypedThis(classType), "x", ObjectType.IntType),
+                        new TypedLocalOrFieldVar(ObjectType.IntType, "x"),
                         new TypedInstVar(new TypedLocalOrFieldVar(classType, "y"), "x", ObjectType.IntType),
                         Operators.LESSTHAN, ObjectType.BoolType), ObjectType.BoolType)));
 
