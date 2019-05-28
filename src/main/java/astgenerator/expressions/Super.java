@@ -9,4 +9,9 @@ public class Super extends Expression
     public TypedExpression toTyped(TypeChecker converter) {
         return converter.typeCheck(this);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Super;
+    }
 }

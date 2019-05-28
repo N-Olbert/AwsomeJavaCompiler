@@ -6,6 +6,7 @@ import tastgenerator.TypeChecker;
 import tastgenerator.statements.TypedStatement;
 
 import java.util.List;
+import java.util.Objects;
 
 public class NewStatement extends Statement
 {
@@ -31,5 +32,19 @@ public class NewStatement extends Statement
     @Override
     public TypedStatement toTyped(TypeChecker converter) {
         return converter.typeCheck(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NewStatement that = (NewStatement) o;
+        return Objects.equals(newType, that.newType) &&
+                Objects.equals(parameters, that.parameters);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(newType, parameters);
     }
 }
