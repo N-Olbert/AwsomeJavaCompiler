@@ -2,7 +2,6 @@ package astgenerator.parser.astgen;
 
 import astgenerator.parser.generated.awsomeJavaParser;
 import astgenerator.statements.Block;
-import astgenerator.statements.LocalVarDeclaration;
 import astgenerator.statements.Statement;
 
 import java.util.ArrayList;

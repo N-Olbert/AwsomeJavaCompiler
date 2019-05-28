@@ -1,5 +1,6 @@
 package astgenerator.parser.astgen;
 
+import astgenerator.generalelements.MainMethodDeclaration;
 import astgenerator.generalelements.MethodDeclaration;
 import astgenerator.generalelements.MethodParameter;
 import astgenerator.parser.generated.awsomeJavaParser;
@@ -25,6 +26,10 @@ class MethodGenerator{
         } else {
             return new MethodDeclaration(ObjectType.VoidType, classname, new ArrayList<>(), new Block());
         }
+    }
+
+    static MainMethodDeclaration generateMainMethod(awsomeJavaParser.MainMethodContext context){
+        return new MainMethodDeclaration(BlockGenerator.generate(context.block()));
     }
 
     static MethodDeclaration generateMethod(awsomeJavaParser.MethodDeclarationContext context){

@@ -1,13 +1,8 @@
 package astgenerator.parser.astgen;
 
 import astgenerator.expressions.Expression;
-import astgenerator.expressions.InstVar;
 import astgenerator.expressions.LocalOrFieldVar;
 import astgenerator.parser.generated.awsomeJavaParser;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 class BasicExpressionGenerator {
 
@@ -16,11 +11,18 @@ class BasicExpressionGenerator {
             return BaseTypeGenerator.generate(basicexpressionsContext.baseType());
         } else if (basicexpressionsContext.instVar() != null){
             return InstVarGenerator.generate(basicexpressionsContext.instVar());
-        } else if (basicexpressionsContext.unary() != null){
-            return UnaryGenerator.generate(basicexpressionsContext.unary());
-        } else { //Identifier
+        } else  if (basicexpressionsContext.Identifier() != null){
             return new LocalOrFieldVar(basicexpressionsContext.Identifier().getText());
+        } else { //statementExpression
+            awsomeJavaParser.StatementExpressionsContext statementExpressionsContext =
+                    basicexpressionsContext.statementExpressions();
+            if (statementExpressionsContext.assign() != null) {
+                return AssignExpressionGenerator.generate(statementExpressionsContext.assign());
+            } else if (statementExpressionsContext.methodCall() != null) {
+                return MethodCallExpressionGenerator.generate(statementExpressionsContext.methodCall());
+            }  else { //New
+                return NewExpressionGenerator.generate(statementExpressionsContext.jNew());
+            }
         }
     }
-
 }
