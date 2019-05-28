@@ -1,35 +1,60 @@
 package astgenerator.parser.astgen;
 
-import astgenerator.generalelements.MainMethodDeclaration;
 import astgenerator.generalelements.MethodDeclaration;
 import astgenerator.generalelements.MethodParameter;
 import astgenerator.parser.generated.awsomeJavaParser;
 import astgenerator.statements.Block;
+import common.AccessModifier;
 import common.Modifier;
 import common.ObjectType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 class MethodGenerator{
 
-    static MethodDeclaration generateConstructor(awsomeJavaParser.ClassBodyContext bodyContext, String classname){
+    static List<MethodDeclaration> generateConstructors(awsomeJavaParser.ClassBodyContext bodyContext,
+                                                        String classname) {
 
-        if (bodyContext.constructor() != null) {
-            awsomeJavaParser.ConstructorContext constructorContext = bodyContext.constructor();
-            return new MethodDeclaration(AccessModifierGenerator.generate(constructorContext.AccessModifier()),
+        List<MethodDeclaration> constructorDecls = new ArrayList<>();
+
+        bodyContext.constructor().forEach(constructorContext -> {
+            Block block = null;
+
+            if (constructorContext.block() != null) {
+                block = BlockGenerator.generate(constructorContext.block());
+            }
+
+            constructorDecls.add(new MethodDeclaration(
+                    AccessModifierGenerator.generate(constructorContext.AccessModifier()),
                     Modifier.NONE,
                     ObjectType.VoidType,
-                    constructorContext.Identifier().getText(), generate(constructorContext.nMethodParameters()
-                    .methodParameter()), null);
-        } else {
-            return new MethodDeclaration(ObjectType.VoidType, classname, new ArrayList<>(), new Block());
+                    constructorContext.Identifier().getText(),
+                    generate(constructorContext.nMethodParameters().methodParameter()),
+                    block));
+        });
+
+        if (constructorDecls.size() == 0){
+            
+            constructorDecls.add(new MethodDeclaration(AccessModifier.PACKAGE_PRIVATE,
+                    Modifier.NONE,
+                    ObjectType.VoidType,
+                    classname,
+                    new ArrayList<>(),
+                    new Block(new ArrayList<>())));
         }
+
+        return constructorDecls;
     }
 
-    static MainMethodDeclaration generateMainMethod(awsomeJavaParser.MainMethodContext context){
-        return new MainMethodDeclaration(BlockGenerator.generate(context.block()));
+    static MethodDeclaration generateMainMethod(awsomeJavaParser.MainMethodContext context){
+        return new MethodDeclaration(
+                AccessModifier.PUBLIC,
+                Modifier.STATIC,
+                ObjectType.VoidType,
+                "main",
+                new ArrayList<>(),
+                BlockGenerator.generate(context.block()));
     }
 
     static MethodDeclaration generateMethod(awsomeJavaParser.MethodDeclarationContext context){

@@ -22,7 +22,7 @@ public class awsomeJavaLexer extends Lexer {
 		Void=16, Super=17, This=18, If=19, Else=20, Equal=21, PlusEqual=22, MinusEqual=23, 
 		Comperator=24, OpBeforeIdentifier=25, OpBeforeOrAfterIdentifier=26, PointOperator=27, 
 		AddSubOperator=28, LogicalOperator=29, LBracket=30, RBracket=31, CurlyLBracket=32, 
-		CurlyRBracket=33, Dot=34, Comma=35, Semincolor=36, JString=37, Identifier=38, 
+		CurlyRBracket=33, Dot=34, Comma=35, Semicolon=36, JString=37, Identifier=38, 
 		JCharacter=39, JInteger=40, WS=41, Comment=42, LineComment=43;
 	public static String[] channelNames = {
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
@@ -39,8 +39,8 @@ public class awsomeJavaLexer extends Lexer {
 			"Super", "This", "If", "Else", "Equal", "PlusEqual", "MinusEqual", "Comperator", 
 			"OpBeforeIdentifier", "OpBeforeOrAfterIdentifier", "PointOperator", "AddSubOperator", 
 			"LogicalOperator", "LBracket", "RBracket", "CurlyLBracket", "CurlyRBracket", 
-			"Dot", "Comma", "Semincolor", "JString", "Identifier", "JCharacter", 
-			"JInteger", "WS", "Comment", "LineComment"
+			"Dot", "Comma", "Semicolon", "JString", "Identifier", "JCharacter", "JInteger", 
+			"WS", "Comment", "LineComment"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -62,7 +62,7 @@ public class awsomeJavaLexer extends Lexer {
 			"If", "Else", "Equal", "PlusEqual", "MinusEqual", "Comperator", "OpBeforeIdentifier", 
 			"OpBeforeOrAfterIdentifier", "PointOperator", "AddSubOperator", "LogicalOperator", 
 			"LBracket", "RBracket", "CurlyLBracket", "CurlyRBracket", "Dot", "Comma", 
-			"Semincolor", "JString", "Identifier", "JCharacter", "JInteger", "WS", 
+			"Semicolon", "JString", "Identifier", "JCharacter", "JInteger", "WS", 
 			"Comment", "LineComment"
 		};
 	}

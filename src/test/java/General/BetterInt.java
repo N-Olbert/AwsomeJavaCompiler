@@ -38,7 +38,7 @@ public class BetterInt
         List<Expression> args = new ArrayList<>();
         args.add(
                 new Binary(
-                        new InstVar(new This(), "x"),
+                        new LocalOrFieldVar("x"),
                         new InstVar(new LocalOrFieldVar("y"), "x"), Operators.PLUS));
 
         var add = new MethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, classType, "Add",
@@ -48,7 +48,7 @@ public class BetterInt
         args = new ArrayList<>();
         args.add(
                 new Binary(
-                        new InstVar(new This(), "x"),
+                        new LocalOrFieldVar("x"),
                         new InstVar(new LocalOrFieldVar("y"), "x"), Operators.MINUS));
 
         var subtract = new MethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, classType, "Subtract",
@@ -58,7 +58,7 @@ public class BetterInt
         var lessThan = new MethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, ObjectType.BoolType, "LessThan",
                 new ArrayList<>() {{ add(new MethodParameter(classType, "y"));}},
                 new Block( new Return(new Binary(
-                        new InstVar(new This(), "x"),
+                        new LocalOrFieldVar("x"),
                         new InstVar(new LocalOrFieldVar("y"), "x"), Operators.LESSTHAN))));
 
         var methods = new ArrayList<MethodDeclaration>();

@@ -4,25 +4,24 @@ programm: jClass+;
 jClass: AccessModifier? 'class' Identifier classBody;
 constructor: AccessModifier? Identifier LBracket nMethodParameters RBracket block;
 mainMethod: AccessModifier 'static' Void 'main' LBracket 'String[]' 'args' RBracket block;
-classBody: CurlyLBracket (methodDeclaration|fieldDeclaration)* constructor? mainMethod?
+classBody: CurlyLBracket (methodDeclaration|fieldDeclaration)* constructor* mainMethod?
     (methodDeclaration|fieldDeclaration)* CurlyRBracket;
 methodDeclaration: AccessModifier? (objectType|Void) Identifier LBracket nMethodParameters RBracket block;
-fieldDeclaration: AccessModifier?  objectType Identifier (Equal expression)? Semincolor;
+fieldDeclaration: AccessModifier?  objectType Identifier (Equal expression)? Semicolon;
 methodParameter: objectType Identifier;
 nMethodParameters: (methodParameter)? | methodParameter (Comma methodParameter)+;
 
 nArguments: expression? | expression (Comma expression)* | instVar;
 expression:  basicexpressions | binary | LBracket expression RBracket;
 basicexpressions:  baseType | instVar | Identifier | statementExpressions ;
-instVar:  This Dot Identifier|(This Dot)? (Identifier Dot)+ Identifier | Super Dot Identifier
-    | (Super Dot)? (Identifier Dot)+ Identifier;
+instVar:  This Dot Identifier|(This Dot)? (Identifier Dot)+ Identifier;
 statementExpressions: assign | jNew | methodCall; //| unary;
 assign: (instVar | Identifier) (Equal|PlusEqual|MinusEqual) expression;
 localVarDeclaration: objectType Identifier ((Equal|PlusEqual|MinusEqual) expression)?;
 jNew: 'new' Identifier LBracket nArguments RBracket;
 methodCall: (instVar|Identifier) LBracket nArguments RBracket;
-statement: ifelse | localVarDeclaration Semincolor | jReturn Semincolor | jWhile | block | assign Semincolor
-    | statementExpressions Semincolor;
+statement: ifelse | localVarDeclaration Semicolon | jReturn Semicolon | jWhile | block
+    | statementExpressions Semicolon;
 block: CurlyLBracket (statement)* CurlyRBracket;
 ifelse: jIf jElseIf* jElse?;
 jIf: If LBracket expression RBracket block;
@@ -61,7 +60,7 @@ CurlyLBracket:'{';
 CurlyRBracket:'}';
 Dot: '.';
 Comma: ',';
-Semincolor: ';';
+Semicolon: ';';
 JString: '"'[A-Za-z]*'"'+;
 Identifier: [A-Za-z][A-Za-z0-9]*;
 JCharacter: '\'' [A-Za-z]'\'';

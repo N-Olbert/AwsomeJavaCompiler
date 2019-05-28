@@ -2,6 +2,7 @@ package astgenerator.parser.astgen;
 
 import astgenerator.generalelements.FieldDeclaration;
 import astgenerator.parser.generated.awsomeJavaParser;
+import common.Modifier;
 import common.ObjectType;
 
 class FieldGenerator {
@@ -26,7 +27,9 @@ class FieldGenerator {
                     break;
             }
         }
-        return new FieldDeclaration(type, fieldDecl.Identifier().getText());
+
+        return new FieldDeclaration(AccessModifierGenerator.generate(fieldDecl.AccessModifier()),
+                Modifier.NONE, type,  fieldDecl.Identifier().getText());
     }
 
 }

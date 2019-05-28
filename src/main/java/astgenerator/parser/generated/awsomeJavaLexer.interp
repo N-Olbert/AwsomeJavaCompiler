@@ -81,7 +81,7 @@ CurlyLBracket
 CurlyRBracket
 Dot
 Comma
-Semincolor
+Semicolon
 JString
 Identifier
 JCharacter
@@ -126,7 +126,7 @@ CurlyLBracket
 CurlyRBracket
 Dot
 Comma
-Semincolor
+Semicolon
 JString
 Identifier
 JCharacter
