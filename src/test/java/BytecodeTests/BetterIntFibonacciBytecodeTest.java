@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.objectweb.asm.ClassWriter;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.ibm.icu.impl.Assert.fail;
@@ -32,16 +33,18 @@ public class BetterIntFibonacciBytecodeTest {
         byte[] bytes2 = cws.get(1).toByteArray();
         BytecodeTests.saveClass(bytes, "target/fibonacciBetterInt.class");
         BytecodeTests.saveClass(bytes2, "target/fibonacciBetterInt2.class");
-        BytecodeLoader loader = new BytecodeLoader(bytes);
-        BytecodeLoader betterIntLoader = new BytecodeLoader(bytes2);
+        var map = new HashMap<String, byte[]>();
+        map.put("Fibonacci", bytes);
+        map.put("BetterInt", bytes2);
+        BytecodeLoader loader = new BytecodeLoader(map);
         //var Class = loader.findClass("Fibonacci");
-        var betterInt = betterIntLoader.findClass("BetterInt");
+        var betterInt = loader.findClass("BetterInt");
         //assertNotNull(Class);
         //assertNotNull(betterInt);
         Object classObject;
         Object betterIntObject;
         try {
-            var betterIntConstructor = betterIntLoader.getConstructor("BetterInt", int.class);
+            var betterIntConstructor = loader.getConstructor("BetterInt", int.class);
             betterIntObject = betterIntConstructor.newInstance(11);
             var theClass = loader.findClass("Fibonacci");
             assertEquals(theClass.getDeclaredConstructors().length, 1);
@@ -49,7 +52,7 @@ public class BetterIntFibonacciBytecodeTest {
             var method = loader.getMethod("Fibonacci", "fibonacci", betterInt);
             assertEquals(betterInt, method.getReturnType());
             assertEquals(89,
-                    betterIntLoader.getField("BetterInt", "x").get(method.invoke(classObject, betterIntObject)));
+                    loader.getField("BetterInt", "x").get(method.invoke(classObject, betterIntObject)));
         }
         catch(IllegalAccessException | NoSuchMethodException | InvocationTargetException | InstantiationException | NoSuchFieldException e) {
             e.printStackTrace();
