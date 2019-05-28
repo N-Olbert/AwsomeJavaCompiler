@@ -1,30 +1,27 @@
-package TypedASTTests;
+package General;
 
 import BytecodeTests.TypedProgramGenerator;
+import TypedASTTests.UntypedProgramGenerator;
 import astgenerator.expressions.*;
 import astgenerator.generalelements.MethodDeclaration;
+import astgenerator.generalelements.MethodParameter;
 import astgenerator.generalelements.UntypedProgram;
-import astgenerator.statements.MethodCallStatement;
-import common.AccessModifier;
-import common.Modifier;
-import common.ObjectType;
-import common.Operators;
-import org.junit.Assert;
-import org.junit.Test;
+import astgenerator.statements.*;
+import common.*;
 import tastgenerator.expressions.*;
 import tastgenerator.generalelements.TypedMethodDeclaration;
 import tastgenerator.generalelements.TypedMethodParameter;
 import tastgenerator.generalelements.TypedProgram;
 import tastgenerator.statements.*;
 
-import javax.enterprise.inject.Typed;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
-public class FibonacciTastGeneration
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+public class Fibonacci
 {
-    public static TypedProgram getFibonacciTastRecursion()
+    public static TypedProgram getTypedRecursiveFibonacciProgram()
     {
         var className = "Fibonacci";
         var classType = ObjectType.getType(className);
@@ -75,7 +72,7 @@ public class FibonacciTastGeneration
                 }});
     }
 
-    public static TypedProgram getFibonacciTastIterative()
+    public static TypedProgram getTypedIterativeFibonacciProgram()
     {
         var className = "Fibonacci";
         var methodName = "fibonacci";
@@ -160,7 +157,7 @@ public class FibonacciTastGeneration
                 }});
     }
 
-    public static TypedProgram getFibonacciRecursiveWithBetterInt()
+    public static TypedProgram getTypedRecursiveBetterIntFibonacciProgram()
     {
         var className = "Fibonacci";
         var classType = ObjectType.getType(className);
@@ -204,7 +201,7 @@ public class FibonacciTastGeneration
                 , ObjectType.getType(betterInt)
         );
 
-        var block = new TypedBlock(ObjectType.IntType,new TypedIfElse(condition, new TypedBlock(ObjectType.getType(betterInt), then), new TypedBlock(ObjectType.getType(betterInt), otherwise), ObjectType.getType(betterInt)));
+        var block = new TypedBlock(ObjectType.getType(betterInt),new TypedIfElse(condition, new TypedBlock(ObjectType.getType(betterInt), then), new TypedBlock(ObjectType.getType(betterInt), otherwise), ObjectType.getType(betterInt)));
 
         var ctor = new TypedMethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.VoidType,
                 className, new ArrayList<>(), new TypedBlock(new ArrayList<>(), ObjectType.VoidType));
@@ -214,9 +211,154 @@ public class FibonacciTastGeneration
                 new ArrayList <>() {{add(new TypedMethodParameter(ObjectType.getType(betterInt), "n"));}}, block);
 
 
-        return TypedProgramGenerator.getProgram(className, new ArrayList <>(), new ArrayList <>() {{
+        var prog = TypedProgramGenerator.getProgram(className, new ArrayList <>(), new ArrayList <>() {{
             add(ctor);
             add(method);
         }});
+        prog.getClasses().add(BetterInt.getTypedBetterIntClass());
+        return prog;
+    }
+
+    public static UntypedProgram getRecursiveFibonacciProgram()
+    {
+        var className = "Fibonacci";
+        var methodName = "fibonacci";
+
+        var methodParams = new ArrayList<String[]>(){{
+            add(new String[]{ObjectType.VoidType.getName(),className});
+            add(new String[]{String.valueOf(AccessModifier.PUBLIC), String.valueOf(Modifier.NONE),ObjectType.IntType.getName(),methodName});
+        }};
+
+        var blocks = new ArrayList<Block>();
+        blocks.add(new Block());
+        blocks.add(new Block(
+                new IfElse(new Binary(new LocalOrFieldVar("n"), new JInteger("1"), Operators.LESSOREQUAL),
+                        new Block(new Return(new LocalOrFieldVar("n"))),
+                        new Block(new Return(
+                                new Binary(
+                                        new MethodCallExpression(new This(),methodName,
+                                                new ArrayList <>(){{
+                                                    add(new Binary(new LocalOrFieldVar("n"), new JInteger("1"), Operators.MINUS));
+                                                }}),
+                                        new MethodCallExpression(new This(),methodName,new
+                                                ArrayList <>(){{
+                                                    add(new Binary(new LocalOrFieldVar("n"), new JInteger("2"), Operators.MINUS));
+                                                }}),
+                                        Operators.PLUS)
+                        )))
+        ));
+
+        var methodParameters = new ArrayList<ArrayList<MethodParameter>>(){{
+            add(new ArrayList <>());
+            add(new ArrayList <>(){{
+                add(new MethodParameter(ObjectType.IntType, "n"));
+            }});
+        }};
+
+        var methods = UntypedProgramGenerator.getMethodsWithParams(methodParams, blocks, methodParameters);
+
+        var program = UntypedProgramGenerator.getProgram(className, new ArrayList <>(), methods);
+        return program;
+    }
+
+    public static UntypedProgram getIterativeFibonacciProgram()
+    {
+        var className = "Fibonacci";
+        var methodName = "fibonacci";
+
+        var methodParams = new ArrayList<String[]>(){{
+            add(new String[]{ObjectType.VoidType.getName(),className});
+            add(new String[]{String.valueOf(AccessModifier.PUBLIC), String.valueOf(Modifier.NONE),ObjectType.IntType.getName(),methodName});
+        }};
+
+        var blocks = new ArrayList<Block>();
+        blocks.add(new Block());
+        blocks.add(new Block(
+                new IfElse(new Binary(new LocalOrFieldVar("n"), new JInteger("2"), Operators.LESSTHAN),
+                        new Block(new Return(new JInteger("1"))),
+                        new Block(
+                                new LocalVarDeclaration(ObjectType.IntType, "a"),
+                                new AssignStatement(new LocalOrFieldVar("a"), new JInteger("0")),
+                                new LocalVarDeclaration(ObjectType.IntType, "b"),
+                                new AssignStatement(new LocalOrFieldVar("b"), new JInteger("1")),
+                                new LocalVarDeclaration(ObjectType.IntType, "i"),
+                                new AssignStatement(new LocalOrFieldVar("i"), new JInteger("3")),
+                                new LocalVarDeclaration(ObjectType.IntType, "temp"),
+                                new While(new Binary(new LocalOrFieldVar("i"), new LocalOrFieldVar("n"), Operators.LESSOREQUAL),
+                                        new Block(
+                                                new AssignStatement(new LocalOrFieldVar("temp"), new LocalOrFieldVar("b")),
+                                                new AssignStatement(new LocalOrFieldVar("b"),
+                                                        new Binary(new LocalOrFieldVar("b"), new LocalOrFieldVar("a"), Operators.PLUS)),
+                                                new AssignStatement(new LocalOrFieldVar("a"), new LocalOrFieldVar("temp")),
+                                                new AssignStatement(new LocalOrFieldVar("i"),
+                                                        new Binary(new LocalOrFieldVar("i"), new JInteger("1"), Operators.PLUS))
+                                        )
+                                ),
+                                new Return(new Binary(new LocalOrFieldVar("a"), new LocalOrFieldVar("b"), Operators.PLUS))
+                        )
+                )
+        ));
+
+        var methodParameters = new ArrayList<ArrayList<MethodParameter>>(){{
+            add(new ArrayList <>());
+            add(new ArrayList <>(){{
+                add(new MethodParameter(ObjectType.IntType, "n"));
+            }});
+        }};
+
+        var methods = UntypedProgramGenerator.getMethodsWithParams(methodParams, blocks, methodParameters);
+
+        var program = UntypedProgramGenerator.getProgram(className, new ArrayList <>(), methods);
+        return program;
+    }
+
+    public static UntypedProgram getRecursiveFibonacciWithBetterIntProgram()
+    {
+        var className = "Fibonacci";
+        var methodName = "fibonacci";
+        var bIType = ObjectType.getType("BetterInt");
+        var methodParams = new ArrayList<MethodParameter>();
+        methodParams.add(new MethodParameter(bIType, "n"));
+        var methodBlock = new Block(new ArrayList<>());
+        var methodDecl = new MethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, bIType,
+                                                methodName, methodParams, methodBlock);
+        var condition = new MethodCallExpression(
+                new LocalOrFieldVar("n"), "LessThan",
+                new ArrayList <>(){{
+                    add(new NewExpression(bIType,
+                            new ArrayList <>(){{
+                                add(new JInteger("2"));
+                            }})
+                    );
+                }}
+        );
+        var then = new Return(new LocalOrFieldVar("n"));
+        var firstMethodParams = new ArrayList<Expression>();
+        var firstCall = new MethodCallExpression(new This(), methodName, firstMethodParams);
+        //return fibonacci(n.Subtract(new BetterInt(1))).Add(fibonacci(n.Subtract(new BetterInt(2))));
+        firstMethodParams.add(new MethodCallExpression(
+                new LocalOrFieldVar("n"),"Subtract",
+                    new ArrayList<>(){{
+                        add(new NewExpression(bIType, new ArrayList<>() {{add(new JInteger("1"));}}));;}}));
+
+        var secondMethodParams = new ArrayList<Expression>();
+        secondMethodParams.add(new MethodCallExpression(
+                new LocalOrFieldVar("n"),"Subtract",
+                    new ArrayList<>(){{
+                        add(new NewExpression(bIType, new ArrayList<>() {{add(new JInteger("2"));}}));;}}));
+        var secondCall = new MethodCallExpression(new This(), methodName, secondMethodParams);
+
+        var otherwise = new Return(new MethodCallExpression(firstCall, "Add",
+                new ArrayList<>(){{add(secondCall);}}));
+        methodBlock.getBlockedStatements().add(new IfElse(condition, new Block(then), new Block(otherwise)));
+        var ctor = new MethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.VoidType, className,
+                new ArrayList<>(),
+                new Block(new ArrayList<>()));
+        var methods = new ArrayList<MethodDeclaration>();
+        methods.add(ctor);
+        methods.add(methodDecl);
+        var prog = UntypedProgramGenerator.getProgram(className, new ArrayList<>(), methods);
+        prog.getClasses().add(BetterInt.getBetterIntClass()); //for type check;
+        return prog;
     }
 }
