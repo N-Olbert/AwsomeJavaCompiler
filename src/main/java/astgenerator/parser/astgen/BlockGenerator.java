@@ -15,9 +15,8 @@ class BlockGenerator {
 
         if (blockContext.statement() != null) {
             if (blockContext.statement().size() > 0) {
-                blockContext.statement().forEach(statement -> {
-                    statements.add(StatementGenerator.generate(statement));
-                });
+                blockContext.statement().forEach(statement ->
+                        statements.addAll(StatementGenerator.generate(statement)));
             }
         }
 

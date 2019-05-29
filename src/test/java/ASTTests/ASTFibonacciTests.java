@@ -28,7 +28,7 @@ public class ASTFibonacciTests
         InputStream file = ResourceHelper.getFileAsStream("Fibonacci_Iter.java");
         var astGen = Global.getFactory().getASTGenerator();
         var ast = astGen.getAST(file);
-        assertEquals(ast, Fibonacci.getRecursiveFibonacciProgram());
+        assertEquals(ast, Fibonacci.getIterativeFibonacciProgram());
     }
 
     @Test

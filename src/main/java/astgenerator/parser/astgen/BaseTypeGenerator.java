@@ -11,8 +11,6 @@ public class BaseTypeGenerator {
             return new JBoolean(context.JBoolean().getText());
         } else if (context.JCharacter() != null){
             return new JCharacter(context.JCharacter().getText());
-        } else if (context.JString() != null){
-            return new JString(context.JString().getText());
         } else if (context.JNull() != null){
             return new JNull();
         } else if (context.Super() != null) {
