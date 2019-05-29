@@ -123,8 +123,8 @@ public class Fibonacci
         loopStmt.add(new TypedAssignStatement(new TypedLocalOrFieldVar(ObjectType.IntType, "temp"),
                 new TypedLocalOrFieldVar(ObjectType.IntType, "b")));
         loopStmt.add(new TypedAssignStatement(new TypedLocalOrFieldVar(ObjectType.IntType, "b"),
-                new TypedBinary(new TypedLocalOrFieldVar(ObjectType.IntType, "b"),
-                        new TypedLocalOrFieldVar(ObjectType.IntType, "a"), Operators.PLUS, ObjectType.IntType)));
+                new TypedBinary(new TypedLocalOrFieldVar(ObjectType.IntType, "a"),
+                        new TypedLocalOrFieldVar(ObjectType.IntType, "b"), Operators.PLUS, ObjectType.IntType)));
         loopStmt.add(new TypedAssignStatement(new TypedLocalOrFieldVar(ObjectType.IntType, "a"),
                 new TypedLocalOrFieldVar(ObjectType.IntType, "temp")));
         loopStmt.add(new TypedAssignStatement(new TypedLocalOrFieldVar(ObjectType.IntType, "i"),
@@ -288,7 +288,7 @@ public class Fibonacci
                                         new Block(
                                                 new AssignStatement(new LocalOrFieldVar("temp"), new LocalOrFieldVar("b")),
                                                 new AssignStatement(new LocalOrFieldVar("b"),
-                                                        new Binary(new LocalOrFieldVar("b"), new LocalOrFieldVar("a"), Operators.PLUS)),
+                                                        new Binary(new LocalOrFieldVar("a"), new LocalOrFieldVar("b"), Operators.PLUS)),
                                                 new AssignStatement(new LocalOrFieldVar("a"), new LocalOrFieldVar("temp")),
                                                 new AssignStatement(new LocalOrFieldVar("i"),
                                                         new Binary(new LocalOrFieldVar("i"), new JInteger("1"), Operators.PLUS))
