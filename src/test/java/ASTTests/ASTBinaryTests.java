@@ -8,6 +8,7 @@ import astgenerator.generalelements.*;
 import astgenerator.generalelements.Class;
 import astgenerator.statements.AssignStatement;
 import astgenerator.statements.Block;
+import astgenerator.statements.Statement;
 import common.*;
 import org.junit.Test;
 
@@ -39,7 +40,7 @@ public class ASTBinaryTests {
                 (AccessModifier.PACKAGE_PRIVATE,  Modifier.NONE,ObjectType.IntType, "c"));
 
         expectedTestClass.getMethods().add(new MethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE,
-                ObjectType.VoidType, className, new ArrayList<>(), new Block()));
+                ObjectType.VoidType, className, new ArrayList<>(), new Block(new Statement[0])));
 
         var methodParams = new ArrayList<MethodParameter>();
         var assignPunktVorStrich = new AssignStatement(
