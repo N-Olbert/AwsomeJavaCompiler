@@ -23,9 +23,12 @@ public class StatementGenerator {
             statements.add(WhileGenerator.generate(statementContext.jWhile()));
         } else if (statementContext.localVarDeclaration() != null) {
             statements.add(LocalVarDeclarationGenerator.generate(statementContext.localVarDeclaration()));
-            statements.add(new AssignStatement(
-                    new LocalOrFieldVar(statementContext.localVarDeclaration().Identifier().getText()),
-                    ExpressionGenerator.generate(statementContext.localVarDeclaration().expression())));
+
+            if (statementContext.localVarDeclaration().expression() != null) {
+                statements.add(new AssignStatement(
+                        new LocalOrFieldVar(statementContext.localVarDeclaration().Identifier().getText()),
+                        ExpressionGenerator.generate(statementContext.localVarDeclaration().expression())));
+            }
         } else { //statementeExpression
             awsomeJavaParser.StatementExpressionsContext statementExpressionsContext =
                     statementContext.statementExpressions();
