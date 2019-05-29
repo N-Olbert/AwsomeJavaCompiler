@@ -34,7 +34,7 @@ binary: basicexpressions (operators basicexpressions)+;
 operatorBeforeExpr: (OpBeforeIdentifier|OpBeforeOrAfterIdentifier) (Identifier|instVar);
 operatorAfterExpr: (Identifier|instVar) OpBeforeOrAfterIdentifier;
 baseType: JBoolean | JNull | This | JString | JCharacter | JInteger | Super;
-objectType: 'int'|'char'|'boolean'|'String'|Identifier;
+objectType: 'int'|'char'|'boolean'|Identifier;
 operators: LogicalOperator|Comperator|AddSubOperator|PointOperator;
 
 AccessModifier: 'public' | 'protected' | 'private';
@@ -61,7 +61,6 @@ CurlyRBracket:'}';
 Dot: '.';
 Comma: ',';
 Semicolon: ';';
-JString: '"'[A-Za-z]*'"'+;
 Identifier: [A-Za-z][A-Za-z0-9]*;
 JCharacter: '\'' [A-Za-z]'\'';
 JInteger: [0-9]+;

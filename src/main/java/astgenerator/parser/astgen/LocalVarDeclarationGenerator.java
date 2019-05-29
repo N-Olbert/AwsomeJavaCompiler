@@ -1,6 +1,5 @@
 package astgenerator.parser.astgen;
 
-import astgenerator.expressions.Expression;
 import astgenerator.parser.generated.awsomeJavaParser;
 import astgenerator.statements.LocalVarDeclaration;
 import common.ObjectType;
