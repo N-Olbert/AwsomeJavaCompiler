@@ -186,11 +186,6 @@ public class TypeCheckerInstance implements TypeChecker
     }
 
     @Override
-    public TypedString typeCheck(JString toCheck) {
-        return new TypedString(toCheck.getJString());
-    }
-
-    @Override
     public TypedLocalOrFieldVar typeCheck(LocalOrFieldVar toCheck) {
         ObjectType varType = null;
         for (Tuple<String, ObjectType> localVar : currentLocalVars) {
