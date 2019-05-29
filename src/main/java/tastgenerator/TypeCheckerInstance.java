@@ -297,7 +297,8 @@ public class TypeCheckerInstance implements TypeChecker
         return new TypedFieldDeclaration(toCheck.getAccessModifier(),
                                          toCheck.getModifier(),
                                          toCheck.getVariableType(),
-                                         toCheck.getName());
+                                         toCheck.getName(),
+                                         typedExpression);
     }
 
     @Override
@@ -405,14 +406,6 @@ public class TypeCheckerInstance implements TypeChecker
         for (TypedMethodParameter typedParam: methodParameters) {
             if (toCheck.getName().equals(typedParam.getName())) {
                 throw new AlreadyDefinedException("Variable " + toCheck.getName() + " is already defined in the local scope");
-            }
-        }
-        TypedExpression typedExpression = null;
-        if (toCheck.getExpression() != null) {
-            typedExpression = toCheck.getExpression().toTyped(this);
-            if (!toCheck.getVariableType().getName().equals(typedExpression.getObjectType().getName())) {
-                throw new TypeMismatchException("Local var " + toCheck.getVariableType() + " cannot be initialized with type " +
-                        typedExpression.getObjectType());
             }
         }
         currentLocalVars.add(new Tuple<String, ObjectType>(toCheck.getName(), toCheck.getVariableType()));
