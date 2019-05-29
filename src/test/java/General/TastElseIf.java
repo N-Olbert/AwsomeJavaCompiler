@@ -57,7 +57,6 @@ public class TastElseIf
 
         var methods = TypedProgramGenerator.getMethods(methodParams, blocks, methodParameters);
 
-        var program = TypedProgramGenerator.getProgram(className, new ArrayList <>(), methods);
-        return program;
+        return TypedProgramGenerator.getProgram(className, new ArrayList <>(), methods);
     }
 }
