@@ -79,7 +79,7 @@ public class TypedProgramGenerator
         return methodList;
     }
 
-    static List<TypedMethodDeclaration> getMethods(List <String[]> params, List <TypedBlock> stmts, List <ArrayList <TypedMethodParameter>> parameters)
+    public static List<TypedMethodDeclaration> getMethods(List <String[]> params, List <TypedBlock> stmts, List <ArrayList <TypedMethodParameter>> parameters)
     {
         var methodList = new ArrayList<TypedMethodDeclaration>();
         for(String[] s : params)
