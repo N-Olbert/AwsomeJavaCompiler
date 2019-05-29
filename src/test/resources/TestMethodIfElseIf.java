@@ -1,5 +1,5 @@
 class TestwithIfElseIf {
-    int TestIfElseIf(int x, int y) {
+    public int TestIfElseIf(int x, int y) {
         int t=-1;
         if (x>y) {
             t=x;
