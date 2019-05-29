@@ -1,6 +1,6 @@
 public class Fibonacci
 {
-    int fibonacci(int n)
+    public int fibonacci(int n)
     {
         if(n <2)
         {
@@ -17,7 +17,7 @@ public class Fibonacci
                 temp=b;
                 b=a+b;
                 a=temp;
-                i++;
+                i = i + 1;
             }
 
             return a + b;

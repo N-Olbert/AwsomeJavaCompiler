@@ -52,6 +52,18 @@ public class awsomeJavaBaseListener implements awsomeJavaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterMainMethod(awsomeJavaParser.MainMethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMainMethod(awsomeJavaParser.MainMethodContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterClassBody(awsomeJavaParser.ClassBodyContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -124,18 +136,6 @@ public class awsomeJavaBaseListener implements awsomeJavaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterInstVar(awsomeJavaParser.InstVarContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitInstVar(awsomeJavaParser.InstVarContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterExpression(awsomeJavaParser.ExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -143,6 +143,30 @@ public class awsomeJavaBaseListener implements awsomeJavaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitExpression(awsomeJavaParser.ExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterBasicexpressions(awsomeJavaParser.BasicexpressionsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitBasicexpressions(awsomeJavaParser.BasicexpressionsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterInstVar(awsomeJavaParser.InstVarContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitInstVar(awsomeJavaParser.InstVarContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -160,18 +184,6 @@ public class awsomeJavaBaseListener implements awsomeJavaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterLocalVarDeclaration(awsomeJavaParser.LocalVarDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitLocalVarDeclaration(awsomeJavaParser.LocalVarDeclarationContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterAssign(awsomeJavaParser.AssignContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -179,6 +191,18 @@ public class awsomeJavaBaseListener implements awsomeJavaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAssign(awsomeJavaParser.AssignContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterLocalVarDeclaration(awsomeJavaParser.LocalVarDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitLocalVarDeclaration(awsomeJavaParser.LocalVarDeclarationContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -244,6 +268,42 @@ public class awsomeJavaBaseListener implements awsomeJavaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterJIf(awsomeJavaParser.JIfContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJIf(awsomeJavaParser.JIfContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJElseIf(awsomeJavaParser.JElseIfContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJElseIf(awsomeJavaParser.JElseIfContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterJElse(awsomeJavaParser.JElseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitJElse(awsomeJavaParser.JElseContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterJWhile(awsomeJavaParser.JWhileContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -292,6 +352,30 @@ public class awsomeJavaBaseListener implements awsomeJavaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterOperatorBeforeExpr(awsomeJavaParser.OperatorBeforeExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOperatorBeforeExpr(awsomeJavaParser.OperatorBeforeExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOperatorAfterExpr(awsomeJavaParser.OperatorAfterExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOperatorAfterExpr(awsomeJavaParser.OperatorAfterExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBaseType(awsomeJavaParser.BaseTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -311,6 +395,18 @@ public class awsomeJavaBaseListener implements awsomeJavaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitObjectType(awsomeJavaParser.ObjectTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOperators(awsomeJavaParser.OperatorsContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOperators(awsomeJavaParser.OperatorsContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

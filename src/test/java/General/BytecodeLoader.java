@@ -3,25 +3,44 @@ package General;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Custom Classloader which loads the given byte array.
  */
 public class BytecodeLoader extends ClassLoader {
     private byte[] byteCode;
-    private Class<?> clazz;
+    private Map<String, byte[]> byteCodes;
+    private Map<String, Class<?>> classes = new HashMap<>();
 
     public BytecodeLoader(byte[] byteCode) {
+        byteCodes = new HashMap<>();
         this.byteCode = byteCode;
+    }
+
+    public BytecodeLoader(Map<String, byte[]> byteCodes) {
+        this.byteCodes = byteCodes;
     }
 
     @Override
     public Class findClass(String name) {
-        if(clazz != null) {
-            return clazz;
+        if(!byteCodes.containsKey(name)) {
+            if(byteCode != null) {
+                byteCodes.put(name, byteCode);
+                byteCode = null;
+            }
+            else {
+                return null;
+            }
+        }
+        if(classes.containsKey(name)) {
+            return classes.get(name);
         }
         else {
-            return clazz = defineClass(name, byteCode, 0, byteCode.length);
+            Class<?> clazz = defineClass(name, byteCodes.get(name), 0, byteCodes.get(name).length);
+            classes.put(name, clazz);
+            return clazz;
         }
     }
 

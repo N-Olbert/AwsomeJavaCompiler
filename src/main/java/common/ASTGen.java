@@ -1,7 +1,7 @@
 package common;
 
 import astgenerator.generalelements.UntypedProgram;
-import astgenerator.parser.ParseTreeGenerator;
+import astgenerator.parser.astgen.UntypedProgramGenerator;
 import astgenerator.parser.generated.awsomeJavaLexer;
 import astgenerator.parser.generated.awsomeJavaParser;
 import org.antlr.v4.runtime.CharStream;
@@ -23,8 +23,7 @@ public class ASTGen implements ASTGenerator {
         awsomeJavaLexer lexer = new awsomeJavaLexer(cstream);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         awsomeJavaParser parser = new awsomeJavaParser(tokens);
-        ParseTreeGenerator generator = new ParseTreeGenerator();
 
-        return new ParseTreeGenerator().generate(parser.programm());
+        return new UntypedProgramGenerator().generate(parser.programm());
     }
 }

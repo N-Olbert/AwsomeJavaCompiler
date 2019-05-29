@@ -49,4 +49,59 @@ public class TypedMethodDeclaration extends TypedGeneralThing
     public AccessModifier getAccessModifier() { return accessModifier; }
 
     public Modifier getModifier() { return modifier; }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+        if (!super.equals(o))
+        {
+            return false;
+        }
+
+        TypedMethodDeclaration that = (TypedMethodDeclaration) o;
+
+        if (accessModifier != that.accessModifier)
+        {
+            return false;
+        }
+        if (modifier != that.modifier)
+        {
+            return false;
+        }
+        if (returnType != null ? !returnType.equals(that.returnType) : that.returnType != null)
+        {
+            return false;
+        }
+        if (name != null ? !name.equals(that.name) : that.name != null)
+        {
+            return false;
+        }
+        if (params != null ? !params.equals(that.params) : that.params != null)
+        {
+            return false;
+        }
+        return stmt != null ? stmt.equals(that.stmt) : that.stmt == null;
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = super.hashCode();
+        result = 31 * result + (accessModifier != null ? accessModifier.hashCode() : 0);
+        result = 31 * result + (modifier != null ? modifier.hashCode() : 0);
+        result = 31 * result + (returnType != null ? returnType.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (params != null ? params.hashCode() : 0);
+        result = 31 * result + (stmt != null ? stmt.hashCode() : 0);
+        return result;
+    }
 }
