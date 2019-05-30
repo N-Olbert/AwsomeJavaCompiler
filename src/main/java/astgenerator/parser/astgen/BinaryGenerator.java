@@ -27,7 +27,7 @@ public class BinaryGenerator {
         operatorTypes.add(Arrays.asList(new String[]{"==","!="})); //EQUALS
         operatorTypes.add(Arrays.asList(new String[]{">=",">","<=","<"})); //COMPARATOR
         operatorTypes.add(Arrays.asList(new String[]{"*","/"})); //POINT
-        operatorTypes.add(Arrays.asList(new String[]{"+","-"})); //ADDSUB
+        operatorTypes.add(Arrays.asList(new String[]{"+","-","%"})); //ADDSUB
 
 
         List <String> operators = new ArrayList<>();
@@ -93,6 +93,8 @@ public class BinaryGenerator {
                 return Operators.PLUS;
             case "-":
                 return Operators.MINUS;
+            case "%":
+                return Operators.MODULO;
             default:
                 return null;
         }
