@@ -3,6 +3,7 @@ package BytecodeTests;
 import General.BytecodeLoader;
 import General.Vorlesungsbeispiel1;
 import General.Vorlesungsbeispiel2;
+import General.Vorlesungsbeispiel2Extended;
 import common.Global;
 import common.ObjectType;
 import org.junit.Test;
@@ -73,6 +74,56 @@ public class VorlesungsbeispielByteCodeTests
         catch (NullPointerException expected)
         {
         }
+    }
+
+    @Test
+    public void testVorlesungsbeispiel2Extended1() throws Exception {
+        var program = Vorlesungsbeispiel2Extended.getVorlesungsbeispiel2Extended1TypedProgram();
+        var generator = Global.getFactory().getBytecodeGenerator();
+        var byteCode = generator.generate(program);
+        assertNotNull(byteCode);
+        assertEquals(byteCode.size(), 4);
+        var map = new HashMap<String, byte[]>(){{
+            put("Cl1", byteCode.get(0).toByteArray());
+            put("Cl2", byteCode.get(1).toByteArray());
+            put("Cl3", byteCode.get(2).toByteArray());
+            put("Cl4", byteCode.get(3).toByteArray());
+        }};
+
+        var loader = new BytecodeLoader(map);
+        var c2Thing = getThing(loader, "Cl2");
+        var c3Thing = getThing(loader, "Cl3");
+        var c4Thing = getThing(loader, "Cl4");
+
+        var testTypeObjectReturn = c2Thing.getClass().getDeclaredMethods()[0];
+        var result = testTypeObjectReturn.invoke(c4Thing, null, c2Thing);
+        assertEquals(result, c2Thing);
+        result = testTypeObjectReturn.invoke(c4Thing, c3Thing, c2Thing);
+        assertEquals(result, c3Thing);
+    }
+
+    @Test
+    public void testVorlesungsbeispiel2Extended2() throws Exception {
+        var program = Vorlesungsbeispiel2Extended.getVorlesungsbeispiel2Extended2TypedProgram();
+        var generator = Global.getFactory().getBytecodeGenerator();
+        var byteCode = generator.generate(program);
+        assertNotNull(byteCode);
+        assertEquals(byteCode.size(), 4);
+        var map = new HashMap<String, byte[]>(){{
+            put("Cl1", byteCode.get(0).toByteArray());
+            put("Cl2", byteCode.get(1).toByteArray());
+            put("Cl3", byteCode.get(2).toByteArray());
+            put("Cl5", byteCode.get(3).toByteArray());
+        }};
+
+        var loader = new BytecodeLoader(map);
+        var c5Thing = getThing(loader, "Cl5");
+
+        var testWideningReturn = c5Thing.getClass().getDeclaredMethods()[0];
+        var result = testWideningReturn.invoke(c5Thing, 1, 'h');
+        assertEquals(result, 1);
+        result = testWideningReturn.invoke(c5Thing, 8, 'h');
+        assertEquals(result, 'h');
     }
 
     private Object getThing(BytecodeLoader loader, String className) throws Exception
