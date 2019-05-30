@@ -17,7 +17,6 @@ public interface TypeChecker
     TypedChar typeCheck(JCharacter toCheck);
     TypedInt typeCheck(JInteger toCheck);
     TypedNull typeCheck(JNull toCheck);
-    TypedString typeCheck(JString toCheck);
     TypedLocalOrFieldVar typeCheck(LocalOrFieldVar toCheck);
     TypedMethodCallExpression typeCheck(MethodCallExpression toCheck);
     TypedNewExpression typeCheck(NewExpression toCheck);

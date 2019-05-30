@@ -21,6 +21,7 @@ public class TypedBlock extends TypedStatement
     }
     public TypedBlock(ObjectType objectType, TypedStatement... blockedStatements)
     {
+        blockedStatements = blockedStatements == null ? new TypedStatement[0] : blockedStatements;
         this.blockedStatements = Arrays.asList(blockedStatements);
         this.objectType = objectType;
     }
