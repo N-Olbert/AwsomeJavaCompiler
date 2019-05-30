@@ -288,26 +288,6 @@ public interface awsomeJavaListener extends ParseTreeListener {
 	 */
 	void exitBinary(awsomeJavaParser.BinaryContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link awsomeJavaParser#operatorBeforeExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterOperatorBeforeExpr(awsomeJavaParser.OperatorBeforeExprContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link awsomeJavaParser#operatorBeforeExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitOperatorBeforeExpr(awsomeJavaParser.OperatorBeforeExprContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link awsomeJavaParser#operatorAfterExpr}.
-	 * @param ctx the parse tree
-	 */
-	void enterOperatorAfterExpr(awsomeJavaParser.OperatorAfterExprContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link awsomeJavaParser#operatorAfterExpr}.
-	 * @param ctx the parse tree
-	 */
-	void exitOperatorAfterExpr(awsomeJavaParser.OperatorAfterExprContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link awsomeJavaParser#baseType}.
 	 * @param ctx the parse tree
 	 */

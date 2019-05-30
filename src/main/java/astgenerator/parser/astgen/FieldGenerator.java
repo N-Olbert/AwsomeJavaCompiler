@@ -5,31 +5,48 @@ import astgenerator.parser.generated.awsomeJavaParser;
 import common.Modifier;
 import common.ObjectType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 class FieldGenerator {
 
-    static FieldDeclaration generate(awsomeJavaParser.FieldDeclarationContext fieldDecl){
-        ObjectType type = null;
+    static List<FieldDeclaration> generate(awsomeJavaParser.FieldDeclarationContext fieldDecl){
 
-        if (fieldDecl.objectType().Identifier() != null){
-            type = ObjectType.getType(fieldDecl.objectType().Identifier().getText());
-        } else {
-            String objectType = fieldDecl.objectType().getText();
+        List<FieldDeclaration> declarations = new ArrayList<>();
 
-            switch (objectType){
-                case "int":
-                    type = ObjectType.IntType;
-                    break;
-                case "char":
-                    type = ObjectType.CharType;
-                    break;
-                case "boolean":
-                    type = ObjectType.BoolType;
-                    break;
+        fieldDecl.Identifier().forEach(identifier -> {
+
+            ObjectType type = null;
+
+            if (fieldDecl.objectType().Identifier() != null) {
+                type = ObjectType.getType(fieldDecl.objectType().Identifier().getText());
+            } else {
+                String objectType = fieldDecl.objectType().getText();
+
+                switch (objectType) {
+                    case "int":
+                        type = ObjectType.IntType;
+                        break;
+                    case "char":
+                        type = ObjectType.CharType;
+                        break;
+                    case "boolean":
+                        type = ObjectType.BoolType;
+                        break;
+                }
             }
-        }
 
-        return new FieldDeclaration(AccessModifierGenerator.generate(fieldDecl.AccessModifier()),
-                Modifier.NONE, type,  fieldDecl.Identifier().getText());
+            if (fieldDecl.expression() != null){
+                declarations.add(new FieldDeclaration(AccessModifierGenerator.generate(fieldDecl.AccessModifier()),
+                        Modifier.NONE, type, identifier.getText(),
+                        ExpressionGenerator.generate(fieldDecl.expression())));
+            } else {
+                declarations.add(new FieldDeclaration(AccessModifierGenerator.generate(fieldDecl.AccessModifier()),
+                        Modifier.NONE, type, identifier.getText()));
+            }
+        });
+
+        return declarations;
     }
 
 }

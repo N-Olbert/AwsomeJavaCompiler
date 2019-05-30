@@ -20,7 +20,7 @@ public class awsomeJavaLexer extends Lexer {
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, T__5=6, T__6=7, T__7=8, T__8=9, 
 		T__9=10, T__10=11, AccessModifier=12, JBoolean=13, JNull=14, Void=15, 
 		Super=16, This=17, If=18, Else=19, Equal=20, PlusEqual=21, MinusEqual=22, 
-		Comperator=23, OpBeforeIdentifier=24, OpBeforeOrAfterIdentifier=25, PointOperator=26, 
+		Comperator=23, NotOperator=24, OpBeforeOrAfterIdentifier=25, PointOperator=26, 
 		AddSubOperator=27, LogicalOperator=28, LBracket=29, RBracket=30, CurlyLBracket=31, 
 		CurlyRBracket=32, Dot=33, Comma=34, Semicolon=35, Identifier=36, JCharacter=37, 
 		JInteger=38, WS=39, Comment=40, LineComment=41;
@@ -37,7 +37,7 @@ public class awsomeJavaLexer extends Lexer {
 			"T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "T__6", "T__7", "T__8", 
 			"T__9", "T__10", "AccessModifier", "JBoolean", "JNull", "Void", "Super", 
 			"This", "If", "Else", "Equal", "PlusEqual", "MinusEqual", "Comperator", 
-			"OpBeforeIdentifier", "OpBeforeOrAfterIdentifier", "PointOperator", "AddSubOperator", 
+			"NotOperator", "OpBeforeOrAfterIdentifier", "PointOperator", "AddSubOperator", 
 			"LogicalOperator", "LBracket", "RBracket", "CurlyLBracket", "CurlyRBracket", 
 			"Dot", "Comma", "Semicolon", "Identifier", "JCharacter", "JInteger", 
 			"WS", "Comment", "LineComment"
@@ -59,7 +59,7 @@ public class awsomeJavaLexer extends Lexer {
 		return new String[] {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			"AccessModifier", "JBoolean", "JNull", "Void", "Super", "This", "If", 
-			"Else", "Equal", "PlusEqual", "MinusEqual", "Comperator", "OpBeforeIdentifier", 
+			"Else", "Equal", "PlusEqual", "MinusEqual", "Comperator", "NotOperator", 
 			"OpBeforeOrAfterIdentifier", "PointOperator", "AddSubOperator", "LogicalOperator", 
 			"LBracket", "RBracket", "CurlyLBracket", "CurlyRBracket", "Dot", "Comma", 
 			"Semicolon", "Identifier", "JCharacter", "JInteger", "WS", "Comment", 
@@ -148,21 +148,21 @@ public class awsomeJavaLexer extends Lexer {
 		")\3)\3)\3)\3)\3)\3*\3*\3*\3*\7*\u0134\n*\f*\16*\u0137\13*\3*\3*\3\u0127"+
 		"\2+\3\3\5\4\7\5\t\6\13\7\r\b\17\t\21\n\23\13\25\f\27\r\31\16\33\17\35"+
 		"\20\37\21!\22#\23%\24\'\25)\26+\27-\30/\31\61\32\63\33\65\34\67\359\36"+
-		";\37= ?!A\"C#E$G%I&K\'M(O)Q*S+\3\2\n\4\2>>@@\4\2,,\61\61\4\2--//\4\2C"+
-		"\\c|\5\2\62;C\\c|\3\2\62;\5\2\13\f\17\17\"\"\4\2\f\f\17\17\2\u0147\2\3"+
-		"\3\2\2\2\2\5\3\2\2\2\2\7\3\2\2\2\2\t\3\2\2\2\2\13\3\2\2\2\2\r\3\2\2\2"+
-		"\2\17\3\2\2\2\2\21\3\2\2\2\2\23\3\2\2\2\2\25\3\2\2\2\2\27\3\2\2\2\2\31"+
-		"\3\2\2\2\2\33\3\2\2\2\2\35\3\2\2\2\2\37\3\2\2\2\2!\3\2\2\2\2#\3\2\2\2"+
-		"\2%\3\2\2\2\2\'\3\2\2\2\2)\3\2\2\2\2+\3\2\2\2\2-\3\2\2\2\2/\3\2\2\2\2"+
-		"\61\3\2\2\2\2\63\3\2\2\2\2\65\3\2\2\2\2\67\3\2\2\2\29\3\2\2\2\2;\3\2\2"+
-		"\2\2=\3\2\2\2\2?\3\2\2\2\2A\3\2\2\2\2C\3\2\2\2\2E\3\2\2\2\2G\3\2\2\2\2"+
-		"I\3\2\2\2\2K\3\2\2\2\2M\3\2\2\2\2O\3\2\2\2\2Q\3\2\2\2\2S\3\2\2\2\3U\3"+
-		"\2\2\2\5[\3\2\2\2\7b\3\2\2\2\tg\3\2\2\2\13p\3\2\2\2\ru\3\2\2\2\17y\3\2"+
-		"\2\2\21\177\3\2\2\2\23\u0086\3\2\2\2\25\u008a\3\2\2\2\27\u008f\3\2\2\2"+
-		"\31\u00ad\3\2\2\2\33\u00b8\3\2\2\2\35\u00ba\3\2\2\2\37\u00bf\3\2\2\2!"+
-		"\u00c4\3\2\2\2#\u00ca\3\2\2\2%\u00cf\3\2\2\2\'\u00d2\3\2\2\2)\u00d7\3"+
-		"\2\2\2+\u00d9\3\2\2\2-\u00dc\3\2\2\2/\u00e8\3\2\2\2\61\u00ea\3\2\2\2\63"+
-		"\u00f0\3\2\2\2\65\u00f2\3\2\2\2\67\u00f4\3\2\2\29\u00fa\3\2\2\2;\u00fc"+
+		";\37= ?!A\"C#E$G%I&K\'M(O)Q*S+\3\2\n\4\2>>@@\4\2,,\61\61\5\2\'\'--//\4"+
+		"\2C\\c|\5\2\62;C\\c|\3\2\62;\5\2\13\f\17\17\"\"\4\2\f\f\17\17\2\u0147"+
+		"\2\3\3\2\2\2\2\5\3\2\2\2\2\7\3\2\2\2\2\t\3\2\2\2\2\13\3\2\2\2\2\r\3\2"+
+		"\2\2\2\17\3\2\2\2\2\21\3\2\2\2\2\23\3\2\2\2\2\25\3\2\2\2\2\27\3\2\2\2"+
+		"\2\31\3\2\2\2\2\33\3\2\2\2\2\35\3\2\2\2\2\37\3\2\2\2\2!\3\2\2\2\2#\3\2"+
+		"\2\2\2%\3\2\2\2\2\'\3\2\2\2\2)\3\2\2\2\2+\3\2\2\2\2-\3\2\2\2\2/\3\2\2"+
+		"\2\2\61\3\2\2\2\2\63\3\2\2\2\2\65\3\2\2\2\2\67\3\2\2\2\29\3\2\2\2\2;\3"+
+		"\2\2\2\2=\3\2\2\2\2?\3\2\2\2\2A\3\2\2\2\2C\3\2\2\2\2E\3\2\2\2\2G\3\2\2"+
+		"\2\2I\3\2\2\2\2K\3\2\2\2\2M\3\2\2\2\2O\3\2\2\2\2Q\3\2\2\2\2S\3\2\2\2\3"+
+		"U\3\2\2\2\5[\3\2\2\2\7b\3\2\2\2\tg\3\2\2\2\13p\3\2\2\2\ru\3\2\2\2\17y"+
+		"\3\2\2\2\21\177\3\2\2\2\23\u0086\3\2\2\2\25\u008a\3\2\2\2\27\u008f\3\2"+
+		"\2\2\31\u00ad\3\2\2\2\33\u00b8\3\2\2\2\35\u00ba\3\2\2\2\37\u00bf\3\2\2"+
+		"\2!\u00c4\3\2\2\2#\u00ca\3\2\2\2%\u00cf\3\2\2\2\'\u00d2\3\2\2\2)\u00d7"+
+		"\3\2\2\2+\u00d9\3\2\2\2-\u00dc\3\2\2\2/\u00e8\3\2\2\2\61\u00ea\3\2\2\2"+
+		"\63\u00f0\3\2\2\2\65\u00f2\3\2\2\2\67\u00f4\3\2\2\29\u00fa\3\2\2\2;\u00fc"+
 		"\3\2\2\2=\u00fe\3\2\2\2?\u0100\3\2\2\2A\u0102\3\2\2\2C\u0104\3\2\2\2E"+
 		"\u0106\3\2\2\2G\u0108\3\2\2\2I\u010a\3\2\2\2K\u0111\3\2\2\2M\u0116\3\2"+
 		"\2\2O\u011b\3\2\2\2Q\u0121\3\2\2\2S\u012f\3\2\2\2UV\7e\2\2VW\7n\2\2WX"+
