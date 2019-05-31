@@ -20,6 +20,8 @@ public class Vorlesungsbeispiel2Extended
     {
         var className = "Cl4";
         var baseProg = Vorlesungsbeispiel2.getVorlesungsbeispiel2Program();
+        var ctor = new MethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.VoidType,
+                className, new ArrayList<>(), new Block());
         var method = new MethodDeclaration(AccessModifier.PACKAGE_PRIVATE,  Modifier.NONE, ObjectType.JObjectType,
                 "testTypeObjectReturn",
                 new ArrayList<>(){{
@@ -37,7 +39,7 @@ public class Vorlesungsbeispiel2Extended
                 ));
 
         var class4 = new Class(ObjectType.getType(className), new ArrayList<>(),
-                new ArrayList<>(){{add(method);}});
+                new ArrayList<>(){{add(ctor);add(method);}});
         baseProg.getClasses().add(class4);
         return baseProg;
     }
@@ -46,6 +48,9 @@ public class Vorlesungsbeispiel2Extended
     {
         var className = "Cl4";
         var baseProg = Vorlesungsbeispiel2.getVorlesungsbeispiel2TypedProgram();
+        var ctor = new TypedMethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.VoidType,
+                className, new ArrayList<>(), new TypedBlock(ObjectType.VoidType));
+
         var method = new TypedMethodDeclaration(AccessModifier.PACKAGE_PRIVATE,  Modifier.NONE, ObjectType.JObjectType,
                 "testTypeObjectReturn",
                 new ArrayList<>(){{
@@ -72,7 +77,7 @@ public class Vorlesungsbeispiel2Extended
                 ));
 
         var class4 = new TypedClass(ObjectType.getType(className), new ArrayList<>(),
-                new ArrayList<>(){{add(method);}});
+                new ArrayList<>(){{add(ctor);add(method);}});
         baseProg.getClasses().add(class4);
         return baseProg;
     }
@@ -81,6 +86,8 @@ public class Vorlesungsbeispiel2Extended
     {
         var className = "Cl5";
         var baseProg = Vorlesungsbeispiel2.getVorlesungsbeispiel2Program();
+        var ctor = new MethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.VoidType,
+                className, new ArrayList<>(), new Block());
         var method = new MethodDeclaration(AccessModifier.PACKAGE_PRIVATE,  Modifier.NONE, ObjectType.IntType,
                 "testWideningReturn",
                 new ArrayList<>(){{
@@ -98,7 +105,7 @@ public class Vorlesungsbeispiel2Extended
                 ));
 
         var class4 = new Class(ObjectType.getType(className), new ArrayList<>(),
-                new ArrayList<>(){{add(method);}});
+                new ArrayList<>(){{add(ctor);add(method);}});
         baseProg.getClasses().add(class4);
         return baseProg;
     }
@@ -107,6 +114,8 @@ public class Vorlesungsbeispiel2Extended
     {
         var className = "Cl5";
         var baseProg = Vorlesungsbeispiel2.getVorlesungsbeispiel2TypedProgram();
+        var ctor = new TypedMethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.VoidType,
+                className, new ArrayList<>(), new TypedBlock(ObjectType.VoidType));
         var method = new TypedMethodDeclaration(AccessModifier.PACKAGE_PRIVATE,  Modifier.NONE, ObjectType.IntType,
                 "testWideningReturn",
                 new ArrayList<>(){{
@@ -133,7 +142,7 @@ public class Vorlesungsbeispiel2Extended
                 ));
 
         var class4 = new TypedClass(ObjectType.getType(className), new ArrayList<>(),
-                new ArrayList<>(){{add(method);}});
+                new ArrayList<>(){{add(ctor);add(method);}});
         baseProg.getClasses().add(class4);
         return baseProg;
     }

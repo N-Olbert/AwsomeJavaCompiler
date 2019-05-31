@@ -1,5 +1,6 @@
 package TypedASTTests;
 
+import General.BetterInt;
 import astgenerator.expressions.*;
 import astgenerator.generalelements.UntypedProgram;
 import astgenerator.statements.AssignStatement;
@@ -11,7 +12,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 import tastgenerator.TypeCheckerInstance;
+import tastgenerator.exceptions.TypeMismatchException;
 import tastgenerator.expressions.TypedBinary;
+
+import java.util.ArrayList;
 
 public class TypedBinaryTests
 {
@@ -245,5 +249,68 @@ public class TypedBinaryTests
         assertEquals(typedBinary.getExpression().getObjectType(), ObjectType.IntType);
         assertEquals(typedBinary.getExpression2().getObjectType(), ObjectType.CharType);
         assertEquals(typedBinary.getOperator(), Operators.NOTEQUALS);
+    }
+
+    @Test
+    public void ValidEqualsTest1()
+    {
+        var converter = new TypeCheckerInstance(BetterInt.getBetterIntProgram());
+        var binary = new Binary(new NewExpression(ObjectType.getType("BetterInt"), new ArrayList<>()), new JNull(), Operators.NOTEQUALS);
+        binary.toTyped(converter);;
+    }
+
+    @Test
+    public void ValidEqualsTest2()
+    {
+        var converter = new TypeCheckerInstance(BetterInt.getBetterIntProgram());
+        var binary = new Binary(new NewExpression(ObjectType.getType("BetterInt"), new ArrayList<>()), new JNull(), Operators.EQUALS);
+        binary.toTyped(converter);;
+    }
+    @Test(expected = TypeMismatchException.class)
+    public void InvalidEqualsTest1()
+    {
+        var converter = new TypeCheckerInstance(new UntypedProgram());
+        var binary = new Binary(new JInteger("1"), new JNull(), Operators.NOTEQUALS);
+        binary.toTyped(converter);;
+    }
+
+    @Test(expected = TypeMismatchException.class)
+    public void InvalidEqualsTest2()
+    {
+        var converter = new TypeCheckerInstance(new UntypedProgram());
+        var binary = new Binary(new JInteger("1"), new JNull(), Operators.EQUALS);
+        binary.toTyped(converter);;
+    }
+
+    @Test(expected = TypeMismatchException.class)
+    public void InvalidEqualsTest3()
+    {
+        var converter = new TypeCheckerInstance(new UntypedProgram());
+        var binary = new Binary(new JCharacter("1"), new JNull(), Operators.NOTEQUALS);
+        binary.toTyped(converter);;
+    }
+
+    @Test(expected = TypeMismatchException.class)
+    public void InvalidEqualsTest4()
+    {
+        var converter = new TypeCheckerInstance(new UntypedProgram());
+        var binary = new Binary(new JCharacter("1"), new JNull(), Operators.EQUALS);
+        binary.toTyped(converter);;
+    }
+
+    @Test(expected = TypeMismatchException.class)
+    public void InvalidEqualsTest5()
+    {
+        var converter = new TypeCheckerInstance(new UntypedProgram());
+        var binary = new Binary(new JBoolean("true"), new JNull(), Operators.NOTEQUALS);
+        binary.toTyped(converter);;
+    }
+
+    @Test(expected = TypeMismatchException.class)
+    public void InvalidEqualsTest6()
+    {
+        var converter = new TypeCheckerInstance(new UntypedProgram());
+        var binary = new Binary(new JBoolean("true"), new JNull(), Operators.EQUALS);
+        binary.toTyped(converter);;
     }
 }

@@ -14,10 +14,7 @@ import tastgenerator.expressions.*;
 import tastgenerator.generalelements.*;
 import tastgenerator.statements.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class TypeCheckerInstance implements TypeChecker
 {
@@ -138,9 +135,12 @@ public class TypeCheckerInstance implements TypeChecker
                 }
             case EQUALS:
             case NOTEQUALS:
+                List<ObjectType> primitiveTypes = Arrays.asList(ObjectType.IntType, ObjectType.CharType, ObjectType.BoolType);
                 if (((expression1.getObjectType() == ObjectType.IntType || expression1.getObjectType() == ObjectType.CharType) &&
                      (expression2.getObjectType() == ObjectType.IntType || expression2.getObjectType() == ObjectType.CharType)) ||
-                     (expression1.getObjectType() == ObjectType.BoolType && expression2.getObjectType() == ObjectType.BoolType)) {
+                     (expression1.getObjectType() == ObjectType.BoolType && expression2.getObjectType() == ObjectType.BoolType) ||
+                     (expression1.getObjectType() == ObjectType.NullType && !primitiveTypes.contains(expression2.getObjectType())) ||
+                     (expression2.getObjectType() == ObjectType.NullType && !primitiveTypes.contains(expression1.getObjectType()))) {
                     return new TypedBinary(expression1, expression2, toCheck.getOperator(), ObjectType.BoolType);
                 } else {
                     throw new TypeMismatchException("Type Mismatch: Cannot apply " + toCheck.getOperator().name() + " to '" +

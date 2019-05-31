@@ -49,7 +49,6 @@ public class TypedNewStatement extends TypedStatement {
             return false;
         }
         return parameters != null ? parameters.equals(that.parameters) : that.parameters == null;
-
     }
 
     @Override
