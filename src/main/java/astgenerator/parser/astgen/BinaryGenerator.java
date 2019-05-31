@@ -46,7 +46,7 @@ public class BinaryGenerator {
             for (int i = 0; i < operators.size(); i++) {
                 if (operatortype.contains(operators.get(i))) {
                     if (!newExpressions.isEmpty()) {
-                        newExpressions.remove(expressions.size() - 1);
+                        newExpressions.remove(newExpressions.size() - 1);
                     }
                     newExpressions.add(new Binary(expressions.get(i), expressions.get(i + 1), getoperatorFromString(operators.get(i))));
                 } else {
