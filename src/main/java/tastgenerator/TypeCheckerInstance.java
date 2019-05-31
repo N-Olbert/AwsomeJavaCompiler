@@ -140,7 +140,8 @@ public class TypeCheckerInstance implements TypeChecker
             case NOTEQUALS:
                 if (((expression1.getObjectType() == ObjectType.IntType || expression1.getObjectType() == ObjectType.CharType) &&
                      (expression2.getObjectType() == ObjectType.IntType || expression2.getObjectType() == ObjectType.CharType)) ||
-                     (expression1.getObjectType() == ObjectType.BoolType && expression2.getObjectType() == ObjectType.BoolType)) {
+                     (expression1.getObjectType() == ObjectType.BoolType && expression2.getObjectType() == ObjectType.BoolType) ||
+                     (expression1.getObjectType() == ObjectType.NullType || expression2.getObjectType() == ObjectType.NullType)) {
                     return new TypedBinary(expression1, expression2, toCheck.getOperator(), ObjectType.BoolType);
                 } else {
                     throw new TypeMismatchException("Type Mismatch: Cannot apply " + toCheck.getOperator().name() + " to '" +
