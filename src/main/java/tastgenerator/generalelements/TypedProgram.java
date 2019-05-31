@@ -19,4 +19,34 @@ public class TypedProgram extends TypedGeneralThing
     {
         this.classes = classes;
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+        if (!super.equals(o))
+        {
+            return false;
+        }
+
+        TypedProgram that = (TypedProgram) o;
+
+        return classes != null ? classes.equals(that.classes) : that.classes == null;
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = super.hashCode();
+        result = 31 * result + (classes != null ? classes.hashCode() : 0);
+        return result;
+    }
 }

@@ -186,11 +186,6 @@ public class TypeCheckerInstance implements TypeChecker
     }
 
     @Override
-    public TypedString typeCheck(JString toCheck) {
-        return new TypedString(toCheck.getJString());
-    }
-
-    @Override
     public TypedLocalOrFieldVar typeCheck(LocalOrFieldVar toCheck) {
         ObjectType varType = null;
         for (Tuple<String, ObjectType> localVar : currentLocalVars) {
@@ -286,10 +281,19 @@ public class TypeCheckerInstance implements TypeChecker
 
     @Override
     public TypedFieldDeclaration typeCheck(FieldDeclaration toCheck) {
+        TypedExpression typedExpression = null;
+        if (toCheck.getExpression() != null) {
+            typedExpression = toCheck.getExpression().toTyped(this);
+            if (!toCheck.getVariableType().getName().equals(typedExpression.getObjectType().getName())) {
+                throw new TypeMismatchException("Field of type " + toCheck.getVariableType() + " cannot be initialized with type " +
+                        typedExpression.getObjectType());
+            }
+        }
         return new TypedFieldDeclaration(toCheck.getAccessModifier(),
                                          toCheck.getModifier(),
                                          toCheck.getVariableType(),
-                                         toCheck.getName());
+                                         toCheck.getName(),
+                                         typedExpression);
     }
 
     @Override

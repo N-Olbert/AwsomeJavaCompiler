@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TypedProgramGenerator
 {
-    static TypedProgram getProgram(String className, List <TypedFieldDeclaration> fields, List <TypedMethodDeclaration> methods)
+    public static TypedProgram getProgram(String className, List <TypedFieldDeclaration> fields, List <TypedMethodDeclaration> methods)
     {
         var classes = new ArrayList <TypedClass>();
         var newClass = new TypedClass(ObjectType.getType(className), fields, methods);
@@ -79,7 +79,7 @@ public class TypedProgramGenerator
         return methodList;
     }
 
-    static List<TypedMethodDeclaration> getMethods(List <String[]> params, List <TypedBlock> stmts, List <ArrayList <TypedMethodParameter>> parameters)
+    public static List<TypedMethodDeclaration> getMethods(List <String[]> params, List <TypedBlock> stmts, List <ArrayList <TypedMethodParameter>> parameters)
     {
         var methodList = new ArrayList<TypedMethodDeclaration>();
         for(String[] s : params)

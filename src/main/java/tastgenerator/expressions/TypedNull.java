@@ -19,4 +19,10 @@ public class TypedNull extends TypedExpression
     public void generateByteCode(MethodVisitor visitor, Context context) {
         Generator.generate(this, visitor, context);
     }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        return super.equals(o) && o instanceof TypedNull;
+    }
 }

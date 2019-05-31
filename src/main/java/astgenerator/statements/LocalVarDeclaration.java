@@ -1,8 +1,11 @@
 package astgenerator.statements;
 
+import astgenerator.expressions.Expression;
 import common.ObjectType;
 import tastgenerator.TypeChecker;
 import tastgenerator.statements.TypedStatement;
+
+import java.util.Objects;
 
 public class LocalVarDeclaration extends Statement
 {
@@ -28,5 +31,19 @@ public class LocalVarDeclaration extends Statement
     @Override
     public TypedStatement toTyped(TypeChecker converter) {
         return converter.typeCheck(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LocalVarDeclaration that = (LocalVarDeclaration) o;
+        return Objects.equals(variableType, that.variableType) &&
+                Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(variableType, name);
     }
 }

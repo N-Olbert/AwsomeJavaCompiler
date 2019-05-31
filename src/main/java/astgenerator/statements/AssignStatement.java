@@ -4,6 +4,8 @@ import astgenerator.expressions.Expression;
 import tastgenerator.TypeChecker;
 import tastgenerator.statements.TypedStatement;
 
+import java.util.Objects;
+
 public class AssignStatement extends Statement
 {
     private Expression expression1;
@@ -25,5 +27,19 @@ public class AssignStatement extends Statement
     @Override
     public TypedStatement toTyped(TypeChecker converter) {
         return converter.typeCheck(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AssignStatement that = (AssignStatement) o;
+        return Objects.equals(expression1, that.expression1) &&
+                Objects.equals(expression2, that.expression2);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(expression1, expression2);
     }
 }

@@ -66,7 +66,7 @@ public class PointClassTests
 
     private UntypedProgram getPointClassWithGetters(UntypedProgram baseClass)
     {
-        var methods = baseClass.getClasses().get(1).getMethods();
+        var methods = baseClass.getClasses().get(0).getMethods();
         var returnStatement1 = new Block(new Return(new InstVar(new This(), "x")));
         var returnStatement2 = new Block(new Return(new InstVar(new This(), "y")));
 
@@ -112,7 +112,7 @@ public class PointClassTests
         assertNotNull(typedProgram);
         assertEquals(typedProgram.getClasses().size(), 1);
         var typedPointClass = typedProgram.getClasses().get(0);
-        assertEquals(typedProgram.getObjectType(), ObjectType.getType("Point"));
+        assertEquals(typedPointClass.getObjectType(), ObjectType.getType("Point"));
         var typedFields = typedPointClass.getFields();
         assertEquals(typedFields.size(), 2);
         assertEquals(typedFields.get(0).getName(), "x");
@@ -130,7 +130,7 @@ public class PointClassTests
     {
         assertEquals(typedProgram.getClasses().size(), 1);
         var typedPointClass = typedProgram.getClasses().get(0);
-        assertEquals(typedProgram.getObjectType(), ObjectType.getType("Point"));
+        assertEquals(typedPointClass.getObjectType(), ObjectType.getType("Point"));
         var getX = typedPointClass.getMethods().stream().filter(x -> x.getName().equals("getX")).findFirst().get();
         var getY = typedPointClass.getMethods().stream().filter(x -> x.getName().equals("getY")).findFirst().get();
         for(TypedMethodDeclaration tm : new TypedMethodDeclaration[] {getX, getY})

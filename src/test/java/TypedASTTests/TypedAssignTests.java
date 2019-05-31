@@ -56,7 +56,7 @@ public class TypedAssignTests
         assertEquals(typed.getObjectType(), ObjectType.BoolType);
         var localVar = (TypedLocalVarDeclaration)((TypedBlock)typed).getBlockedStatements().get(0);
         assertNotNull(localVar);
-        assertEquals(localVar.getObjectType(), ObjectType.BoolType);
+        assertEquals(localVar.getObjectType(), ObjectType.VoidType);
 
         var ifElse = (TypedIfElse)((TypedBlock)typed).getBlockedStatements().get(1);
         assertEquals(ifElse.getObjectType(), ObjectType.BoolType);
@@ -69,18 +69,18 @@ public class TypedAssignTests
 
         var assign = (TypedAssignExpression)binary.getExpression();
         assertEquals(assign.getObjectType(), ObjectType.BoolType); //this is the vital one
-        var assignTarget = (TypedLocalOrFieldVar)binary.getExpression();
+        var assignTarget = (TypedLocalOrFieldVar)assign.getExpression1();
         assertEquals(assignTarget.getName(), "b");
         assertEquals(assignTarget.getObjectType(), ObjectType.BoolType);
-        var assignValue = (TypedBinary)binary.getExpression2();
+        var assignValue = (TypedBinary)assign.getExpression2();
         assertEquals(assignValue.getOperator(), Operators.EQUALS);
-        assertTrue(assignValue.getExpression() instanceof TypedBoolean);
+        assertTrue(assignValue.getExpression() instanceof TypedInt);
         assertEquals(assignValue.getExpression().getObjectType(), ObjectType.IntType);
-        assertTrue(assignValue.getExpression2() instanceof TypedBoolean);
+        assertTrue(assignValue.getExpression2() instanceof TypedInt);
         assertEquals(assignValue.getExpression2().getObjectType(), ObjectType.IntType);
 
         var toCompare = binary.getExpression2();
-        assertEquals(assignValue.getExpression().getObjectType(), ObjectType.BoolType);
+        assertEquals(assignValue.getObjectType(), ObjectType.BoolType);
         assertTrue(toCompare instanceof TypedBoolean);
     }
 }

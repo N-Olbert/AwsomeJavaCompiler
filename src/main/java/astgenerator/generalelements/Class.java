@@ -6,6 +6,7 @@ import tastgenerator.generalelements.TypedGeneralThing;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Class extends GeneralThing
 {
@@ -38,5 +39,20 @@ public class Class extends GeneralThing
     @Override
     public TypedGeneralThing toTyped(TypeChecker converter) {
         return converter.typeCheck(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Class aClass = (Class) o;
+        return Objects.equals(classType, aClass.classType) &&
+                Objects.equals(fields, aClass.fields) &&
+                Objects.equals(methods, aClass.methods);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(classType, fields, methods);
     }
 }

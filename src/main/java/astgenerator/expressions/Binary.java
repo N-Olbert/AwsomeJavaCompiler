@@ -4,6 +4,8 @@ import common.Operators;
 import tastgenerator.TypeChecker;
 import tastgenerator.expressions.TypedExpression;
 
+import java.util.Objects;
+
 public class Binary extends Expression
 {
     private Expression expression;
@@ -34,5 +36,21 @@ public class Binary extends Expression
     @Override
     public TypedExpression toTyped(TypeChecker converter) {
         return converter.typeCheck(this);
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Binary binary = (Binary) o;
+        return Objects.equals(expression, binary.expression) &&
+                Objects.equals(expression2, binary.expression2) &&
+                operator == binary.operator;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(expression, expression2, operator);
     }
 }
