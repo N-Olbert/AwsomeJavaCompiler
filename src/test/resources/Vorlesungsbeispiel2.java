@@ -1,4 +1,4 @@
-Class Cl1 {
+class Cl1 {
     char m1() {
         int b;
         Cl2 x = new Cl2();
@@ -6,13 +6,13 @@ Class Cl1 {
     }
 }
 
-Class Cl2 {
+class Cl2 {
     Cl3 v;
     char m2(Cl3 v, int w) {
         return v.y;
     }
 }
 
-Class Cl3 {
+class Cl3 {
     char y;
 }
