@@ -27,11 +27,11 @@ public class BetterInt
         var fields = new ArrayList<FieldDeclaration>();
         fields.add(new FieldDeclaration(AccessModifier.PUBLIC, Modifier.NONE, ObjectType.IntType, "x"));
 
-        var ctor1 = new MethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, ObjectType.VoidType, "BetterInt",
+        var ctor1 = new MethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.VoidType, "BetterInt",
                 new ArrayList<>() {{add(new MethodParameter(ObjectType.IntType, "x"));}},
                 new Block(new AssignStatement(new InstVar(new This(), "x"), new LocalOrFieldVar("x"))));
 
-        var ctor2 = new MethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, ObjectType.VoidType, "BetterInt",
+        var ctor2 = new MethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.VoidType, "BetterInt",
                 new ArrayList<>(),
                 new Block(new AssignStatement(new LocalOrFieldVar("x"), new JInteger("0"))));
 
@@ -85,13 +85,13 @@ public class BetterInt
         var fields = new ArrayList<TypedFieldDeclaration>();
         fields.add(new TypedFieldDeclaration(AccessModifier.PUBLIC, Modifier.NONE, ObjectType.IntType, "x"));
 
-        var ctor1 = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, ObjectType.VoidType, "BetterInt",
+        var ctor1 = new TypedMethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.VoidType, "BetterInt",
                 new ArrayList<>() {{add(new TypedMethodParameter(ObjectType.IntType, "x"));}},
                 new TypedBlock(ObjectType.VoidType,
                         new TypedAssignStatement(new TypedInstVar(new TypedThis(classType), "x", ObjectType.IntType),
                         new TypedLocalOrFieldVar(ObjectType.IntType, "x"))));
 
-        var ctor2 = new TypedMethodDeclaration(AccessModifier.PUBLIC, Modifier.NONE, ObjectType.VoidType, "BetterInt",
+        var ctor2 = new TypedMethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE, ObjectType.VoidType, "BetterInt",
                 new ArrayList<>(),
                 new TypedBlock(ObjectType.VoidType,
                                new TypedAssignStatement(new TypedLocalOrFieldVar(ObjectType.IntType, "x"), new TypedInt("0"))));
