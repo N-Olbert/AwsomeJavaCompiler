@@ -1,4 +1,4 @@
-public class BetterInt
+class BetterInt
 {
     public int x;
 
