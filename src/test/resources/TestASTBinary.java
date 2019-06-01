@@ -17,13 +17,10 @@ class TestASTBinary{
 
     public void andVorOr()
     {
-        int result = a || b && c;
+        boolean result = a || b && c;
     }
 
-    public void binaryTest()
-    {
-        int result = a == b && !c;
-    }
+    public void binaryTest() { boolean result = a == b && !c; }
 
     public void fancyShit()
     {

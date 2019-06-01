@@ -15,8 +15,6 @@ public class ObjectTypeGenerator {
                 return ObjectType.BoolType;
             case "char":
                 return ObjectType.CharType;
-            case "String":
-                return ObjectType.StringType;
             default:
                 return ObjectType.getType(objectType);
         }
