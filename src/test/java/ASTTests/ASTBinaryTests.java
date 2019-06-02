@@ -8,6 +8,7 @@ import astgenerator.generalelements.*;
 import astgenerator.generalelements.Class;
 import astgenerator.statements.AssignStatement;
 import astgenerator.statements.Block;
+import astgenerator.statements.LocalVarDeclaration;
 import astgenerator.statements.Statement;
 import common.*;
 import org.junit.Test;
@@ -43,6 +44,7 @@ public class ASTBinaryTests {
                 ObjectType.VoidType, className, new ArrayList<>(), new Block(new Statement[0])));
 
         var methodParams = new ArrayList<MethodParameter>();
+        var resultDeclaration = new LocalVarDeclaration(ObjectType.IntType, "result");
         var assignPunktVorStrich = new AssignStatement(
                 //TODO: Line below should be something like new LocalOrFieldVar(new LocalVarDeclaration)
                 new LocalOrFieldVar("result"),
@@ -50,7 +52,7 @@ public class ASTBinaryTests {
                         new LocalOrFieldVar("a"),
                         new Binary(new LocalOrFieldVar("b"), new LocalOrFieldVar("c"), Operators.MULTIPLICATION),
                         Operators.PLUS));
-        var methodBody = new Block(assignPunktVorStrich);
+        var methodBody = new Block(resultDeclaration, assignPunktVorStrich);
 
         expectedTestClass.getMethods().add(new MethodDeclaration
                 (AccessModifier.PUBLIC, Modifier.NONE, ObjectType.VoidType, "punktVorStrich", methodParams, methodBody));
@@ -64,7 +66,7 @@ public class ASTBinaryTests {
                 )
         );
 
-        methodBody = new Block(assignPunktVorStrichMitKlammer);
+        methodBody = new Block(resultDeclaration, assignPunktVorStrichMitKlammer);
         expectedTestClass.getMethods().add(new MethodDeclaration(
                 AccessModifier.PUBLIC, Modifier.NONE, ObjectType.VoidType, "StrichVorPunktMitKlammer",methodParams, methodBody)
         );
@@ -76,7 +78,7 @@ public class ASTBinaryTests {
                         new Binary(new LocalOrFieldVar("b"), new LocalOrFieldVar("c"), Operators.DIVISION),
                         Operators.PLUS)
         );
-        methodBody = new Block(punktVorStrichMitGeteilt);
+        methodBody = new Block(resultDeclaration, punktVorStrichMitGeteilt);
         expectedTestClass.getMethods().add(new MethodDeclaration(
                 AccessModifier.PUBLIC, Modifier.NONE, ObjectType.VoidType, "punktVorStrichMitGeteilt", methodParams, methodBody
         ));
@@ -92,7 +94,7 @@ public class ASTBinaryTests {
                 ), Operators.OR)
         );
 
-        methodBody = new Block(andVorOr);
+        methodBody = new Block(resultDeclaration, andVorOr);
         expectedTestClass.getMethods().add(new MethodDeclaration(
                 AccessModifier.PUBLIC, Modifier.NONE, ObjectType.VoidType, "andVorOr", methodParams, methodBody
         ));
@@ -110,7 +112,7 @@ public class ASTBinaryTests {
                 )
         );
 
-        methodBody = new Block(binaryTest);
+        methodBody = new Block(resultDeclaration, binaryTest);
         expectedTestClass.getMethods().add(new MethodDeclaration(
                 AccessModifier.PUBLIC, Modifier.NONE, ObjectType.VoidType, "binaryTest", methodParams , methodBody)
         );
@@ -136,7 +138,7 @@ public class ASTBinaryTests {
                 )
         );
 
-        methodBody = new Block(fancyShit);
+        methodBody = new Block(resultDeclaration, fancyShit);
         expectedTestClass.getMethods().add(new MethodDeclaration(
                 AccessModifier.PUBLIC,
                 Modifier.NONE,

@@ -22,8 +22,8 @@ public class BinaryGenerator {
     public static Binary generate(awsomeJavaParser.BinaryContext binaryContext){
         operatorTypes = new ArrayList<>();
         operatorTypes.add(Arrays.asList(new String[]{"==","!="})); //EQUALS
-        operatorTypes.add(Collections.singletonList("||")); //OR
         operatorTypes.add(Collections.singletonList("&&")); //AND
+        operatorTypes.add(Collections.singletonList("||")); //OR
         operatorTypes.add(Collections.singletonList("^")); //XOR
         operatorTypes.add(Arrays.asList(new String[]{">=",">","<=","<"})); //COMPARATOR
         operatorTypes.add(Arrays.asList(new String[]{"*","/","%"})); //POINT
