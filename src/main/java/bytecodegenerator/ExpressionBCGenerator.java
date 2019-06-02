@@ -16,7 +16,6 @@ import tastgenerator.expressions.TypedLocalOrFieldVar;
 import tastgenerator.expressions.TypedMethodCallExpression;
 import tastgenerator.expressions.TypedNewExpression;
 import tastgenerator.expressions.TypedNull;
-import tastgenerator.expressions.TypedString;
 import tastgenerator.expressions.TypedSuper;
 import tastgenerator.expressions.TypedThis;
 import tastgenerator.expressions.TypedUnary;
@@ -32,10 +31,6 @@ public class ExpressionBCGenerator {
 
     public static void generate(TypedThis expression, MethodVisitor visitor, Context context) {
         visitor.visitVarInsn(ALOAD, 0);
-    }
-
-    public static void generate(TypedString expression, MethodVisitor visitor, Context context) {
-        visitor.visitLdcInsn(expression.getJString());
     }
 
     public static void generate(TypedBoolean typedBoolean, MethodVisitor visitor, Context context) {
