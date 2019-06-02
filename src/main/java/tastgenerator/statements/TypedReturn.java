@@ -1,19 +1,15 @@
 package tastgenerator.statements;
 
 import bytecodegenerator.Context;
-import bytecodegenerator.Generator;
+import bytecodegenerator.StatementBCGenerator;
 import common.ObjectType;
 import org.objectweb.asm.MethodVisitor;
 import tastgenerator.expressions.TypedExpression;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class TypedReturn extends TypedStatement
-{
+public class TypedReturn extends TypedStatement {
     private TypedExpression exp;
-    public TypedReturn(TypedExpression exp, ObjectType objectType)
-    {
+
+    public TypedReturn(TypedExpression exp, ObjectType objectType) {
         this.exp = exp;
         this.objectType = objectType;
     }
@@ -22,30 +18,25 @@ public class TypedReturn extends TypedStatement
         this.objectType = objectType;
     }
 
-    public TypedExpression getExp()
-    {
+    public TypedExpression getExp() {
         return exp;
     }
 
 
     @Override
     public void generateByteCode(MethodVisitor visitor, Context context) {
-        Generator.generate(this, visitor, context);
+        StatementBCGenerator.generate(this, visitor, context);
     }
 
     @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-        {
+    public boolean equals(Object o) {
+        if(this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass())
-        {
+        if(o == null || getClass() != o.getClass()) {
             return false;
         }
-        if (!super.equals(o))
-        {
+        if(!super.equals(o)) {
             return false;
         }
 
@@ -56,8 +47,7 @@ public class TypedReturn extends TypedStatement
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (exp != null ? exp.hashCode() : 0);
         return result;

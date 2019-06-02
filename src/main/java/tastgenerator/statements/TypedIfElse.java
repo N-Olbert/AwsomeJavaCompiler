@@ -1,23 +1,19 @@
 package tastgenerator.statements;
 
 import bytecodegenerator.Context;
-import bytecodegenerator.Generator;
+import bytecodegenerator.StatementBCGenerator;
 import common.ObjectType;
 import org.objectweb.asm.MethodVisitor;
 import tastgenerator.expressions.TypedExpression;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-public class TypedIfElse extends TypedStatement
-{
+public class TypedIfElse extends TypedStatement {
     private TypedExpression condition;
     private TypedBlock then;
     private TypedBlock otherwise;
 
-    public TypedIfElse(TypedExpression condition, TypedBlock then, TypedBlock otherwise, ObjectType objectType)
-    {
+    public TypedIfElse(TypedExpression condition, TypedBlock then, TypedBlock otherwise, ObjectType objectType) {
         this.condition = condition;
         this.then = then;
         this.otherwise = otherwise;
@@ -31,50 +27,41 @@ public class TypedIfElse extends TypedStatement
         this.objectType = objectType;
     }
 
-    public TypedExpression getCondition()
-    {
+    public TypedExpression getCondition() {
         return condition;
     }
 
-    public TypedBlock getThen()
-    {
+    public TypedBlock getThen() {
         return then;
     }
 
-    public TypedBlock getOtherwise()
-    {
+    public TypedBlock getOtherwise() {
         return otherwise;
     }
 
     @Override
     public void generateByteCode(MethodVisitor visitor, Context context) {
-        Generator.generate(this, visitor, context);
+        StatementBCGenerator.generate(this, visitor, context);
     }
 
     @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-        {
+    public boolean equals(Object o) {
+        if(this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass())
-        {
+        if(o == null || getClass() != o.getClass()) {
             return false;
         }
-        if (!super.equals(o))
-        {
+        if(!super.equals(o)) {
             return false;
         }
 
         TypedIfElse that = (TypedIfElse) o;
 
-        if (condition != null ? !condition.equals(that.condition) : that.condition != null)
-        {
+        if(condition != null ? !condition.equals(that.condition) : that.condition != null) {
             return false;
         }
-        if (then != null ? !then.equals(that.then) : that.then != null)
-        {
+        if(then != null ? !then.equals(that.then) : that.then != null) {
             return false;
         }
         return otherwise != null ? otherwise.equals(that.otherwise) : that.otherwise == null;
@@ -82,8 +69,7 @@ public class TypedIfElse extends TypedStatement
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (condition != null ? condition.hashCode() : 0);
         result = 31 * result + (then != null ? then.hashCode() : 0);

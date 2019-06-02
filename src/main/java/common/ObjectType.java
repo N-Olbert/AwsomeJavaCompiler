@@ -8,10 +8,10 @@ public class ObjectType {
     public static ObjectType IntType = new ObjectType("I");
     public static ObjectType BoolType = new ObjectType("Z");
     public static ObjectType CharType = new ObjectType("C");
-    public static ObjectType StringType = new ObjectType(String.class.toString());
+    public static ObjectType StringType = new ObjectType(String.class.getName());
     public static ObjectType VoidType = new ObjectType("V");
     public static ObjectType NullType = new ObjectType("null");
-    public static ObjectType JObjectType = new ObjectType(Object.class.toString());
+    public static ObjectType JObjectType = new ObjectType(Object.class.getName());
 
 
     private String name;

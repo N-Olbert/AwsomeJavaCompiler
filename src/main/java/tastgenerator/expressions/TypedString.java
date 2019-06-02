@@ -1,43 +1,36 @@
 package tastgenerator.expressions;
 
 import bytecodegenerator.Context;
-import bytecodegenerator.Generator;
+import bytecodegenerator.ExpressionBCGenerator;
 import common.ObjectType;
 import org.objectweb.asm.MethodVisitor;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class TypedString extends TypedExpression{
+public class TypedString extends TypedExpression {
     private String jString;
 
-    public TypedString(String jString){
+    public TypedString(String jString) {
         this.jString = jString;
         this.objectType = ObjectType.StringType;
     }
 
-    public String getJString(){
+    public String getJString() {
         return jString;
     }
 
     @Override
     public void generateByteCode(MethodVisitor visitor, Context context) {
-        Generator.generate(this, visitor, context);
+        ExpressionBCGenerator.generate(this, visitor, context);
     }
 
     @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-        {
+    public boolean equals(Object o) {
+        if(this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass())
-        {
+        if(o == null || getClass() != o.getClass()) {
             return false;
         }
-        if (!super.equals(o))
-        {
+        if(!super.equals(o)) {
             return false;
         }
 
@@ -48,8 +41,7 @@ public class TypedString extends TypedExpression{
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (jString != null ? jString.hashCode() : 0);
         return result;
