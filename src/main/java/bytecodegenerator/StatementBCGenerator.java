@@ -25,8 +25,9 @@ import static org.objectweb.asm.Opcodes.*;
  */
 public class StatementBCGenerator {
     public static void generate(TypedBlock block, MethodVisitor visitor, Context context) {
+        Context childContext = context.clone();
         if(block.getBlockedStatements() != null) {
-            block.getBlockedStatements().forEach(statement -> statement.generateByteCode(visitor, context.clone()));
+            block.getBlockedStatements().forEach(statement -> statement.generateByteCode(visitor, childContext));
         }
     }
 
