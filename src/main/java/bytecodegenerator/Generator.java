@@ -16,11 +16,30 @@ import java.util.stream.Collectors;
 import static bytecodegenerator.GeneratorUtils.*;
 import static org.objectweb.asm.Opcodes.*;
 
+/**
+ * The Generator class contains all generators of the general elements of the TAST
+ *
+ * @author Nico Dreher
+ */
 public abstract class Generator {
+    /**
+     * Generates the bytecode of a {@link TypedProgram}
+     *
+     * @param program The {@link TypedProgram} to generate the bytecode
+     *
+     * @return A list of the generated {@link ClassWriter}
+     */
     public static List<ClassWriter> generate(TypedProgram program) {
         return program.getClasses().stream().map(Generator::generate).collect(Collectors.toList());
     }
 
+    /**
+     * Generates a {@link ClassWriter} from a {@link TypedClass}
+     *
+     * @param clazz The {@link TypedClass} to generate the bytecode
+     *
+     * @return The {@link ClassWriter} with the bytecode
+     */
     public static ClassWriter generate(TypedClass clazz) {
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
         cw.visit(V1_4, ACC_PUBLIC,
@@ -38,6 +57,13 @@ public abstract class Generator {
     }
 
 
+    /**
+     * Generates the bytecode of a field
+     *
+     * @param declaration The declaration of the field
+     * @param writer      The ClassWriter to generate the field
+     * @param context     The {@link Context} of the current scope
+     */
     public static void generate(TypedFieldDeclaration declaration, ClassWriter writer, Context context) {
         if(Modifier.STATIC.equals(declaration.getModifier())) {
             context.getStaticFields().add(declaration.getName());
@@ -49,7 +75,13 @@ public abstract class Generator {
                 declaration.getName(), declaration.getVariableType().getByteCodeName(), null, null);
     }
 
-
+    /**
+     * Generate the bytecode of a method
+     *
+     * @param declaration The declaration of the method
+     * @param writer      The ClassWriter to generate the method
+     * @param context     The {@link Context} of the current scope
+     */
     public static void generate(TypedMethodDeclaration declaration, ClassWriter writer, Context context) {
         String name = declaration.getName();
         if(declaration.getName().equals(context.getClassName())) {

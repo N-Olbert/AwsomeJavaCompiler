@@ -17,6 +17,12 @@ import tastgenerator.statements.TypedWhile;
 import static bytecodegenerator.GeneratorUtils.*;
 import static org.objectweb.asm.Opcodes.*;
 
+/**
+ * The ExpressionBCGenerator contains the generators of all {@link TypedStatement}
+ *
+ * @author Nico Dreher
+ * @see bytecodegenerator.interfaces.ByteCodeGeneratable
+ */
 public class StatementBCGenerator {
     public static void generate(TypedBlock block, MethodVisitor visitor, Context context) {
         if(block.getBlockedStatements() != null) {
@@ -90,7 +96,17 @@ public class StatementBCGenerator {
         visitor.visitInsn(POP);
     }
 
-    public static void generate(TypedStatement statement, MethodVisitor visitor, Context context) {
+    /**
+     * The default implementation for a {@link TypedStatement}
+     *
+     * @param statement The statement for the bytecode generation
+     * @param visitor   The {@link MethodVisitor} of the current method
+     * @param context   The {@link Context} of the current scope
+     *
+     * @throws NotImplementedYetException Always
+     */
+    public static void generate(TypedStatement statement, MethodVisitor visitor, Context context)
+            throws NotImplementedYetException {
         throw new NotImplementedYetException();
     }
 }

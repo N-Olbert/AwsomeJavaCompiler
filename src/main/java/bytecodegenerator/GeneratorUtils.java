@@ -12,8 +12,20 @@ import java.util.stream.Collectors;
 
 import static org.objectweb.asm.Opcodes.*;
 
+/**
+ * The GeneratorUtils class contains some utility functions for the bytecode generation
+ *
+ * @author Nico Dreher
+ */
 public class GeneratorUtils {
 
+    /**
+     * Get the type signature of function parameters
+     *
+     * @param types The list of the {@link ObjectType} from the parameters
+     *
+     * @return The type signature of the parameters
+     */
     public static String generateTypeSignature(List<ObjectType> types) {
         StringBuilder builder = new StringBuilder();
         builder.append('(');
@@ -23,6 +35,13 @@ public class GeneratorUtils {
     }
 
 
+    /**
+     * Get the load {@link org.objectweb.asm.Opcodes} by the {@link ObjectType}
+     *
+     * @param type The {@link ObjectType} to load
+     *
+     * @return the needed opcode
+     */
     public static int getOpcodeLoad(ObjectType type) {
         if(isInteger(type)) {
             return ILOAD;
@@ -33,6 +52,13 @@ public class GeneratorUtils {
     }
 
 
+    /**
+     * Checks if a {@link ObjectType} has the integer type
+     *
+     * @param type The type to check
+     *
+     * @return True if the ObjectType is a integer type
+     */
     public static boolean isInteger(ObjectType type) {
         return "I".equals(type.getName()) || "C".equals(type.getName()) || "Z".equals(type.getName());
     }

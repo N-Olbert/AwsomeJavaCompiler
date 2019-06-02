@@ -23,6 +23,12 @@ import tastgenerator.expressions.TypedUnary;
 import static bytecodegenerator.GeneratorUtils.*;
 import static org.objectweb.asm.Opcodes.*;
 
+/**
+ * The ExpressionBCGenerator contains the generators of all {@link TypedExpression}
+ *
+ * @author Nico Dreher
+ * @see bytecodegenerator.interfaces.ByteCodeGeneratable
+ */
 public class ExpressionBCGenerator {
 
     public static void generate(TypedNull expression, MethodVisitor visitor, Context context) {
@@ -336,6 +342,16 @@ public class ExpressionBCGenerator {
         throw new NotImplementedYetException();
     }
 
+
+    /**
+     * The default implementation for a {@link TypedExpression}
+     *
+     * @param expression The expression for the bytecode generation
+     * @param visitor    The {@link MethodVisitor} of the current method
+     * @param context    The {@link Context} of the current scope
+     *
+     * @throws NotImplementedYetException Always
+     */
     public static void generate(TypedExpression expression, MethodVisitor visitor, Context context) {
         throw new NotImplementedYetException();
     }
