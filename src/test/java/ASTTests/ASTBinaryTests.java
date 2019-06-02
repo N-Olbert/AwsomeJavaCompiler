@@ -43,15 +43,16 @@ public class ASTBinaryTests {
         expectedTestClass.getMethods().add(new MethodDeclaration(AccessModifier.PACKAGE_PRIVATE, Modifier.NONE,
                 ObjectType.VoidType, className, new ArrayList<>(), new Block(new Statement[0])));
 
-        var intResult = new LocalVarDeclaration(ObjectType.IntType, "result");
         var methodParams = new ArrayList<MethodParameter>();
+        var resultDeclaration = new LocalVarDeclaration(ObjectType.IntType, "result");
         var assignPunktVorStrich = new AssignStatement(
+                //TODO: Line below should be something like new LocalOrFieldVar(new LocalVarDeclaration)
                 new LocalOrFieldVar("result"),
                 new Binary(
                         new LocalOrFieldVar("a"),
                         new Binary(new LocalOrFieldVar("b"), new LocalOrFieldVar("c"), Operators.MULTIPLICATION),
                         Operators.PLUS));
-        var methodBody = new Block(intResult, assignPunktVorStrich);
+        var methodBody = new Block(resultDeclaration, assignPunktVorStrich);
 
         expectedTestClass.getMethods().add(new MethodDeclaration
                 (AccessModifier.PUBLIC, Modifier.NONE, ObjectType.VoidType, "punktVorStrich", methodParams, methodBody));
@@ -65,7 +66,7 @@ public class ASTBinaryTests {
                 )
         );
 
-        methodBody = new Block(intResult, assignPunktVorStrichMitKlammer);
+        methodBody = new Block(resultDeclaration, assignPunktVorStrichMitKlammer);
         expectedTestClass.getMethods().add(new MethodDeclaration(
                 AccessModifier.PUBLIC, Modifier.NONE, ObjectType.VoidType, "StrichVorPunktMitKlammer",methodParams, methodBody)
         );
@@ -77,12 +78,11 @@ public class ASTBinaryTests {
                         new Binary(new LocalOrFieldVar("b"), new LocalOrFieldVar("c"), Operators.DIVISION),
                         Operators.PLUS)
         );
-        methodBody = new Block(intResult, punktVorStrichMitGeteilt);
+        methodBody = new Block(resultDeclaration, punktVorStrichMitGeteilt);
         expectedTestClass.getMethods().add(new MethodDeclaration(
                 AccessModifier.PUBLIC, Modifier.NONE, ObjectType.VoidType, "punktVorStrichMitGeteilt", methodParams, methodBody
         ));
 
-        var boolResult = new LocalVarDeclaration(ObjectType.BoolType, "result");
         var andVorOr = new AssignStatement(
                 new LocalOrFieldVar("result"),
                 new Binary(
@@ -94,7 +94,7 @@ public class ASTBinaryTests {
                 ), Operators.OR)
         );
 
-        methodBody = new Block(boolResult, andVorOr);
+        methodBody = new Block(resultDeclaration, andVorOr);
         expectedTestClass.getMethods().add(new MethodDeclaration(
                 AccessModifier.PUBLIC, Modifier.NONE, ObjectType.VoidType, "andVorOr", methodParams, methodBody
         ));
@@ -112,7 +112,7 @@ public class ASTBinaryTests {
                 )
         );
 
-        methodBody = new Block(boolResult, binaryTest);
+        methodBody = new Block(resultDeclaration, binaryTest);
         expectedTestClass.getMethods().add(new MethodDeclaration(
                 AccessModifier.PUBLIC, Modifier.NONE, ObjectType.VoidType, "binaryTest", methodParams , methodBody)
         );
@@ -138,7 +138,7 @@ public class ASTBinaryTests {
                 )
         );
 
-        methodBody = new Block(intResult, fancyShit);
+        methodBody = new Block(resultDeclaration, fancyShit);
         expectedTestClass.getMethods().add(new MethodDeclaration(
                 AccessModifier.PUBLIC,
                 Modifier.NONE,
