@@ -36,7 +36,7 @@ public class ASTFibonacciTests
     {
         InputStream file1 = ResourceHelper.getFileAsStream("BetterInt.java");
         InputStream file2 = ResourceHelper.getFileAsStream("FibonacciWithBetterInt.java");
-        var file = new SequenceInputStream(file1, file2);
+        var file = new SequenceInputStream(file2, file1);
         var astGen = Global.getFactory().getASTGenerator();
         var ast = astGen.getAST(file);
         assertEquals(ast, Fibonacci.getRecursiveFibonacciWithBetterIntProgram());
