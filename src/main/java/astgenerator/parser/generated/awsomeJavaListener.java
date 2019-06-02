@@ -188,6 +188,16 @@ public interface awsomeJavaListener extends ParseTreeListener {
 	 */
 	void exitMethodCall(awsomeJavaParser.MethodCallContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link awsomeJavaParser#methodCallPrefix}.
+	 * @param ctx the parse tree
+	 */
+	void enterMethodCallPrefix(awsomeJavaParser.MethodCallPrefixContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link awsomeJavaParser#methodCallPrefix}.
+	 * @param ctx the parse tree
+	 */
+	void exitMethodCallPrefix(awsomeJavaParser.MethodCallPrefixContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link awsomeJavaParser#statement}.
 	 * @param ctx the parse tree
 	 */

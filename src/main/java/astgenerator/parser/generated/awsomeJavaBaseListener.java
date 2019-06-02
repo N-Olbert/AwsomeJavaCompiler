@@ -232,6 +232,18 @@ public class awsomeJavaBaseListener implements awsomeJavaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterMethodCallPrefix(awsomeJavaParser.MethodCallPrefixContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMethodCallPrefix(awsomeJavaParser.MethodCallPrefixContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterStatement(awsomeJavaParser.StatementContext ctx) { }
 	/**
 	 * {@inheritDoc}

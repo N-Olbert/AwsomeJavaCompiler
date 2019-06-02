@@ -39,6 +39,6 @@ public class ASTFibonacciTests
         var file = new SequenceInputStream(file1, file2);
         var astGen = Global.getFactory().getASTGenerator();
         var ast = astGen.getAST(file);
-        assertEquals(ast, Fibonacci.getTypedRecursiveBetterIntFibonacciProgram());
+        assertEquals(ast, Fibonacci.getRecursiveFibonacciWithBetterIntProgram());
     }
 }

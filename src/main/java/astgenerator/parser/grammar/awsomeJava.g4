@@ -19,7 +19,9 @@ statementExpressions: assign | jNew | methodCall;
 assign: (instVar | Identifier) (Equal|PlusEqual|MinusEqual) expression;
 localVarDeclaration: objectType Identifier (Comma Identifier)* ((Equal|PlusEqual|MinusEqual) expression)?;
 jNew: 'new' Identifier LBracket nArguments RBracket;
-methodCall: (instVar|Identifier Dot)? Identifier LBracket nArguments RBracket;
+methodCall: methodCallPrefix? (Identifier LBracket nArguments RBracket Dot)*
+(Identifier LBracket nArguments RBracket);
+methodCallPrefix: (instVar|Identifier Dot);
 statement: ifelse | localVarDeclaration Semicolon | jReturn Semicolon | jWhile | block
     | statementExpressions Semicolon;
 block: CurlyLBracket (statement)* CurlyRBracket;

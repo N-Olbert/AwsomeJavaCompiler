@@ -1,4 +1,4 @@
-public class Fibonacci
+class Fibonacci
 {
     public BetterInt fibonacci(BetterInt n)
     {
