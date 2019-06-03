@@ -72,7 +72,7 @@ public abstract class Generator {
             context.getLocalFields().add(declaration.getName());
         }
         writer.visitField(declaration.getAccessModifier().getCode() | declaration.getModifier().getCode(),
-                declaration.getName(), declaration.getVariableType().getByteCodeName(), null, null);
+                declaration.getName(), GeneratorUtils.geTypeSignatureName(declaration.getVariableType()), null, null);
     }
 
     /**
@@ -95,7 +95,7 @@ public abstract class Generator {
         }
         MethodVisitor visitor =
                 writer.visitMethod(declaration.getAccessModifier().getCode() | declaration.getModifier().getCode(),
-                        name, signature + declaration.getReturnType().getByteCodeName(), null,
+                        name, signature + GeneratorUtils.geTypeSignatureName(declaration.getReturnType()), null,
                         null);
         if(name.equals("<init>")) {
             visitor.visitVarInsn(ALOAD, 0);

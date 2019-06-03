@@ -10,7 +10,7 @@ public class ObjectType {
     public static ObjectType CharType = new ObjectType("C");
     public static ObjectType VoidType = new ObjectType("V");
     public static ObjectType NullType = new ObjectType("null");
-    public static ObjectType JObjectType = new ObjectType(Object.class.getName());
+    public static ObjectType JObjectType = new ObjectType(Object.class.toString());
 
 
     private String name;
@@ -29,15 +29,6 @@ public class ObjectType {
 
     public String getName() {
         return name;
-    }
-
-    public String getByteCodeName() {
-        if("I".equals(getName()) || "Z".equals(getName()) || "C".equals(getName()) || "V".equals(getName())) {
-            return getName();
-        }
-        else {
-            return "L" + getName().replace('.', '/') + ";";
-        }
     }
 
     @Override
