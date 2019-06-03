@@ -9,6 +9,11 @@ public class Main
 
     public static void main(String[] args) throws IOException
     {
+        if (args.length == 0)
+        {
+            System.out.println("Keine Files angegeben");
+            return;
+        }
         var inputList = new ArrayList <FileInputStream>()
         {{
             for (var fileName : args)
@@ -26,9 +31,11 @@ public class Main
             System.out.println("Generating byte code.");
             var byteCode = Global.getFactory().getBytecodeGenerator().generate(typedAst);
             System.out.println("Starting generation of typed ast.");
-            for (var clazz: byteCode)
+            for (int i = 0; i < byteCode.size(); i++)
             {
-                saveClass(clazz.toByteArray(), "target/fibonacci.class"); // TODO: Classname for filename
+                var classname = typedAst.getClasses().get(i).getObjectType().getName();
+                var classfile = byteCode.get(i);
+                saveClass(classfile.toByteArray(), "target/"+classname+".class");
             }
         }
     }
