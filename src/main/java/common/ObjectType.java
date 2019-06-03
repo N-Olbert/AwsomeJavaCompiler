@@ -10,7 +10,7 @@ public class ObjectType {
     public static ObjectType CharType = new ObjectType("C");
     public static ObjectType VoidType = new ObjectType("V");
     public static ObjectType NullType = new ObjectType("null");
-    public static ObjectType JObjectType = new ObjectType("Object");
+    public static ObjectType JObjectType = new ObjectType(Object.class.getName());
 
 
     private String name;
