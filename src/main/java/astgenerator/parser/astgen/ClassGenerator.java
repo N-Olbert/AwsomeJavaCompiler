@@ -19,7 +19,7 @@ class ClassGenerator {
         awsomeJavaParser.ClassBodyContext bodyContext = classContext.classBody();
 
         if (bodyContext.fieldDeclaration() != null) {
-            bodyContext.fieldDeclaration().forEach(fieldDecl -> fieldDecls.add(FieldGenerator.generate(fieldDecl)));
+            bodyContext.fieldDeclaration().forEach(fieldDecl -> fieldDecls.addAll(FieldGenerator.generate(fieldDecl)));
         }
 
         methodDecls.addAll(MethodGenerator.generateConstructors(bodyContext,classContext.Identifier().getText()));

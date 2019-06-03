@@ -232,6 +232,18 @@ public class awsomeJavaBaseListener implements awsomeJavaListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterMethodCallPrefix(awsomeJavaParser.MethodCallPrefixContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitMethodCallPrefix(awsomeJavaParser.MethodCallPrefixContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterStatement(awsomeJavaParser.StatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -347,30 +359,6 @@ public class awsomeJavaBaseListener implements awsomeJavaListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitBinary(awsomeJavaParser.BinaryContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterOperatorBeforeExpr(awsomeJavaParser.OperatorBeforeExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitOperatorBeforeExpr(awsomeJavaParser.OperatorBeforeExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterOperatorAfterExpr(awsomeJavaParser.OperatorAfterExprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitOperatorAfterExpr(awsomeJavaParser.OperatorAfterExprContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

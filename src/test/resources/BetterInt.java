@@ -2,12 +2,12 @@ class BetterInt
 {
     public int x;
 
-    public BetterInt(int x)
+    BetterInt(int x)
     {
         this.x = x;
     }
 
-    public BetterInt()
+    BetterInt()
     {
         x = 0;
     }
