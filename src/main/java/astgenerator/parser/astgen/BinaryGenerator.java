@@ -21,12 +21,12 @@ public class BinaryGenerator {
 
     public static Binary generate(awsomeJavaParser.BinaryContext binaryContext){
         operatorTypes = new ArrayList<>();
-        operatorTypes.add(Collections.singletonList("||")); //OR
-        operatorTypes.add(Collections.singletonList("&&")); //AND
-        operatorTypes.add(Collections.singletonList("^")); //XOR
         operatorTypes.add(Arrays.asList(new String[]{"==","!="})); //EQUALS
+        operatorTypes.add(Collections.singletonList("&&")); //AND
+        operatorTypes.add(Collections.singletonList("||")); //OR
+        operatorTypes.add(Collections.singletonList("^")); //XOR
         operatorTypes.add(Arrays.asList(new String[]{">=",">","<=","<"})); //COMPARATOR
-        operatorTypes.add(Arrays.asList(new String[]{"*","/"})); //POINT
+        operatorTypes.add(Arrays.asList(new String[]{"*","/","%"})); //POINT
         operatorTypes.add(Arrays.asList(new String[]{"+","-"})); //ADDSUB
 
 
@@ -46,7 +46,7 @@ public class BinaryGenerator {
             for (int i = 0; i < operators.size(); i++) {
                 if (operatortype.contains(operators.get(i))) {
                     if (!newExpressions.isEmpty()) {
-                        newExpressions.remove(expressions.size() - 1);
+                        newExpressions.remove(newExpressions.size() - 1);
                     }
                     newExpressions.add(new Binary(expressions.get(i), expressions.get(i + 1), getoperatorFromString(operators.get(i))));
                 } else {
@@ -89,6 +89,8 @@ public class BinaryGenerator {
                 return Operators.MULTIPLICATION;
             case "/":
                 return Operators.DIVISION;
+            case "%":
+                return Operators.MODULO;
             case "+":
                 return Operators.PLUS;
             case "-":

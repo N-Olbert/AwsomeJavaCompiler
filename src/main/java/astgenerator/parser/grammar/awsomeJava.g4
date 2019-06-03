@@ -1,25 +1,25 @@
 grammar awsomeJava;
 
 programm: jClass+;
-jClass: AccessModifier? 'class' Identifier classBody;
+jClass: 'class' Identifier classBody;
 constructor: AccessModifier? Identifier LBracket nMethodParameters RBracket block;
-mainMethod: AccessModifier 'static' Void 'main' LBracket 'String[]' 'args' RBracket block;
-classBody: CurlyLBracket (methodDeclaration|fieldDeclaration)* constructor* mainMethod?
-    (methodDeclaration|fieldDeclaration)* CurlyRBracket;
+classBody: CurlyLBracket (methodDeclaration|fieldDeclaration|constructor)* CurlyRBracket;
 methodDeclaration: AccessModifier? (objectType|Void) Identifier LBracket nMethodParameters RBracket block;
-fieldDeclaration: AccessModifier?  objectType Identifier (Equal expression)? Semicolon;
+fieldDeclaration: AccessModifier?  objectType Identifier (Comma Identifier)* (Equal expression)? Semicolon;
 methodParameter: objectType Identifier;
 nMethodParameters: (methodParameter)? | methodParameter (Comma methodParameter)+;
 
 nArguments: expression? | expression (Comma expression)* | instVar;
-expression:  basicexpressions | binary | LBracket expression RBracket;
-basicexpressions:  baseType | instVar | Identifier | statementExpressions ;
+expression:  basicexpressions | binary;
+basicexpressions:  baseType | instVar | Identifier | statementExpressions | unary | LBracket expression RBracket ;
 instVar:  This Dot Identifier|(This Dot)? (Identifier Dot)+ Identifier;
-statementExpressions: assign | jNew | methodCall; //| unary;
+statementExpressions: assign | jNew | methodCall;
 assign: (instVar | Identifier) (Equal|PlusEqual|MinusEqual) expression;
-localVarDeclaration: objectType Identifier ((Equal|PlusEqual|MinusEqual) expression)?;
+localVarDeclaration: objectType Identifier (Comma Identifier)* ((Equal|PlusEqual|MinusEqual) expression)?;
 jNew: 'new' Identifier LBracket nArguments RBracket;
-methodCall: (instVar|Identifier) LBracket nArguments RBracket;
+methodCall: methodCallPrefix? (Identifier LBracket nArguments RBracket Dot)*
+(Identifier LBracket nArguments RBracket);
+methodCallPrefix: (instVar|Identifier Dot);
 statement: ifelse | localVarDeclaration Semicolon | jReturn Semicolon | jWhile | block
     | statementExpressions Semicolon;
 block: CurlyLBracket (statement)* CurlyRBracket;
@@ -29,10 +29,8 @@ jElseIf: Else If LBracket expression RBracket block;
 jElse: Else block;
 jWhile: 'while' LBracket expression RBracket block;
 jReturn: 'return' expression;
-unary:  operatorBeforeExpr | operatorAfterExpr;
+unary:  NotOperator expression;
 binary: basicexpressions (operators basicexpressions)+;
-operatorBeforeExpr: (OpBeforeIdentifier|OpBeforeOrAfterIdentifier) (Identifier|instVar);
-operatorAfterExpr: (Identifier|instVar) OpBeforeOrAfterIdentifier;
 baseType: JBoolean | JNull | This | JString | JCharacter | JInteger | Super;
 objectType: 'int'|'char'|'boolean'|Identifier;
 operators: LogicalOperator|Comperator|AddSubOperator|PointOperator;
@@ -49,10 +47,10 @@ Equal: '=';
 PlusEqual: '+=';
 MinusEqual: '-=';
 Comperator: '=='|'!='|'>='|'<='|'>'|'<';
-OpBeforeIdentifier: '!';
+NotOperator: '!';
 OpBeforeOrAfterIdentifier: '++'|'--';
 PointOperator: '*'|'/';
-AddSubOperator: '+'|'-';
+AddSubOperator: '+'|'-'|'%';
 LogicalOperator: '&&'|'||';
 LBracket:'(';
 RBracket:')';

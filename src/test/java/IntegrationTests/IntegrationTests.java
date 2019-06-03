@@ -1,5 +1,6 @@
 package IntegrationTests;
 
+import BytecodeTests.BetterIntFibonacciBytecodeTest;
 import General.BytecodeLoader;
 import General.ResourceHelper;
 import common.Global;
@@ -86,8 +87,11 @@ public class IntegrationTests
     {
         InputStream file1 = ResourceHelper.getFileAsStream("BetterInt.java");
         InputStream file2 = ResourceHelper.getFileAsStream("FibonacciWithBetterInt.java");
-        var file = new SequenceInputStream(file1, file2);
-        assertFibonacci(file);
+        var file = new SequenceInputStream(file2, file1);
+        var ast = Global.getFactory().getASTGenerator().getAST(file);
+        var typedAst = Global.getFactory().getTypedAstGenerator().getTypedProgram(ast);
+        var byteCode = Global.getFactory().getBytecodeGenerator().generate(typedAst);
+        BetterIntFibonacciBytecodeTest.assertBetterIntFibonacciByteCode(byteCode);
     }
 
     private void assertFibonacci(InputStream file) throws Exception

@@ -27,11 +27,14 @@ public class BetterIntFibonacciBytecodeTest {
         List<ClassWriter> cws = byteCodeGen.generate(program);
         assertNotNull(cws);
 
+        assertBetterIntFibonacciByteCode(cws);
+    }
+
+    public static void assertBetterIntFibonacciByteCode(List<ClassWriter> cws)
+    {
         assertEquals(cws.size(), 2);
         byte[] bytes = cws.get(0).toByteArray();
         byte[] bytes2 = cws.get(1).toByteArray();
-        BytecodeTests.saveClass(bytes, "target/fibonacciBetterInt.class");
-        BytecodeTests.saveClass(bytes2, "target/fibonacciBetterInt2.class");
         var map = new HashMap<String, byte[]>();
         map.put("Fibonacci", bytes);
         map.put("BetterInt", bytes2);

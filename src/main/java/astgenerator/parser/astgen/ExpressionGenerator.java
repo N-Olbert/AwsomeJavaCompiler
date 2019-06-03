@@ -9,10 +9,8 @@ public class ExpressionGenerator {
     public static Expression generate(awsomeJavaParser.ExpressionContext expressionContext){
         if (expressionContext.basicexpressions() != null) {
             return BasicExpressionGenerator.generate(expressionContext.basicexpressions());
-        } else if (expressionContext.binary() != null){
+        } else { //binary
             return BinaryGenerator.generate(expressionContext.binary());
-        } else { //expression in brackets
-            return ExpressionGenerator.generate(expressionContext.expression());
         }
     }
 }
