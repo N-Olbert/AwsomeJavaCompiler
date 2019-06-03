@@ -32,7 +32,7 @@ public class StatementBCGenerator {
     }
 
     public static void generate(TypedReturn statement, MethodVisitor visitor, Context context) {
-        switch(statement.getObjectType().getName()) {
+        switch(getTypeName(statement.getObjectType())) {
             case "C": //Fall Trough
             case "Z":
             case "I":

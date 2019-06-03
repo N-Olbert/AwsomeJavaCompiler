@@ -29,7 +29,7 @@ public class GeneratorUtils {
     public static String generateTypeSignature(List<ObjectType> types) {
         StringBuilder builder = new StringBuilder();
         builder.append('(');
-        types.forEach(type -> builder.append(type.getByteCodeName()));
+        types.forEach(type -> builder.append(geTypeSignatureName(type)));
         builder.append(')');
         return builder.toString();
     }
@@ -70,7 +70,7 @@ public class GeneratorUtils {
             expression2.generateByteCode(visitor, context);
             visitor.visitFieldInsn(PUTFIELD, context.getClassName(),
                     ((TypedInstVar) expression1).getName(),
-                    expression2.getObjectType().getName());
+                    getTypeName(expression2.getObjectType()));
         }
         else if(expression1 instanceof TypedLocalOrFieldVar) {
             TypedLocalOrFieldVar lofv = (TypedLocalOrFieldVar) expression1;
@@ -87,7 +87,7 @@ public class GeneratorUtils {
                 visitor.visitVarInsn(ALOAD, 0);
                 expression2.generateByteCode(visitor, context);
                 visitor.visitFieldInsn(PUTFIELD, context.getClassName(), lofv.getName(),
-                        lofv.getObjectType().getName());
+                        getTypeName(lofv.getObjectType()));
             }
             else {
                 throw new NotImplementedYetException();
@@ -100,10 +100,10 @@ public class GeneratorUtils {
 
     public static void generateNew(ObjectType type, List<TypedExpression> params, MethodVisitor visitor,
                                    Context context) {
-        visitor.visitTypeInsn(NEW, type.getName());
+        visitor.visitTypeInsn(NEW, getTypeName(type));
         visitor.visitInsn(DUP);
         params.forEach(param -> param.generateByteCode(visitor, context));
-        visitor.visitMethodInsn(INVOKESPECIAL, type.getName(), "<init>",
+        visitor.visitMethodInsn(INVOKESPECIAL, getTypeName(type), "<init>",
                 generateTypeSignature(params.stream().map(TypedExpression::getObjectType).collect(
                         Collectors.toList())) + "V", false);
     }
@@ -115,10 +115,27 @@ public class GeneratorUtils {
         String signature =
                 generateTypeSignature(params.stream().map(TypedExpression::getObjectType).collect(
                         Collectors.toList())) +
-                        type.getByteCodeName();
+                        geTypeSignatureName(type);
         object.generateByteCode(visitor, context);
         params.forEach(exp -> exp.generateByteCode(visitor, context));
-        visitor.visitMethodInsn(INVOKEVIRTUAL, object.getObjectType().getName(),
+        visitor.visitMethodInsn(INVOKEVIRTUAL, getTypeName(object.getObjectType()),
                 name, signature, false);
     }
+
+    public static String geTypeSignatureName(ObjectType type) {
+        if("I".equals(getTypeName(type)) || "Z".equals(getTypeName(type)) || "C".equals(getTypeName(type)) ||
+                "V".equals(getTypeName(type))) {
+            return getTypeName(type);
+        }
+        else {
+            return "L" + getTypeName(type) + ";";
+        }
+    }
+
+    public static String getTypeName(ObjectType type) {
+        return ObjectType.JObjectType.equals(type) ? Object.class.getName().replace('.', '/') :
+                type.getName().replace('.', '/');
+    }
+
+
 }

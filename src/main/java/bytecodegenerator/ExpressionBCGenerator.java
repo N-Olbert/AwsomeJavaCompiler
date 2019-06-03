@@ -309,19 +309,19 @@ public class ExpressionBCGenerator {
         else if(context.getLocalFields().contains(expression.getName())) {
             visitor.visitVarInsn(ALOAD, 0);
             visitor.visitFieldInsn(GETFIELD, context.getClassName(), expression.getName(),
-                    expression.getObjectType().getByteCodeName());
+                    GeneratorUtils.geTypeSignatureName(expression.getObjectType()));
         }
         else if(context.getStaticFields().contains(expression.getName())) {
             visitor.visitFieldInsn(GETSTATIC, context.getClassName(), expression.getName(),
-                    expression.getObjectType().getByteCodeName());
+                    GeneratorUtils.geTypeSignatureName(expression.getObjectType()));
         }
     }
 
     public static void generate(TypedInstVar expression, MethodVisitor visitor, Context context) {
         expression.getExpression().generateByteCode(visitor, context);
-        visitor.visitFieldInsn(GETFIELD, expression.getExpression().getObjectType().getName(),
+        visitor.visitFieldInsn(GETFIELD, GeneratorUtils.getTypeName(expression.getExpression().getObjectType()),
                 expression.getName(),
-                expression.getObjectType().getByteCodeName());
+                GeneratorUtils.geTypeSignatureName(expression.getObjectType()));
     }
 
     public static void generate(TypedMethodCallExpression expression, MethodVisitor visitor, Context context) {
@@ -341,7 +341,6 @@ public class ExpressionBCGenerator {
     public static void generate(TypedSuper expression, MethodVisitor visitor, Context context) {
         throw new NotImplementedYetException();
     }
-
 
     /**
      * The default implementation for a {@link TypedExpression}
