@@ -35,9 +35,10 @@ public class Main
             {
                 var classname = typedAst.getClasses().get(i).getObjectType().getName();
                 var classfile = byteCode.get(i);
-                saveClass(classfile.toByteArray(), "target/"+classname+".class");
+                saveClass(classfile.toByteArray(), "./"+classname+".class");
             }
         }
+        System.out.println("Output got saved to: "+System.getProperty("user.dir"));
     }
 
     private static void saveClass(byte[] bytes, String fileName) {

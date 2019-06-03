@@ -34,6 +34,17 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <dependencies>
@@ -56,6 +67,7 @@
             <artifactId>antlr4-maven-plugin</artifactId>
             <version>4.7.2</version>
             <type>maven-plugin</type>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
