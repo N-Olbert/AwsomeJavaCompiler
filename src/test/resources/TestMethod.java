@@ -1,5 +1,0 @@
-class Testing {
-    void donothing() {
-
-    }
-}
