@@ -1,14 +1,10 @@
 package tastgenerator.expressions;
 
 import bytecodegenerator.Context;
-import bytecodegenerator.Generator;
-import common.ObjectType;
+import bytecodegenerator.ExpressionBCGenerator;
 import org.objectweb.asm.MethodVisitor;
 
-import java.util.Map;
-
-public class TypedAssignExpression extends TypedExpression
-{
+public class TypedAssignExpression extends TypedExpression {
     private TypedExpression expression1;
     private TypedExpression expression2;
 
@@ -28,29 +24,24 @@ public class TypedAssignExpression extends TypedExpression
 
     @Override
     public void generateByteCode(MethodVisitor visitor, Context context) {
-        Generator.generate(this, visitor, context);
+        ExpressionBCGenerator.generate(this, visitor, context);
     }
 
     @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-        {
+    public boolean equals(Object o) {
+        if(this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass())
-        {
+        if(o == null || getClass() != o.getClass()) {
             return false;
         }
-        if (!super.equals(o))
-        {
+        if(!super.equals(o)) {
             return false;
         }
 
         TypedAssignExpression that = (TypedAssignExpression) o;
 
-        if (expression1 != null ? !expression1.equals(that.expression1) : that.expression1 != null)
-        {
+        if(expression1 != null ? !expression1.equals(that.expression1) : that.expression1 != null) {
             return false;
         }
         return expression2 != null ? expression2.equals(that.expression2) : that.expression2 == null;
@@ -58,8 +49,7 @@ public class TypedAssignExpression extends TypedExpression
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (expression1 != null ? expression1.hashCode() : 0);
         result = 31 * result + (expression2 != null ? expression2.hashCode() : 0);

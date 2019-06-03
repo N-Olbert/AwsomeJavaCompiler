@@ -1,31 +1,25 @@
 package tastgenerator.statements;
 
-import bytecodegenerator.GenerateByteCodeStatement;
+import bytecodegenerator.interfaces.ByteCodeGeneratable;
 import common.ObjectType;
 
-public abstract class TypedStatement implements GenerateByteCodeStatement
-{
+public abstract class TypedStatement implements ByteCodeGeneratable {
     protected ObjectType objectType;
 
-    public ObjectType getObjectType()
-    {
+    public ObjectType getObjectType() {
         return objectType;
     }
 
-    public void setObjectType(ObjectType objectType)
-    {
+    public void setObjectType(ObjectType objectType) {
         this.objectType = objectType;
     }
 
     @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-        {
+    public boolean equals(Object o) {
+        if(this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass())
-        {
+        if(o == null || getClass() != o.getClass()) {
             return false;
         }
 
@@ -36,8 +30,7 @@ public abstract class TypedStatement implements GenerateByteCodeStatement
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return objectType != null ? objectType.hashCode() : 0;
     }
 }

@@ -1,14 +1,12 @@
 package tastgenerator.statements;
+
 import bytecodegenerator.Context;
-import bytecodegenerator.Generator;
+import bytecodegenerator.StatementBCGenerator;
 import common.ObjectType;
 import org.objectweb.asm.MethodVisitor;
 import tastgenerator.expressions.TypedExpression;
 
-import java.util.Map;
-
-public class TypedAssignStatement extends TypedStatement
-{
+public class TypedAssignStatement extends TypedStatement {
     private TypedExpression expression1;
     private TypedExpression expression2;
 
@@ -28,29 +26,24 @@ public class TypedAssignStatement extends TypedStatement
 
     @Override
     public void generateByteCode(MethodVisitor visitor, Context context) {
-        Generator.generate(this, visitor, context);
+        StatementBCGenerator.generate(this, visitor, context);
     }
 
     @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-        {
+    public boolean equals(Object o) {
+        if(this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass())
-        {
+        if(o == null || getClass() != o.getClass()) {
             return false;
         }
-        if (!super.equals(o))
-        {
+        if(!super.equals(o)) {
             return false;
         }
 
         TypedAssignStatement that = (TypedAssignStatement) o;
 
-        if (expression1 != null ? !expression1.equals(that.expression1) : that.expression1 != null)
-        {
+        if(expression1 != null ? !expression1.equals(that.expression1) : that.expression1 != null) {
             return false;
         }
         return expression2 != null ? expression2.equals(that.expression2) : that.expression2 == null;
@@ -58,8 +51,7 @@ public class TypedAssignStatement extends TypedStatement
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (expression1 != null ? expression1.hashCode() : 0);
         result = 31 * result + (expression2 != null ? expression2.hashCode() : 0);

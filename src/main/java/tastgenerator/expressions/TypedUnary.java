@@ -1,60 +1,49 @@
 package tastgenerator.expressions;
 
 import bytecodegenerator.Context;
+import bytecodegenerator.ExpressionBCGenerator;
 import common.ObjectType;
-import bytecodegenerator.Generator;
 import common.Operators;
 import org.objectweb.asm.MethodVisitor;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class TypedUnary extends TypedExpression
-{
+public class TypedUnary extends TypedExpression {
     private TypedExpression expression;
     private Operators operator;
-    public TypedUnary(TypedExpression expression, Operators operator, ObjectType objectType)
-    {
+
+    public TypedUnary(TypedExpression expression, Operators operator, ObjectType objectType) {
         this.expression = expression;
         this.operator = operator;
         this.objectType = objectType;
     }
 
-    public TypedExpression getExpression()
-    {
+    public TypedExpression getExpression() {
         return expression;
     }
 
-    public Operators getOperator()
-    {
+    public Operators getOperator() {
         return operator;
     }
 
     @Override
     public void generateByteCode(MethodVisitor visitor, Context context) {
-        Generator.generate(this, visitor, context);
+        ExpressionBCGenerator.generate(this, visitor, context);
     }
 
     @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-        {
+    public boolean equals(Object o) {
+        if(this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass())
-        {
+        if(o == null || getClass() != o.getClass()) {
             return false;
         }
-        if (!super.equals(o))
-        {
+        if(!super.equals(o)) {
             return false;
         }
 
         TypedUnary that = (TypedUnary) o;
 
-        if (expression != null ? !expression.equals(that.expression) : that.expression != null)
-        {
+        if(expression != null ? !expression.equals(that.expression) : that.expression != null) {
             return false;
         }
         return operator == that.operator;
@@ -62,8 +51,7 @@ public class TypedUnary extends TypedExpression
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (expression != null ? expression.hashCode() : 0);
         result = 31 * result + (operator != null ? operator.hashCode() : 0);
