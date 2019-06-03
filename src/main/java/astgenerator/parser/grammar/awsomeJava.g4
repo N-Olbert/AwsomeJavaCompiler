@@ -3,9 +3,7 @@ grammar awsomeJava;
 programm: jClass+;
 jClass: 'class' Identifier classBody;
 constructor: AccessModifier? Identifier LBracket nMethodParameters RBracket block;
-mainMethod: AccessModifier 'static' Void 'main' LBracket 'String[]' 'args' RBracket block;
-classBody: CurlyLBracket (methodDeclaration|fieldDeclaration|constructor)* mainMethod?
-    (methodDeclaration|fieldDeclaration|constructor)* CurlyRBracket;
+classBody: CurlyLBracket (methodDeclaration|fieldDeclaration|constructor)* CurlyRBracket;
 methodDeclaration: AccessModifier? (objectType|Void) Identifier LBracket nMethodParameters RBracket block;
 fieldDeclaration: AccessModifier?  objectType Identifier (Comma Identifier)* (Equal expression)? Semicolon;
 methodParameter: objectType Identifier;
